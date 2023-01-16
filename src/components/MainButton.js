@@ -8,7 +8,7 @@ export const MainButton = ({ updateLocation, loading, style, ...props }) => {
       color={"#fff"}
       extended
       icon={loading ? "loading" : "map-marker"}
-      label={loading ? "Loading..." : "Updatee Location"}
+      label={loading ? "Loading..." : "Set Current Location"}
       onPress={updateLocation}
       style={styles.fabStyle}
       visible={true}
