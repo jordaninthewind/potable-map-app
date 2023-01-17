@@ -6,13 +6,14 @@ import {
   getCurrentPosition,
   requestLocationPermission,
   addPin,
-} from "./src/services.js";
+} from "./src/services/services.js";
+import DEFAULT_REGION from "./src/constants.js";
+
 import Logo from "./src/components/Logo.js";
 import MenuGroup from "./src/components/MenuGroup.js";
 import PotableMap from "./src/components/PotableMap.js";
 import StatusBar from "./src/components/StatusBar.js";
 import NotificationOverlay from "./src/components/NotificationOverlay.js";
-import DEFAULT_REGION from "./src/constants.js";
 
 export default function App() {
   const [location, setLocation] = useState(DEFAULT_REGION);
