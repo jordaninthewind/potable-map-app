@@ -5,12 +5,14 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import {
   getCurrentPosition,
   requestLocationPermission,
+  addPin,
 } from "./src/services.js";
-import PotableMap from "./src/components/PotableMap.js";
+import Logo from "./src/components/Logo.js";
 import MenuGroup from "./src/components/MenuGroup.js";
+import PotableMap from "./src/components/PotableMap.js";
+import StatusBar from "./src/components/StatusBar.js";
 import NotificationOverlay from "./src/components/NotificationOverlay.js";
 import DEFAULT_REGION from "./src/constants.js";
-import Logo from "./src/components/Logo.js";
 
 export default function App() {
   const [location, setLocation] = useState(DEFAULT_REGION);
@@ -51,9 +53,10 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        <PotableMap location={location} onMove={moveMap} />
-        <MenuGroup loading={loading} updateLocation={updateLocation} />
         <Logo />
+        <StatusBar />
+        <PotableMap location={location} addPin={addPin} onMove={moveMap} />
+        <MenuGroup loading={loading} updateLocation={updateLocation} />
         <NotificationOverlay setError={setError} error={error} />
       </SafeAreaView>
     </SafeAreaProvider>
