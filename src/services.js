@@ -11,6 +11,8 @@ export const requestLocationPermission = async () => {
 };
 
 export const getCurrentPosition = async () => {
+  console.log("getting current position...");
+
   try {
     let updatedLocation = await Location.getCurrentPositionAsync();
 
@@ -23,4 +25,8 @@ export const getCurrentPosition = async () => {
   } catch (error) {
     throw error;
   }
+};
+
+export const addPin = ({ nativeEvent }) => {
+  openAddPinModal(nativeEvent.coordinate);
 };
