@@ -14,16 +14,19 @@ const MenuGroup = ({ updateLocation, loading, style, ...props }) => {
           icon: "plus",
           label: "Add Source",
           onPress: updateLocation,
+          ...baseFabStyle,
         },
         {
           icon: "crosshairs-gps",
           label: "Get Current Location",
           onPress: updateLocation,
+          ...baseFabStyle,
         },
         {
           icon: "login",
           label: "Login",
           onPress: updateLocation,
+          ...baseFabStyle,
         },
       ]}
       onStateChange={onStateChange}
@@ -39,10 +42,16 @@ const MenuGroup = ({ updateLocation, loading, style, ...props }) => {
       onLongPress={() => {
         console.log("long press");
       }}
-      size={"small"}
+      backdropColor="rgba(0,0,0,0)"
       {...props}
     />
   );
+};
+
+const baseFabStyle = {
+  backgroundColor: "white",
+  size: "medium",
+  labelStyle: { color: "white", fontSize: 20 },
 };
 
 const styles = StyleSheet.create({
