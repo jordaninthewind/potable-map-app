@@ -2,12 +2,22 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import MapView from "react-native-maps";
 
-export const AppMap = ({ location, onMove, ...props }) => {
+const AppMap = ({ location, onMove, ...props }) => {
   return (
     <MapView
-      style={styles.map}
-      region={location}
+      cacheEnabled={true}
       onRegionChangeComplete={onMove}
+      region={location}
+      scrollEnabled={false}
+      showsBuildings={false}
+      showsCompass={false}
+      showsIndoors={false}
+      showsIndoorLevelPicker={false}
+      showsMyLocationButton={false}
+      showsPointsOfInterest={false}
+      showsUserLocation={true}
+      showsTraffic={true}
+      style={styles.map}
       {...props}
     />
   );
@@ -19,3 +29,5 @@ const styles = StyleSheet.create({
     height: "100%",
   },
 });
+
+export default AppMap;

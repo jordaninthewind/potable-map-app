@@ -1,27 +1,43 @@
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { Snackbar } from "react-native-paper";
 
-import { AppMap } from "./src/components/AppMap.js";
-import { MainButton } from "./src/components/MainButton.js";
-import { MapAppBottomNavigation } from "./src/components/MapAppBottomNavigation.js";
-import * as services from "./src/services.js";
+import {
+  getCurrentPosition,
+  requestLocationPermission,
+} from "./src/services.js";
+import AppMap from "./src/components/AppMap.js";
+import MenuGroup from "./src/components/MenuGroup.js";
+import NotificationOverlay from "./src/components/NotificationOverlay.js";
 import DEFAULT_REGION from "./src/constants.js";
+import Logo from "./src/components/Logo.js";
 
 export default function App() {
   const [location, setLocation] = useState(DEFAULT_REGION);
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    requestLocationPermission()
+      .then((permission) => {
+        if (permission === "granted") {
+          updateLocation();
+        } else {
+          setError("Permission to access location was denied");
+        }
+      })
+      .catch((error) => {
+        setError(error);
+      });
+  }, []);
 
   const updateLocation = () => {
     setLoading(true);
 
-    services
-      .getCurrentPosition()
-      .then((updatedLocation) => setLocation(updatedLocation))
-      .catch((error) => {
-        setErrorMsg(error);
+    getCurrentPosition()
+      .then((loc) => setLocation(loc))
+      .catch((e) => {
+        setError(e);
       })
       .finally(() => {
         setLoading(false);
@@ -36,15 +52,9 @@ export default function App() {
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <AppMap location={location} onMove={moveMap} />
-        <MainButton loading={loading} updateLocation={updateLocation} />
-        <MapAppBottomNavigation />
-        <Snackbar
-          visible={!!errorMsg}
-          action={{ label: "Dismiss", onPress: () => setErrorMsg(null) }}
-          onDismiss={() => setErrorMsg(null)}
-        >
-          {errorMsg?.toString()}
-        </Snackbar>
+        <MenuGroup loading={loading} updateLocation={updateLocation} />
+        <Logo />
+        <NotificationOverlay setError={setError} error={error} />
       </SafeAreaView>
     </SafeAreaProvider>
   );
