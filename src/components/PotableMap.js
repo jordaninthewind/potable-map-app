@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import MapView from "react-native-maps";
 
-const AppMap = ({ location, onMove, ...props }) => {
+const PotableMap = ({ location, onMove, ...props }) => {
   return (
     <MapView
       cacheEnabled={true}
@@ -17,6 +17,7 @@ const AppMap = ({ location, onMove, ...props }) => {
       showsPointsOfInterest={false}
       showsUserLocation={true}
       showsTraffic={true}
+      userInterfaceStyle="dark"
       style={styles.map}
       {...props}
     />
@@ -30,4 +31,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AppMap;
+export default PotableMap;

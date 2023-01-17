@@ -6,7 +6,7 @@ import {
   getCurrentPosition,
   requestLocationPermission,
 } from "./src/services.js";
-import AppMap from "./src/components/AppMap.js";
+import PotableMap from "./src/components/PotableMap.js";
 import MenuGroup from "./src/components/MenuGroup.js";
 import NotificationOverlay from "./src/components/NotificationOverlay.js";
 import DEFAULT_REGION from "./src/constants.js";
@@ -51,7 +51,7 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        <AppMap location={location} onMove={moveMap} />
+        <PotableMap location={location} onMove={moveMap} />
         <MenuGroup loading={loading} updateLocation={updateLocation} />
         <Logo />
         <NotificationOverlay setError={setError} error={error} />
