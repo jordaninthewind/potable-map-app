@@ -4,8 +4,8 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import {
   getCurrentPosition,
+  getLocalPins,
   requestLocationPermission,
-  addPin,
 } from "./src/services/services.js";
 import DEFAULT_REGION from "./src/constants.js";
 
@@ -19,6 +19,7 @@ export default function App() {
   const [location, setLocation] = useState(DEFAULT_REGION);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [markers, setMarkers] = useState([]);
 
   useEffect(() => {
     requestLocationPermission()
@@ -47,6 +48,10 @@ export default function App() {
       });
   };
 
+  const addPin = ({ nativeEvent }) => {
+    setMarkers([...markers, nativeEvent.coordinate]);
+  };
+
   const moveMap = (event) => {
     console.log(event);
   };
@@ -56,7 +61,12 @@ export default function App() {
       <SafeAreaView style={styles.container}>
         <Logo />
         <StatusBar />
-        <PotableMap location={location} addPin={addPin} onMove={moveMap} />
+        <PotableMap
+          location={location}
+          markers={markers}
+          addPin={addPin}
+          onMove={moveMap}
+        />
         <MenuGroup loading={loading} updateLocation={updateLocation} />
         <NotificationOverlay setError={setError} error={error} />
       </SafeAreaView>

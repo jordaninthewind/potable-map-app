@@ -27,6 +27,21 @@ export const getCurrentPosition = async () => {
   }
 };
 
-export const addPin = ({ nativeEvent }) => {
-  openAddPinModal(nativeEvent.coordinate);
+export const getLocalPins = async () => {
+  console.log("getting local pins...");
+
+  try {
+    const pins = new Promise((resolve, reject) =>
+      resolve([
+        {
+          latitude: 37.358976116948014,
+          longitude: -122.02175059936164,
+        },
+      ])
+    );
+
+    return pins;
+  } catch (error) {
+    throw error;
+  }
 };
