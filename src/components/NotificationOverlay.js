@@ -6,6 +6,8 @@ function NotificationOverlay({ error, setError, ...props }) {
       visible={!!error}
       action={{ label: "Dismiss", onPress: () => setError(null) }}
       onDismiss={() => setError(null)}
+      wrapperStyle={{ zIndex: 10 }}
+      elevation={0}
       {...props}
     >
       {error?.toString()}

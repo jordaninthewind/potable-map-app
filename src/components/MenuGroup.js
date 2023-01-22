@@ -51,7 +51,12 @@ const MenuGroup = ({ updateLocation, loading, style, ...props }) => {
 const baseFabStyle = {
   backgroundColor: "white",
   size: "medium",
-  labelStyle: { color: "white", fontSize: 20 },
+  labelStyle: {
+    color: "white",
+    fontSize: 20,
+    textShadowColor: "#000000",
+    textShadowRadius: 5,
+  },
 };
 
 const styles = StyleSheet.create({

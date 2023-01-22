@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StatusBar, StyleSheet, Vibration } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import {
+  addPinRemote,
   getCurrentPosition,
   getLocalPins,
   requestLocationPermission,
@@ -12,7 +13,7 @@ import DEFAULT_REGION from "./src/constants.js";
 import Logo from "./src/components/Logo.js";
 import MenuGroup from "./src/components/MenuGroup.js";
 import PotableMap from "./src/components/PotableMap.js";
-import StatusBar from "./src/components/StatusBar.js";
+import UserInfo from "./src/components/UserInfo.js";
 import NotificationOverlay from "./src/components/NotificationOverlay.js";
 
 export default function App() {
@@ -33,6 +34,14 @@ export default function App() {
       .catch((error) => {
         setError(error);
       });
+
+    getLocalPins()
+      .then((pins) => {
+        setMarkers(pins);
+      })
+      .catch((error) => {
+        setError(error);
+      });
   }, []);
 
   const updateLocation = () => {
@@ -49,7 +58,17 @@ export default function App() {
   };
 
   const addPin = ({ nativeEvent }) => {
-    setMarkers([...markers, nativeEvent.coordinate]);
+    Vibration.vibrate();
+
+    addPinRemote({
+      location: nativeEvent.coordinate,
+      title: "New Pin",
+      user_id: "1",
+    });
+
+    setMarkers(
+      markers ? [...markers, nativeEvent.coordinate] : [nativeEvent.coordinate]
+    );
   };
 
   const moveMap = (event) => {
@@ -59,14 +78,15 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        <Logo />
-        <StatusBar />
+        <StatusBar style="auto" />
+        <UserInfo />
         <PotableMap
           location={location}
           markers={markers}
           addPin={addPin}
           onMove={moveMap}
         />
+        <Logo />
         <MenuGroup loading={loading} updateLocation={updateLocation} />
         <NotificationOverlay setError={setError} error={error} />
       </SafeAreaView>

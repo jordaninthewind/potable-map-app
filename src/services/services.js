@@ -1,4 +1,7 @@
 import * as Location from "expo-location";
+import { addDoc, collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import { PIN_DATABASE } from "../constants";
 
 export const requestLocationPermission = async () => {
   try {
@@ -31,16 +34,25 @@ export const getLocalPins = async () => {
   console.log("getting local pins...");
 
   try {
-    const pins = new Promise((resolve, reject) =>
-      resolve([
-        {
-          latitude: 37.358976116948014,
-          longitude: -122.02175059936164,
-        },
-      ])
-    );
+    const querySnapshot = await getDocs(collection(db, PIN_DATABASE));
+    const pins = querySnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
 
     return pins;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addPinRemote = async (pin) => {
+  console.log("adding pin...");
+
+  try {
+    const docRef = await addDoc(collection(db, PIN_DATABASE), pin);
+
+    return docRef.id;
   } catch (error) {
     throw error;
   }

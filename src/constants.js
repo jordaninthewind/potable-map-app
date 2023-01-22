@@ -4,3 +4,5 @@ export const DEFAULT_REGION = {
   latitudeDelta: 0.8922,
   longitudeDelta: 0.8421,
 };
+
+export const PIN_DATABASE = "test";

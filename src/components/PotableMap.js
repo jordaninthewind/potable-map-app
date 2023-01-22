@@ -1,20 +1,28 @@
-import { StyleSheet } from "react-native";
-import MapView from "react-native-maps";
+import { useColorScheme, StyleSheet } from "react-native";
+import MapView, { Marker } from "react-native-maps";
 
-const PotableMap = ({ location, onMove, addPin, ...props }) => (
-  <MapView
-    cacheEnabled={true}
-    onLongPress={addPin}
-    onRegionChangeComplete={onMove}
-    region={location}
-    showsPointsOfInterest={false}
-    showsUserLocation={true}
-    showsTraffic={true}
-    userInterfaceStyle="dark"
-    style={styles.map}
-    {...props}
-  />
-);
+const PotableMap = ({ location, markers, onMove, addPin, ...props }) => {
+  const colorScheme = useColorScheme();
+  return (
+    <MapView
+      onLongPress={addPin}
+      onRegionChangeComplete={onMove}
+      region={location}
+      showsPointsOfInterest={false}
+      showsUserLocation={true}
+      showsTraffic={true}
+      style={styles.map}
+      userInterfaceStyle={colorScheme}
+      {...props}
+    >
+      {markers?.map(({ location, title }, index) => {
+        return (
+          <Marker key={`pin${index}`} coordinate={location} title={title} />
+        );
+      })}
+    </MapView>
+  );
+};
 
 const styles = StyleSheet.create({
   map: {
