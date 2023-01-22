@@ -3,26 +3,26 @@ import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-function StatusBar() {
+function UserInfo() {
   const { top } = useSafeAreaInsets();
   const userName = "John Doe";
 
   return (
-    <View style={[styles.statusBarContainer, { top }]}>
-      <Text style={styles.statusBarText}>Logged in as: </Text>
-      <Text style={styles.statusBarText}>{userName}</Text>
+    <View style={[styles.UserInfoContainer, { top }]}>
+      <Text style={styles.UserInfoText}>Logged in as: </Text>
+      <Text style={styles.UserInfoText}>{userName}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  statusBarContainer: {
+  UserInfoContainer: {
     paddingRight: 15,
     position: "absolute",
     zIndex: 1,
     width: "100%",
   },
-  statusBarText: {
+  UserInfoText: {
     color: "white",
     fontSize: 20,
     fontWeight: "bold",
@@ -32,4 +32,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StatusBar;
+export default UserInfo;
