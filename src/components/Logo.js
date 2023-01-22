@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     paddingTop: 10,
     position: "absolute",
-    zIndex: 1,
   },
   logoText: {
     color: "red",
