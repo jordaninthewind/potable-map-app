@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { StatusBar, StyleSheet, Vibration } from "react-native";
+import { StyleSheet, Vibration } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 
 import {
   addPinRemote,
@@ -12,15 +13,18 @@ import DEFAULT_REGION from "./src/constants.js";
 
 import Logo from "./src/components/Logo.js";
 import MenuGroup from "./src/components/MenuGroup.js";
+import NotificationOverlay from "./src/components/NotificationOverlay.js";
 import PotableMap from "./src/components/PotableMap.js";
 import UserInfo from "./src/components/UserInfo.js";
-import NotificationOverlay from "./src/components/NotificationOverlay.js";
+import ModalInterface from "./src/components/ModalInterface.js";
+import Loader from "./src/components/Loader.js";
 
 export default function App() {
   const [location, setLocation] = useState(DEFAULT_REGION);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [markers, setMarkers] = useState([]);
+  const [modalIsVisible, setModalIsVisible] = useState(false);
 
   useEffect(() => {
     requestLocationPermission()
@@ -71,6 +75,14 @@ export default function App() {
     );
   };
 
+  const resetError = () => {
+    setError(null);
+  };
+
+  const closeModal = () => {
+    setModalIsVisible(false);
+  };
+
   const moveMap = (event) => {
     console.log(event);
   };
@@ -81,14 +93,20 @@ export default function App() {
         <StatusBar style="auto" />
         <UserInfo />
         <PotableMap
+          addPin={addPin}
           location={location}
           markers={markers}
-          addPin={addPin}
           onMove={moveMap}
         />
         <Logo />
-        <MenuGroup loading={loading} updateLocation={updateLocation} />
-        <NotificationOverlay setError={setError} error={error} />
+        <MenuGroup
+          loading={loading}
+          updateLocation={updateLocation}
+          openModal={() => setModalIsVisible(true)}
+        />
+        <ModalInterface onDismiss={closeModal} visible={modalIsVisible} />
+        <NotificationOverlay error={error} resetError={resetError} />
+        <Loader loading={loading} />
       </SafeAreaView>
     </SafeAreaProvider>
   );
