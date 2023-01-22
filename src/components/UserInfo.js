@@ -1,34 +1,38 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { AppStateContext } from "../contexts";
 
-function UserInfo() {
+const UserInfo = () => {
   const { top } = useSafeAreaInsets();
-  const userName = "John Doe";
+  const { user } = useContext(AppStateContext);
 
   return (
     <View style={[styles.UserInfoContainer, { top }]}>
-      <Text style={styles.UserInfoText}>Logged in as: </Text>
-      <Text style={styles.UserInfoText}>{userName}</Text>
+      {user ? (
+        <Text style={styles.UserInfoText}>Logged in as: {user}</Text>
+      ) : (
+        <Text>Not Logged In</Text>
+      )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   UserInfoContainer: {
-    paddingRight: 15,
     position: "absolute",
+    padding: 5,
     zIndex: 1,
-    width: "100%",
+    backgroundColor: "white",
   },
   UserInfoText: {
-    color: "white",
+    color: "black",
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 5,
     opacity: 0.65,
-    textAlign: "right",
+    textAlign: "center",
   },
 });
 
