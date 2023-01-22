@@ -2,7 +2,7 @@ import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { FAB } from "react-native-paper";
 
-const MenuGroup = ({ updateLocation, loading, style, ...props }) => {
+const MenuGroup = ({ updateLocation, loading, style, openModal, ...props }) => {
   const [open, setOpen] = useState(false);
 
   const onStateChange = ({ open }) => setOpen(open);
@@ -25,7 +25,7 @@ const MenuGroup = ({ updateLocation, loading, style, ...props }) => {
         {
           icon: "login",
           label: "Login",
-          onPress: updateLocation,
+          onPress: openModal,
           ...baseFabStyle,
         },
       ]}
@@ -33,7 +33,7 @@ const MenuGroup = ({ updateLocation, loading, style, ...props }) => {
       onPress={() => {
         console.log("menu opened");
       }}
-      icon={loading ? "loading" : "menu"}
+      icon={"menu"}
       fabStyle={styles.fabStyle}
       mode="flat"
       open={open}
