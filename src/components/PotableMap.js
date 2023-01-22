@@ -8,6 +8,7 @@ const PotableMap = ({ location, markers, onMove, addPin, ...props }) => {
       onLongPress={addPin}
       onRegionChangeComplete={onMove}
       region={location}
+      provider="google"
       showsPointsOfInterest={false}
       showsUserLocation={true}
       showsTraffic={true}
@@ -26,8 +27,9 @@ const PotableMap = ({ location, markers, onMove, addPin, ...props }) => {
 
 const styles = StyleSheet.create({
   map: {
-    width: "100%",
     height: "100%",
+    width: "100%",
+    zIndex: 0,
   },
 });
 
