@@ -9,6 +9,7 @@ import {
   getLocalPins,
   requestLocationPermission,
 } from "./src/services/services.js";
+import { AppStateContext } from "./src/contexts.js";
 import DEFAULT_REGION from "./src/constants.js";
 
 import Logo from "./src/components/Logo.js";
@@ -18,6 +19,7 @@ import PotableMap from "./src/components/PotableMap.js";
 import UserInfo from "./src/components/UserInfo.js";
 import ModalInterface from "./src/components/ModalInterface.js";
 import Loader from "./src/components/Loader.js";
+import { useAuth } from "./src/hooks.js";
 
 export default function App() {
   const [location, setLocation] = useState(DEFAULT_REGION);
@@ -25,6 +27,8 @@ export default function App() {
   const [error, setError] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [modalIsVisible, setModalIsVisible] = useState(false);
+
+  // const { user, login, logout } = useAuth();
 
   useEffect(() => {
     requestLocationPermission()
@@ -52,7 +56,9 @@ export default function App() {
     setLoading(true);
 
     getCurrentPosition()
-      .then((loc) => setLocation(loc))
+      .then((loc) => {
+        setLocation(loc);
+      })
       .catch((e) => {
         setError(e);
       })
@@ -90,23 +96,25 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        <StatusBar style="auto" />
-        <UserInfo />
-        <PotableMap
-          addPin={addPin}
-          location={location}
-          markers={markers}
-          onMove={moveMap}
-        />
-        <Logo />
-        <MenuGroup
-          loading={loading}
-          updateLocation={updateLocation}
-          openModal={() => setModalIsVisible(true)}
-        />
-        <ModalInterface onDismiss={closeModal} visible={modalIsVisible} />
-        <NotificationOverlay error={error} resetError={resetError} />
-        <Loader loading={loading} />
+        <AppStateContext.Provider value={AppStateContext}>
+          <StatusBar style="auto" />
+          <UserInfo />
+          <PotableMap
+            addPin={addPin}
+            location={location}
+            markers={markers}
+            onMove={moveMap}
+          />
+          <Logo />
+          <MenuGroup
+            loading={loading}
+            updateLocation={updateLocation}
+            openModal={() => setModalIsVisible(true)}
+          />
+          <ModalInterface onDismiss={closeModal} visible={modalIsVisible} />
+          <NotificationOverlay error={error} resetError={resetError} />
+          <Loader loading={loading} />
+        </AppStateContext.Provider>
       </SafeAreaView>
     </SafeAreaProvider>
   );
