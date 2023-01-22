@@ -1,13 +1,13 @@
 import { Snackbar } from "react-native-paper";
 
-function NotificationOverlay({ error, setError, ...props }) {
+function NotificationOverlay({ error, resetError, ...props }) {
   return (
     <Snackbar
-      visible={!!error}
-      action={{ label: "Dismiss", onPress: () => setError(null) }}
-      onDismiss={() => setError(null)}
-      wrapperStyle={{ zIndex: 10 }}
+      action={{ label: "Dismiss", onPress: resetError }}
       elevation={0}
+      onDismiss={resetError}
+      visible={!!error}
+      wrapperStyle={{ zIndex: 100 }}
       {...props}
     >
       {error?.toString()}
