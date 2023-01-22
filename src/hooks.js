@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AppStateContext } from "./contexts";
 
 export const useAsyncStorage = () => {
   const [value, setValue] = useState(null);
@@ -25,8 +26,8 @@ export const useAsyncStorage = () => {
 };
 
 export const useUser = () => {
-  const { user, setUser } = useContext(AuthContext);
-  const { setItem } = useLocalStorage();
+  const { user, setUser } = useContext(AppStateContext);
+  const { setItem } = useAsyncStorage();
 
   const addUser = (user) => {
     setUser(user);
@@ -38,17 +39,17 @@ export const useUser = () => {
     setItem("user", "");
   };
 
-  return { user, login, logout, addUser, removeUser };
+  return { user, addUser, removeUser };
 };
 
 export const useAuth = () => {
   const { user, addUser, removeUser } = useUser();
-  const { getItem } = useLocalStorage();
+  const { getItem } = useAsyncStorage();
 
   useEffect(() => {
     const user = getItem("user");
     if (user) {
-      addUser(JSON.parse(user));
+      addUser(user);
     }
   }, []);
 
