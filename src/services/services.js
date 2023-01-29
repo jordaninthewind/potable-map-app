@@ -1,5 +1,11 @@
 import * as Location from "expo-location";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { PIN_DATABASE } from "../constants";
 
@@ -17,13 +23,15 @@ export const getCurrentPosition = async () => {
   console.log("getting current position...");
 
   try {
-    let updatedLocation = await Location.getCurrentPositionAsync();
+    let {
+      coords: { latitude, longitude, latitudeDelta, longitudeDelta },
+    } = await Location.getCurrentPositionAsync();
 
     return {
-      longitude: updatedLocation.coords.longitude,
-      latitude: updatedLocation.coords.latitude,
-      latitudeDelta: updatedLocation.coords.latitudeDelta ?? 0.0922,
-      longitudeDelta: updatedLocation.coords.longitudeDelta ?? 0.0421,
+      longitude,
+      latitude,
+      latitudeDelta,
+      longitudeDelta,
     };
   } catch (error) {
     throw error;
@@ -53,6 +61,20 @@ export const addPinRemote = async (pin) => {
     const docRef = await addDoc(collection(db, PIN_DATABASE), pin);
 
     return docRef.id;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deletePinRemote = async (pin) => {
+  console.log("deleting pin...", pin);
+
+  try {
+    // const docToDelete = collection(db, PIN_DATABASE).doc(pin.id);
+    const docToDelete = doc(db, PIN_DATABASE, pin.id);
+
+    const deleted = await deleteDoc(docToDelete);
+    console.log("deleted", deleted);
   } catch (error) {
     throw error;
   }

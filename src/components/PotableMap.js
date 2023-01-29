@@ -1,7 +1,8 @@
 import { useRef } from "react";
 import { useColorScheme, StyleSheet } from "react-native";
-import MapView, { Callout, Marker } from "react-native-maps";
-import { Text } from "react-native-paper";
+import MapView, { Marker } from "react-native-maps";
+
+import MarkerCallout from "./MarkerCallout";
 
 const PotableMap = ({ location, markers, onMove, addPin, ...props }) => {
   const colorScheme = useColorScheme();
@@ -21,18 +22,14 @@ const PotableMap = ({ location, markers, onMove, addPin, ...props }) => {
       userInterfaceStyle={colorScheme}
       {...props}
     >
-      {markers?.map(({ location, title }, index) => {
+      {markers?.map((marker, index) => {
         return (
           <Marker
             key={`pin${index}`}
-            coordinate={location}
+            coordinate={marker.location}
             calloutVisible={true}
           >
-            <Callout flat style={styles.callout}>
-              <Text>Title: {title}</Text>
-              <Text>Latitude: {location.latitude} </Text>
-              <Text>Longitude: {location.longitude} </Text>
-            </Callout>
+            <MarkerCallout marker={marker} />
           </Marker>
         );
       })}

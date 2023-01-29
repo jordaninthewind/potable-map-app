@@ -1,6 +1,16 @@
+import { useContext } from "react";
 import { Modal, Text } from "react-native-paper";
+import { AppStateContext } from "../contexts";
 
-const ModalInterface = ({ onDismiss, visible }) => {
+const ModalInterface = ({
+  onDismiss,
+  visible,
+  component = <Text>Modal</Text>,
+}) => {
+  const state = useContext(AppStateContext);
+
+  console.log(state.value);
+
   return (
     <Modal
       dismissable={true}
@@ -8,7 +18,7 @@ const ModalInterface = ({ onDismiss, visible }) => {
       onDismiss={onDismiss}
       contentContainerStyle={{ backgroundColor: "white", padding: 20 }}
     >
-      <Text>Modal</Text>
+      {component}
     </Modal>
   );
 };

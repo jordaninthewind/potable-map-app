@@ -19,7 +19,7 @@ import PotableMap from "./src/components/PotableMap.js";
 import UserInfo from "./src/components/UserInfo.js";
 import ModalInterface from "./src/components/ModalInterface.js";
 import Loader from "./src/components/Loader.js";
-import { useAuth } from "./src/hooks.js";
+// import { useAuth } from "./src/hooks.js";
 
 export default function App() {
   const [location, setLocation] = useState(DEFAULT_REGION);
@@ -31,25 +31,27 @@ export default function App() {
   // const { user, login, logout } = useAuth();
 
   useEffect(() => {
-    requestLocationPermission()
-      .then((permission) => {
+    const init = async () => {
+      try {
+        const permission = await requestLocationPermission();
+
         if (permission === "granted") {
           updateLocation();
         } else {
-          setError("Permission to access location was denied");
+          throw new Error("Location permission not granted");
         }
-      })
-      .catch((error) => {
+      } catch (error) {
         setError(error);
-      });
+      }
+    };
 
-    getLocalPins()
-      .then((pins) => {
-        setMarkers(pins);
-      })
-      .catch((error) => {
-        setError(error);
-      });
+    init();
+  }, []);
+
+  useEffect(() => {
+    getLocalPins().then((pins) => {
+      setMarkers(pins);
+    });
   }, []);
 
   const updateLocation = () => {
@@ -122,13 +124,13 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
+    backgroundColor: "#fff",
+    flex: 1,
     justifyContent: "center",
   },
   map: {
-    width: "100%",
     height: "100%",
+    width: "100%",
   },
 });
