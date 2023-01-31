@@ -1,12 +1,90 @@
-import { useRef } from "react";
-import { useColorScheme, StyleSheet } from "react-native";
+import { useEffect, useRef } from "react";
+import { useColorScheme, StyleSheet, Vibration } from "react-native";
 import MapView, { Marker } from "react-native-maps";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addMarker,
+  selectMarkers,
+  setMarkers,
+} from "../features/markers/markersSlice";
+import {
+  addPinRemote,
+  getLocalPins,
+  requestLocationPermission,
+} from "../services/services";
 
 import MarkerCallout from "./MarkerCallout";
 
-const PotableMap = ({ location, markers, onMove, addPin, ...props }) => {
+const PotableMap = () => {
+  const dispatch = useDispatch();
+
+  const markers = useSelector(selectMarkers);
   const colorScheme = useColorScheme();
   const mapRef = useRef(null);
+
+  // const [, setLocation] = useState(DEFAULT_REGION);
+
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const permission = await requestLocationPermission();
+
+        if (permission === "granted") {
+          updateLocation();
+        } else {
+          throw new Error("Location permission not granted");
+        }
+      } catch (error) {
+        dispatch(setError(error));
+      }
+    };
+
+    init();
+  }, []);
+
+  const updateLocation = () => {
+    dispatch(setLoading(true));
+
+    getCurrentPosition()
+      .then((loc) => {
+        dispatch(setLocation(loc));
+      })
+      .catch((e) => {
+        dispatch(setError(e));
+      })
+      .finally(() => {
+        dispatch(setLoading(false));
+      });
+  };
+
+  const addPin = ({ nativeEvent }) => {
+    Vibration.vibrate();
+
+    addPinRemote({
+      location: nativeEvent.coordinate,
+      title: "New Pin",
+      user_id: "1",
+    });
+
+    dispatch(addMarker(nativeEvent.coordinate));
+  };
+
+  useEffect(() => {
+    getLocalPins().then((pins) => {
+      dispatch(setMarkers(pins));
+    });
+  }, []);
+
+  const onMove = () => {
+    console.log("onMove");
+    mapRef.current?.animateCamera({
+      center: location,
+      pitch: 0,
+      heading: 0,
+      altitude: 1000,
+      zoom: 15,
+    });
+  };
 
   return (
     <MapView
@@ -20,7 +98,6 @@ const PotableMap = ({ location, markers, onMove, addPin, ...props }) => {
       showsTraffic={true}
       style={styles.map}
       userInterfaceStyle={colorScheme}
-      {...props}
     >
       {markers?.map((marker, index) => {
         return (

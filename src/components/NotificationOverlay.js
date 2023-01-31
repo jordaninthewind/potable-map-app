@@ -1,5 +1,6 @@
 import { Snackbar } from "react-native-paper";
 
+// error={error} resetError={resetError}
 function NotificationOverlay({ error, resetError, ...props }) {
   return (
     <Snackbar
