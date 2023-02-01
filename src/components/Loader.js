@@ -1,15 +1,22 @@
 import { StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
+import { useSelector } from "react-redux";
 
-const Loader = ({ loading }) => (
-  <>
-    {loading && (
-      <View style={styles.container}>
-        <ActivityIndicator animating={true} size={"large"} color="#f00" />
-      </View>
-    )}
-  </>
-);
+import { selectLoading } from "../features/markers/markersSlice";
+
+const Loader = () => {
+  const loading = useSelector(selectLoading);
+
+  return (
+    <>
+      {loading && (
+        <View style={styles.container}>
+          <ActivityIndicator animating={true} size={"large"} color="#f00" />
+        </View>
+      )}
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

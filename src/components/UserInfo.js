@@ -1,20 +1,17 @@
-import React, { useContext } from "react";
+import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { AppStateContext } from "../contexts";
+import { useSelector } from "react-redux";
+import { selectUser } from "../features/user/userSlice";
 
 const UserInfo = () => {
   const { top } = useSafeAreaInsets();
-  const { user } = useContext(AppStateContext);
+  const user = useSelector(selectUser);
 
   return (
     <View style={[styles.UserInfoContainer, { top }]}>
-      {user ? (
-        <Text style={styles.UserInfoText}>Logged in as: {user}</Text>
-      ) : (
-        <Text>Not Logged In</Text>
-      )}
+      {user ? <Text>Logged in as: {user}</Text> : <Text>Not Logged In</Text>}
     </View>
   );
 };

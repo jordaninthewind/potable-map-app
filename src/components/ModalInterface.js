@@ -1,26 +1,48 @@
-import { useContext } from "react";
+import { StyleSheet } from "react-native";
 import { Modal, Text } from "react-native-paper";
-import { AppStateContext } from "../contexts";
+import { useDispatch, useSelector } from "react-redux";
 
-const ModalInterface = ({
-  onDismiss,
-  visible,
-  component = <Text>Modal</Text>,
-}) => {
-  const state = useContext(AppStateContext);
+import { clearModal, selectModal } from "../features/modal/modalSlice";
+import Login from "./Login";
 
-  console.log(state.value);
+const ModalInterface = () => {
+  const dispatch = useDispatch();
+  const modal = useSelector(selectModal);
+
+  const onDismiss = () => {
+    dispatch(clearModal());
+  };
+
+  const getComponent = () => {
+    switch (modal) {
+      case "login":
+        return <Login />;
+      case "register":
+        return <Text>Register</Text>;
+      default:
+        return <Text>Modal</Text>;
+    }
+  };
 
   return (
     <Modal
       dismissable={true}
-      visible={visible}
+      visible={modal !== null}
       onDismiss={onDismiss}
-      contentContainerStyle={{ backgroundColor: "white", padding: 20 }}
+      contentContainerStyle={styles.container}
     >
-      {component}
+      {getComponent()}
     </Modal>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "white",
+    padding: 20,
+    margin: 20,
+    borderRadius: 10,
+  },
+});
 
 export default ModalInterface;

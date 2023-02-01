@@ -1,4 +1,7 @@
-import * as Location from "expo-location";
+import {
+  getCurrentPositionAsync,
+  requestForegroundPermissionsAsync,
+} from "expo-location";
 import {
   addDoc,
   collection,
@@ -6,12 +9,13 @@ import {
   doc,
   getDocs,
 } from "firebase/firestore";
+
 import { db } from "../../firebaseConfig";
 import { PIN_DATABASE } from "../constants";
 
 export const requestLocationPermission = async () => {
   try {
-    let { status } = await Location.requestForegroundPermissionsAsync();
+    let { status } = await requestForegroundPermissionsAsync();
 
     return status;
   } catch (error) {
@@ -23,16 +27,18 @@ export const getCurrentPosition = async () => {
   console.log("getting current position...");
 
   try {
-    let {
-      coords: { latitude, longitude, latitudeDelta, longitudeDelta },
-    } = await Location.getCurrentPositionAsync();
+    const { coords } = await getCurrentPositionAsync();
 
-    return {
+    const { latitude, longitude } = coords;
+
+    const location = {
       longitude,
       latitude,
-      latitudeDelta,
-      longitudeDelta,
+      latitudeDelta: 0.1,
+      longitudeDelta: 0.1,
     };
+
+    return location;
   } catch (error) {
     throw error;
   }
@@ -70,7 +76,6 @@ export const deletePinRemote = async (pin) => {
   console.log("deleting pin...", pin);
 
   try {
-    // const docToDelete = collection(db, PIN_DATABASE).doc(pin.id);
     const docToDelete = doc(db, PIN_DATABASE, pin.id);
 
     const deleted = await deleteDoc(docToDelete);
