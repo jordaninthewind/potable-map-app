@@ -2,27 +2,30 @@ import { useEffect, useRef } from "react";
 import { useColorScheme, StyleSheet, Vibration } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
+
+import MarkerCallout from "./MarkerCallout";
 import {
   addMarker,
   selectMarkers,
   setMarkers,
+  selectLocation,
 } from "../features/markers/markersSlice";
+import { setError } from "../features/error/errorSlice";
 import {
   addPinRemote,
+  getCurrentPosition,
   getLocalPins,
   requestLocationPermission,
 } from "../services/services";
 
-import MarkerCallout from "./MarkerCallout";
-
 const PotableMap = () => {
-  const dispatch = useDispatch();
-
-  const markers = useSelector(selectMarkers);
-  const colorScheme = useColorScheme();
   const mapRef = useRef(null);
 
-  // const [, setLocation] = useState(DEFAULT_REGION);
+  const dispatch = useDispatch();
+  const colorScheme = useColorScheme();
+
+  const markers = useSelector(selectMarkers);
+  const location = useSelector(selectLocation);
 
   useEffect(() => {
     const init = async () => {
@@ -30,7 +33,7 @@ const PotableMap = () => {
         const permission = await requestLocationPermission();
 
         if (permission === "granted") {
-          updateLocation();
+          await updateLocation();
         } else {
           throw new Error("Location permission not granted");
         }
@@ -42,20 +45,37 @@ const PotableMap = () => {
     init();
   }, []);
 
-  const updateLocation = () => {
-    dispatch(setLoading(true));
+  useEffect(() => {
+    const updateLocation = async () => {
+      dispatch(setLoading(true));
 
-    getCurrentPosition()
-      .then((loc) => {
-        dispatch(setLocation(loc));
-      })
-      .catch((e) => {
-        dispatch(setError(e));
-      })
-      .finally(() => {
+      try {
+        const position = await getCurrentPosition();
+
+        dispatch(setLocation(position));
+      } catch (error) {
+        dispatch(setError(error));
+      } finally {
         dispatch(setLoading(false));
-      });
-  };
+      }
+    };
+
+    updateLocation();
+  }, []);
+
+  useEffect(() => {
+    console.log("location", location);
+    if (mapRef.current) {
+      mapRef.current.animateToRegion(location, 1000);
+    }
+    //   mapRef.current?.animateCamera({
+    //     center: location,
+    //     pitch: 0,
+    //     heading: 0,
+    //     altitude: 1000,
+    //     zoom: 15,
+    //   });
+  }, [location]);
 
   const addPin = ({ nativeEvent }) => {
     Vibration.vibrate();
@@ -70,20 +90,17 @@ const PotableMap = () => {
   };
 
   useEffect(() => {
-    getLocalPins().then((pins) => {
+    const getMarkers = async () => {
+      const pins = await getLocalPins();
+
       dispatch(setMarkers(pins));
-    });
+    };
+
+    getMarkers();
   }, []);
 
   const onMove = () => {
     console.log("onMove");
-    mapRef.current?.animateCamera({
-      center: location,
-      pitch: 0,
-      heading: 0,
-      altitude: 1000,
-      zoom: 15,
-    });
   };
 
   return (

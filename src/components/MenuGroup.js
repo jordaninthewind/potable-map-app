@@ -3,8 +3,11 @@ import { StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { FAB } from "react-native-paper";
 
+import { setError } from "../features/error/errorSlice";
 import { setModal } from "../features/modal/modalSlice";
 import { selectUser, setUser } from "../features/user/userSlice";
+import { setLoading, setLocation } from "../features/markers/markersSlice";
+import { getCurrentPosition } from "../services/services";
 
 const MenuGroup = () => {
   const dispatch = useDispatch();
@@ -22,6 +25,20 @@ const MenuGroup = () => {
     dispatch(setUser(null));
   };
 
+  const updatePosition = async () => {
+    dispatch(setLoading(true));
+
+    try {
+      const position = await getCurrentPosition();
+
+      dispatch(setLocation(position));
+    } catch (error) {
+      dispatch(setError(error));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
   return (
     <FAB.Group
       actions={[
@@ -34,7 +51,7 @@ const MenuGroup = () => {
         {
           icon: "crosshairs-gps",
           label: "Get Current Location",
-          onPress: () => {},
+          onPress: updatePosition,
           ...baseFabStyle,
         },
         {

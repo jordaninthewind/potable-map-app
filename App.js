@@ -6,15 +6,13 @@ import { StatusBar } from "expo-status-bar";
 import store from "./src/store.js";
 import { AppStateContext } from "./src/contexts.js";
 
+import Loader from "./src/components/Loader.js";
 import Logo from "./src/components/Logo.js";
 import MenuGroup from "./src/components/MenuGroup.js";
+import ModalInterface from "./src/components/ModalInterface.js";
 import NotificationOverlay from "./src/components/NotificationOverlay.js";
 import PotableMap from "./src/components/PotableMap.js";
 import UserInfo from "./src/components/UserInfo.js";
-import ModalInterface from "./src/components/ModalInterface.js";
-import Loader from "./src/components/Loader.js";
-
-// import { useAuth } from "./src/hooks.js";
 
 export default function App() {
   return (

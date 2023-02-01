@@ -1,4 +1,7 @@
-import * as Location from "expo-location";
+import {
+  getCurrentPositionAsync,
+  requestForegroundPermissionsAsync,
+} from "expo-location";
 import {
   addDoc,
   collection,
@@ -6,14 +9,13 @@ import {
   doc,
   getDocs,
 } from "firebase/firestore";
-import { useDispatch } from "react-redux";
+
 import { db } from "../../firebaseConfig";
 import { PIN_DATABASE } from "../constants";
-import { setMarkers } from "../features/markers/markersSlice";
 
 export const requestLocationPermission = async () => {
   try {
-    let { status } = await Location.requestForegroundPermissionsAsync();
+    let { status } = await requestForegroundPermissionsAsync();
 
     return status;
   } catch (error) {
@@ -25,35 +27,34 @@ export const getCurrentPosition = async () => {
   console.log("getting current position...");
 
   try {
-    const dispatch = useDispatch();
+    const { coords } = await getCurrentPositionAsync();
 
-    let {
-      coords: { latitude, longitude, latitudeDelta, longitudeDelta },
-    } = await Location.getCurrentPositionAsync();
+    const { latitude, longitude } = coords;
 
     const location = {
       longitude,
       latitude,
-      latitudeDelta,
-      longitudeDelta,
+      latitudeDelta: 0.1,
+      longitudeDelta: 0.1,
     };
 
-    dispatch(setLocation(location));
-  } catch (error) {}
+    return location;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const getLocalPins = async () => {
   console.log("getting local pins...");
 
   try {
-    const dispatch = useDispatch();
     const querySnapshot = await getDocs(collection(db, PIN_DATABASE));
     const pins = querySnapshot.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
     }));
 
-    dispatch(setMarkers(pins));
+    return pins;
   } catch (error) {
     throw error;
   }

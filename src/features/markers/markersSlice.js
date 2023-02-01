@@ -31,12 +31,17 @@ const markersSlice = createSlice({
   },
 });
 
-export const { setMarkers, addMarker } = markersSlice.actions;
+export const { setMarkers, addMarker, setLocation, setLoading } =
+  markersSlice.actions;
 
 export const selectMarkers = (state) => state.markers.entities;
 export const selectMarkersCount = createSelector(
   selectMarkers,
   (markers) => markers.length
 );
+
+export const selectLoading = (state) => state.markers.loading;
+
+export const selectLocation = (state) => state.markers.location;
 
 export default markersSlice.reducer;
