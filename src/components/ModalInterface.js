@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { clearModal, selectModal } from "../features/modal/modalSlice";
 import Login from "./Login";
+import MarkerInfo from "./MarkerInfo";
 
 const ModalInterface = () => {
   const dispatch = useDispatch();
@@ -19,6 +20,8 @@ const ModalInterface = () => {
         return <Login />;
       case "register":
         return <Text>Register</Text>;
+      case "markerInfo":
+        return <MarkerInfo />;
       default:
         return <Text>Modal</Text>;
     }
