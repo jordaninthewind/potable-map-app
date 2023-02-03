@@ -46,18 +46,21 @@ const MenuGroup = () => {
           icon: "plus",
           label: "Add Source",
           onPress: () => {},
+          style: { backgroundColor: "white" },
           ...baseFabStyle,
         },
         {
           icon: "crosshairs-gps",
           label: "Get Current Location",
           onPress: updatePosition,
+          style: { backgroundColor: "white" },
           ...baseFabStyle,
         },
         {
           icon: user ? "logout" : "login",
           label: user ? "Logout" : "Login",
           onPress: user ? handleLogout : openLoginModal,
+          style: { backgroundColor: "white" },
           ...baseFabStyle,
         },
       ]}
@@ -69,8 +72,8 @@ const MenuGroup = () => {
       fabStyle={styles.fabStyle}
       mode="flat"
       open={open}
-      style={styles.fabBackgroundStyle}
       visible={true}
+      size="large"
       onLongPress={() => {
         console.log("long press");
       }}
@@ -80,8 +83,7 @@ const MenuGroup = () => {
 };
 
 const baseFabStyle = {
-  backgroundColor: "white",
-  size: "medium",
+  size: 40,
   lightLabelStyle: {
     color: "white",
     fontSize: 20,
@@ -93,6 +95,10 @@ const baseFabStyle = {
     fontSize: 20,
     textShadowColor: "#000000",
     textShadowRadius: 5,
+  },
+  containerStyle: {
+    backgroundColor: "rgba(255,255,255,0.75)",
+    borderRadius: 10,
   },
 };
 

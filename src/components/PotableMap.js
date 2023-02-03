@@ -9,6 +9,8 @@ import {
   selectMarkers,
   setMarkers,
   selectLocation,
+  setLoading,
+  setLocation,
 } from "../features/markers/markersSlice";
 import { setError } from "../features/error/errorSlice";
 import {
@@ -17,6 +19,7 @@ import {
   getLocalPins,
   requestLocationPermission,
 } from "../services/services";
+import { setModal } from "../features/modal/modalSlice";
 
 const PotableMap = () => {
   const mapRef = useRef(null);
@@ -77,16 +80,20 @@ const PotableMap = () => {
     //   });
   }, [location]);
 
-  const addPin = ({ nativeEvent }) => {
+  const openAddMarkerScreen = ({ nativeEvent }) => {
     Vibration.vibrate();
 
-    addPinRemote({
-      location: nativeEvent.coordinate,
-      title: "New Pin",
-      user_id: "1",
-    });
+    // const pinToAdd = {
+    //   location: nativeEvent.coordinate,
+    //   title: "New Pin",
+    //   user_id: "1",
+    // };
 
-    dispatch(addMarker(nativeEvent.coordinate));
+    // addPinRemote(pinToAdd);
+
+    dispatch(setModal("addMarker"));
+    // dispatch(addMarker(nativeEvent.coordinate));
+    // dispatch(setMarkers([...markers, nativeEvent.coordinate]));
   };
 
   useEffect(() => {
@@ -99,6 +106,12 @@ const PotableMap = () => {
     getMarkers();
   }, []);
 
+  const updateMarkerLocation = ({ nativeEvent, marker }) => {
+    console.log("updateMarkerLocation", nativeEvent);
+
+    updateMarkerLocation;
+  };
+
   const onMove = () => {
     console.log("onMove");
   };
@@ -106,10 +119,10 @@ const PotableMap = () => {
   return (
     <MapView
       ref={mapRef}
-      onLongPress={addPin}
+      onLongPress={openAddMarkerScreen}
       onRegionChangeComplete={onMove}
       region={location}
-      provider="google"
+      // provider="google"
       showsPointsOfInterest={false}
       showsUserLocation={true}
       showsTraffic={true}
@@ -119,9 +132,13 @@ const PotableMap = () => {
       {markers?.map((marker, index) => {
         return (
           <Marker
-            key={`pin${index}`}
-            coordinate={marker.location}
             calloutVisible={true}
+            coordinate={marker.location}
+            draggable
+            onDragEnd={(e) => updateMarkerLocation({ nativeEvent: e, marker })}
+            key={`pin${index}`}
+            pinColor="blue"
+            title={marker.title}
           >
             <MarkerCallout marker={marker} />
           </Marker>

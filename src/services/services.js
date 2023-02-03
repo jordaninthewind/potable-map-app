@@ -72,12 +72,9 @@ export const addPinRemote = async (pin) => {
   }
 };
 
-export const deletePinRemote = async (pin) => {
-  console.log("deleting pin...", pin);
-
+export const deletePinRemote = async (marker) => {
   try {
-    const docToDelete = doc(db, PIN_DATABASE, pin.id);
-
+    const docToDelete = doc(db, PIN_DATABASE, marker.id);
     const deleted = await deleteDoc(docToDelete);
     console.log("deleted", deleted);
   } catch (error) {

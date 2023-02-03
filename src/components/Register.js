@@ -1,48 +1,51 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, IconButton, Text, TextInput } from "react-native-paper";
+import { Button, Text, TextInput } from "react-native-paper";
 import { useDispatch } from "react-redux";
 import { clearModal, setModal } from "../features/modal/modalSlice";
 import { setUser } from "../features/user/userSlice";
+import { signUp } from "../services/authService";
 
-const Login = () => {
+const Register = () => {
   const dispatch = useDispatch();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(true);
 
-  const onLogin = () => {
+  const onRegister = async () => {
     console.log("submit");
+
+    try {
+      const user = await signUp({ email, password });
+      dispatch(setUser(user));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const cancelSignUp = () => {
     dispatch(clearModal());
   };
 
-  const cancelLogin = () => {
-    console.log("cancel");
-    dispatch(clearModal());
-  };
-
-  const openRegisterModal = () => {
-    console.log("register");
-    dispatch(setModal("register"));
+  const returnToLogin = () => {
+    dispatch(setModal("login"));
   };
 
   return (
     <View>
       <View style={styles.inputContainer}>
         <TextInput
-          value={email}
           mode="outlined"
-          label="Email Address"
-          keyboardType="email-address"
+          label="E-mail Address"
+          value={email}
           onChangeText={(e) => setEmail(e)}
         />
         <TextInput
-          value={password}
           mode="outlined"
+          type="password"
           label="Password"
-          secureTextEntry={passwordVisible}
           onChangeText={(e) => setPassword(e)}
+          secureTextEntry={passwordVisible}
           right={
             <TextInput.Icon
               icon="eye"
@@ -50,18 +53,24 @@ const Login = () => {
             />
           }
         />
+
+        <TextInput
+          mode="outlined"
+          label="Password"
+          onChangeText={(e) => setPassword(e)}
+        />
       </View>
       <View style={styles.buttonContainer}>
-        <Button mode="contained" onPress={onLogin}>
-          Log In
+        <Button mode="contained" onPress={onRegister}>
+          Register
         </Button>
-        <Button mode="outlined" onPress={cancelLogin}>
+        <Button mode="outlined" onPress={cancelSignUp}>
           Cancel
         </Button>
       </View>
       <View style={styles.helpContainer}>
-        <Button mode="text" onPress={openRegisterModal}>
-          Sign Up
+        <Button mode="text" onPress={returnToLogin}>
+          Go back to login
         </Button>
         <Text>Forgot Password</Text>
         <Text>Forgot Username</Text>
@@ -71,20 +80,21 @@ const Login = () => {
 };
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    marginVertical: 25,
-  },
   inputContainer: {
-    // marginVertical: 10,
+    justifyContent: "center",
+    height: 125,
+    paddingHorizontal: 20,
+  },
+  buttonContainer: {
+    justifyContent: "center",
+    height: 125,
+    paddingHorizontal: 20,
   },
   helpContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-    fontSize: 5,
+    justifyContent: "center",
+    height: 125,
+    paddingHorizontal: 20,
   },
 });
 
-export default Login;
+export default Register;

@@ -3,25 +3,27 @@ import { Modal, Text } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 
 import { clearModal, selectModal } from "../features/modal/modalSlice";
+import AddMarkerModal from "./AddMarkerModal";
 import Login from "./Login";
 import MarkerInfo from "./MarkerInfo";
+import Register from "./Register";
 
 const ModalInterface = () => {
   const dispatch = useDispatch();
   const modal = useSelector(selectModal);
 
-  const onDismiss = () => {
-    dispatch(clearModal());
-  };
+  const onDismiss = () => dispatch(clearModal());
 
   const getComponent = () => {
     switch (modal) {
       case "login":
         return <Login />;
       case "register":
-        return <Text>Register</Text>;
+        return <Register />;
       case "markerInfo":
         return <MarkerInfo />;
+      case "addMarker":
+        return <AddMarkerModal />;
       default:
         return <Text>Modal</Text>;
     }

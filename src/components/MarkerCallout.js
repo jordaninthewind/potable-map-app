@@ -1,3 +1,4 @@
+import { StyleSheet, View } from "react-native";
 import { Callout } from "react-native-maps";
 import { Button, Text } from "react-native-paper";
 import { useDispatch } from "react-redux";
@@ -15,12 +16,27 @@ const MarkerCallout = ({ marker }) => {
 
   return (
     <Callout onPress={openMarkerInfo}>
-      <Text>Title: {marker.title}</Text>
-      <Text>Latitude: {marker.location?.latitude} </Text>
-      <Text>Longitude: {marker.location?.longitude} </Text>
-      <Button onPress={openMarkerInfo}>Details</Button>
+      <View style={styles.container}>
+        <Text variant="titleMedium">Name: {marker.title || "N/A"}</Text>
+        <Text variant="titleMedium">Rating: {marker.rating || "N/A"}</Text>
+        <Button style={styles.button} mode="outlined" onPress={openMarkerInfo}>
+          Details
+        </Button>
+      </View>
     </Callout>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: "center",
+    height: 125,
+    paddingHorizontal: 20,
+  },
+  button: {
+    backgroundColor: "white",
+    marginTop: 10,
+  },
+});
 
 export default MarkerCallout;
