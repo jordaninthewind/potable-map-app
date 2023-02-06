@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { clearModal, selectModal } from "../features/modal/modalSlice";
 import AddMarkerModal from "./AddMarkerModal";
+import AddPicture from "./AddPicture";
 import Login from "./Login";
 import MarkerInfo from "./MarkerInfo";
 import Register from "./Register";
@@ -24,8 +25,10 @@ const ModalInterface = () => {
         return <MarkerInfo />;
       case "addMarker":
         return <AddMarkerModal />;
+      case "addPicture":
+        return <AddPicture />;
       default:
-        return <Text>Modal</Text>;
+        return null;
     }
   };
 

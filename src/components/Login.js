@@ -1,20 +1,37 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, IconButton, Text, TextInput } from "react-native-paper";
+import { Button, Text, TextInput } from "react-native-paper";
 import { useDispatch } from "react-redux";
+
 import { clearModal, setModal } from "../features/modal/modalSlice";
 import { setUser } from "../features/user/userSlice";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { setError } from "../features/error/errorSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
+  const auth = getAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(true);
 
-  const onLogin = () => {
-    console.log("submit");
-    dispatch(clearModal());
+  const onLogin = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log("login");
+
+      const user = userCredential.user;
+      console.log(user);
+      dispatch(setUser(user));
+    } catch (error) {
+      dispatch(setError(error));
+    }
+    // dispatch(clearModal());
   };
 
   const cancelLogin = () => {

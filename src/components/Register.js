@@ -2,24 +2,31 @@ import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
 import { useDispatch } from "react-redux";
+import { setError } from "../features/error/errorSlice";
 import { clearModal, setModal } from "../features/modal/modalSlice";
 import { setUser } from "../features/user/userSlice";
-import { signUp } from "../services/authService";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const Register = () => {
   const dispatch = useDispatch();
+
+  const auth = getAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(true);
 
-  const onRegister = async () => {
-    console.log("submit");
-
+  const onRegister = async (email, password) => {
     try {
-      const user = await signUp({ email, password });
-      dispatch(setUser(user));
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      dispatch(setUser(userCredential.user));
     } catch (error) {
-      console.log(error);
+      const errorMessage = error.message;
+      dispatch(setError(errorMessage));
     }
   };
 
@@ -52,12 +59,6 @@ const Register = () => {
               onPress={() => setPasswordVisible(!passwordVisible)}
             />
           }
-        />
-
-        <TextInput
-          mode="outlined"
-          label="Password"
-          onChangeText={(e) => setPassword(e)}
         />
       </View>
       <View style={styles.buttonContainer}>

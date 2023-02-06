@@ -1,16 +1,22 @@
 import { Image, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectSelectedMarker } from "../features/markers/markersSlice";
-import { clearModal } from "../features/modal/modalSlice";
+import { clearModal, setModal } from "../features/modal/modalSlice";
 import { deletePinRemote } from "../services/services";
 
 const MarkerInfo = () => {
+  const dispatch = useDispatch();
   const marker = useSelector(selectSelectedMarker);
 
   const deletePin = async () => {
     await deletePinRemote(marker);
     await dispatch(clearModal());
+  };
+
+  const addPicture = () => {
+    dispatch(setModal("addPicture"));
+    console.log("add picture");
   };
 
   return (
@@ -25,6 +31,7 @@ const MarkerInfo = () => {
           <Text>Water Quality</Text>
           <Text>Taste</Text>
           <Text>Notes</Text>
+          <Button onPress={addPicture}>Add Picture</Button>
           <Button onPress={deletePin}>Delete</Button>
         </>
       )}

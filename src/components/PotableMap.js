@@ -11,6 +11,7 @@ import {
   selectLocation,
   setLoading,
   setLocation,
+  setSelectedMarker,
 } from "../features/markers/markersSlice";
 import { setError } from "../features/error/errorSlice";
 import {
@@ -90,7 +91,7 @@ const PotableMap = () => {
     // };
 
     // addPinRemote(pinToAdd);
-
+    dispatch(setSelectedMarker({ location: nativeEvent.coordinate }));
     dispatch(setModal("addMarker"));
     // dispatch(addMarker(nativeEvent.coordinate));
     // dispatch(setMarkers([...markers, nativeEvent.coordinate]));

@@ -26,6 +26,9 @@ const markersSlice = createSlice({
     setSelectedMarker(state, action) {
       state.selectedMarker = action.payload;
     },
+    resetSelectedMarker(state) {
+      state.selectedMarker = null;
+    },
     setLocation(state, action) {
       state.location = action.payload;
     },
@@ -38,6 +41,8 @@ const markersSlice = createSlice({
 export const {
   setMarkers,
   addMarker,
+  deleteMarker,
+  resetSelectedMarker,
   setLocation,
   setLoading,
   setSelectedMarker,
