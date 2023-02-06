@@ -14,12 +14,18 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "UIBackgroundModes": ["location", "fetch"]
-      }
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ]
+      },
+      "bundleIdentifier": "com.potable.water"
     },
     "android": {
       "adaptiveIcon": {
@@ -29,6 +35,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c7bdc156-09fe-4c9f-92e8-4c8f359efebe"
+      }
     }
   }
 }
