@@ -11,7 +11,11 @@ const UserInfo = () => {
 
   return (
     <View style={[styles.UserInfoContainer, { top }]}>
-      {user ? <Text>Logged in as: {user}</Text> : <Text>Not Logged In</Text>}
+      {user ? (
+        <Text>Logged in as: {user?.email}</Text>
+      ) : (
+        <Text>Not Logged In</Text>
+      )}
     </View>
   );
 };

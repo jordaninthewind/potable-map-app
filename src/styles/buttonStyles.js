@@ -9,3 +9,8 @@ export const BASE_BUTTON = {
   justifyContent: "center",
   width: 120,
 };
+
+export const BUTTON_CONTAINER = {
+  flexDirection: "row",
+  justifyContent: "space-evenly",
+};

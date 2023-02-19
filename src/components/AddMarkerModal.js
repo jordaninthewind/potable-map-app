@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,13 +7,19 @@ import {
   selectSelectedMarker,
 } from "../features/markers/markersSlice";
 import { clearModal } from "../features/modal/modalSlice";
+import { firebaseAdapter } from "../helpers";
+import { addMarkerRemote } from "../services/services";
 import { BASE_BUTTON } from "../styles/buttonStyles";
 
 const AddMarkerModal = () => {
   const dispatch = useDispatch();
-  const currentMarker = useSelector(selectSelectedMarker);
+  const marker = useSelector(selectSelectedMarker);
 
-  // const { location } = currentMarker;
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [notes, setNotes] = useState("");
+  const [rating, setRating] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   const onCancel = () => {
     dispatch(clearModal());
@@ -20,34 +27,59 @@ const AddMarkerModal = () => {
   };
 
   const onSubmit = () => {
-    console.log("submit");
+    console.log("submitting marker", marker);
+    addMarkerRemote({
+      name,
+      description,
+      notes,
+      imageUrl,
+      location: firebaseAdapter({ type: "location-geopoint" }).toFirestore(
+        marker
+      ),
+      rating,
+    });
+    console.log("marker added");
   };
 
   return (
     <View>
       <Text variant="headlineMedium" style={{ textAlign: "center" }}>
-        New Marker Info
+        Add Marker
       </Text>
-      {/* <Text variant="bodyMedium">Longitude: {location.longitude} </Text>
-      <Text variant="bodyMedium">Latitude: {location.latitude} </Text> */}
-      <TextInput mode="outlined" label="Location Name" />
-      <TextInput mode="outlined" label="Description" />
-      <TextInput mode="outlined" multiline label="Notes" />
-      <TextInput mode="outlined" label="Rating" />
+      <TextInput
+        style={styles.input}
+        mode="outlined"
+        label="Location Name"
+        value={name}
+        onChange={({ target }) => setName(target.value)}
+      />
+      <TextInput
+        style={styles.input}
+        mode="outlined"
+        label="Description"
+        value={description}
+        onChange={({ target }) => setDescription(target.value)}
+      />
+      <TextInput
+        style={styles.input}
+        mode="outlined"
+        multiline
+        label="Notes"
+        value={notes}
+        onChange={({ target }) => setNotes(target.value)}
+      />
+      <TextInput
+        style={styles.input}
+        mode="outlined"
+        label="Rating"
+        value={rating}
+        onChange={({ target }) => setRating(target.value)}
+      />
       <View style={styles.buttonContainer}>
-        <Button
-          style={styles.buttonContainer}
-          mode="contained"
-          buttonColor="#ff0000"
-          onPress={onSubmit}
-        >
+        <Button mode="contained" buttonColor="#ff0000" onPress={onSubmit}>
           Add Marker
         </Button>
-        <Button
-          style={styles.buttonContainer}
-          mode="outlined"
-          onPress={onCancel}
-        >
+        <Button mode="outlined" onPress={onCancel}>
           Cancel
         </Button>
       </View>
@@ -63,6 +95,9 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     ...BASE_BUTTON,
+  },
+  input: {
+    marginTop: 5,
   },
 });
 

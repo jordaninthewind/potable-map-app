@@ -7,7 +7,6 @@ import { setModal } from "../features/modal/modalSlice";
 
 const MarkerCallout = ({ marker }) => {
   const dispatch = useDispatch();
-
   const openMarkerInfo = () => {
     dispatch(setSelectedMarker(marker));
     dispatch(setModal("markerInfo", marker));

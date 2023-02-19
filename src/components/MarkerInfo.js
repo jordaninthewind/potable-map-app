@@ -3,14 +3,15 @@ import { Button, Text } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { selectSelectedMarker } from "../features/markers/markersSlice";
 import { clearModal, setModal } from "../features/modal/modalSlice";
-import { deletePinRemote } from "../services/services";
+import { deleteMarkerRemote } from "../services/services";
+import { BUTTON_CONTAINER } from "../styles/buttonStyles";
 
 const MarkerInfo = () => {
   const dispatch = useDispatch();
   const marker = useSelector(selectSelectedMarker);
 
   const deletePin = async () => {
-    await deletePinRemote(marker);
+    await deleteMarkerRemote(marker);
     await dispatch(clearModal());
   };
 
@@ -25,14 +26,20 @@ const MarkerInfo = () => {
         <>
           <Text>Latitude: {marker.location?.latitude} </Text>
           <Text>Longitude: {marker.location?.longitude} </Text>
-          <Text>Type: {marker.type}</Text>
+          <Text>Type: {marker.name}</Text>
           <Text>Reference:</Text>
           <Image source={marker.picture} />
           <Text>Water Quality</Text>
           <Text>Taste</Text>
           <Text>Notes</Text>
-          <Button onPress={addPicture}>Add Picture</Button>
-          <Button onPress={deletePin}>Delete</Button>
+          <View style={{ ...BUTTON_CONTAINER }}>
+            <Button mode={"contained-tonal"} onPress={addPicture}>
+              Add Picture
+            </Button>
+            <Button mode={"outlined"} onPress={deletePin}>
+              Delete
+            </Button>
+          </View>
         </>
       )}
     </View>

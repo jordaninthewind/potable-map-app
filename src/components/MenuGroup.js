@@ -33,7 +33,7 @@ const MenuGroup = () => {
 
       dispatch(setLocation(position));
     } catch (error) {
-      dispatch(setError(error));
+      dispatch(setError(error.message));
     } finally {
       dispatch(setLoading(false));
     }
