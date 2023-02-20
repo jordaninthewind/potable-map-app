@@ -10,18 +10,21 @@ const NotificationOverlay = () => {
     dispatch(clearError());
   };
 
-  console.log("NotificationOverlay rendered", errorMessage);
-
   return (
-    <Snackbar
-      action={{ label: "Dismiss", onPress: resetError }}
-      elevation={0}
-      onDismiss={resetError}
-      visible={errorMessage}
-      wrapperStyle={{ zIndex: 100 }}
-    >
-      {errorMessage}
-    </Snackbar>
+    <>
+      {errorMessage && (
+        <Snackbar
+          action={{ label: "Dismiss", onPress: resetError }}
+          elevation={0}
+          onDismiss={resetError}
+          visible={!!errorMessage}
+          wrapperStyle={{ zIndex: 100 }}
+        >
+          {errorMessage?.toString()}
+        </Snackbar>
+      )}
+    </>
   );
 };
+
 export default NotificationOverlay;

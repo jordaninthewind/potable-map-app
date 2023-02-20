@@ -1,54 +1,95 @@
+import { GeoPoint } from "firebase/firestore";
+import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, Text, TextInput } from "react-native-paper";
+import { ActivityIndicator, Button, Text, TextInput } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import {
   resetSelectedMarker,
+  selectLoading,
   selectSelectedMarker,
 } from "../features/markers/markersSlice";
 import { clearModal } from "../features/modal/modalSlice";
-import { BASE_BUTTON } from "../styles/buttonStyles";
+import { addMarkerRemote } from "../services/services";
+import { BASE_BUTTON, BUTTON_ROW_CONTAINER } from "../styles/buttonStyles";
 
 const AddMarkerModal = () => {
   const dispatch = useDispatch();
-  const currentMarker = useSelector(selectSelectedMarker);
+  const marker = useSelector(selectSelectedMarker);
+  const loading = useSelector(selectLoading);
 
-  // const { location } = currentMarker;
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [notes, setNotes] = useState("");
+  const [rating, setRating] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   const onCancel = () => {
     dispatch(clearModal());
     dispatch(resetSelectedMarker());
   };
 
+  const structureMarker = () => {
+    return {
+      name,
+      type: "water fountain",
+      description,
+      notes,
+      rating,
+      imageUrl,
+      location: new GeoPoint(marker.latitude, marker.longitude),
+    };
+  };
+
   const onSubmit = () => {
-    console.log("submit");
+    dispatch(addMarkerRemote(structureMarker()));
+
+    dispatch(clearModal());
   };
 
   return (
     <View>
       <Text variant="headlineMedium" style={{ textAlign: "center" }}>
-        New Marker Info
+        Add Marker
       </Text>
-      {/* <Text variant="bodyMedium">Longitude: {location.longitude} </Text>
-      <Text variant="bodyMedium">Latitude: {location.latitude} </Text> */}
-      <TextInput mode="outlined" label="Location Name" />
-      <TextInput mode="outlined" label="Description" />
-      <TextInput mode="outlined" multiline label="Notes" />
-      <TextInput mode="outlined" label="Rating" />
-      <View style={styles.buttonContainer}>
-        <Button
-          style={styles.buttonContainer}
-          mode="contained"
-          buttonColor="#ff0000"
-          onPress={onSubmit}
-        >
-          Add Marker
-        </Button>
-        <Button
-          style={styles.buttonContainer}
-          mode="outlined"
-          onPress={onCancel}
-        >
+      {!loading && (
+        <>
+          <TextInput
+            style={styles.input}
+            mode="outlined"
+            label="Location Name"
+            value={name}
+            onChangeText={(text) => setName(text)}
+          />
+          <TextInput
+            style={styles.input}
+            mode="outlined"
+            label="Description"
+            value={description}
+            onChangeText={(event) => setDescription(event)}
+          />
+          <TextInput
+            style={styles.input}
+            mode="outlined"
+            multiline
+            label="Notes"
+            value={notes}
+            onChangeText={(event) => setNotes(event)}
+          />
+          <TextInput
+            style={styles.input}
+            mode="outlined"
+            label="Rating"
+            value={rating}
+            onChangeText={(event) => setRating(event)}
+          />
+        </>
+      )}
+      <View style={{ ...BUTTON_ROW_CONTAINER }}>
+        <Button mode="outlined" onPress={onCancel}>
           Cancel
+        </Button>
+        <Button mode="contained" buttonColor="#ff0000" onPress={onSubmit}>
+          {loading ? <ActivityIndicator /> : "Add Marker"}
         </Button>
       </View>
     </View>
@@ -63,6 +104,9 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     ...BASE_BUTTON,
+  },
+  input: {
+    marginTop: 5,
   },
 });
 

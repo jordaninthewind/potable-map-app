@@ -7,7 +7,6 @@ import { setModal } from "../features/modal/modalSlice";
 
 const MarkerCallout = ({ marker }) => {
   const dispatch = useDispatch();
-
   const openMarkerInfo = () => {
     dispatch(setSelectedMarker(marker));
     dispatch(setModal("markerInfo", marker));
@@ -17,8 +16,8 @@ const MarkerCallout = ({ marker }) => {
   return (
     <Callout onPress={openMarkerInfo}>
       <View style={styles.container}>
-        <Text variant="titleMedium">Name: {marker.title || "N/A"}</Text>
-        <Text variant="titleMedium">Rating: {marker.rating || "N/A"}</Text>
+        <Text variant="titleMedium">Type: {marker.type}</Text>
+        <Text variant="titleMedium">Rating: {marker.rating}</Text>
         <Button style={styles.button} mode="outlined" onPress={openMarkerInfo}>
           Details
         </Button>
@@ -35,7 +34,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "white",
-    marginTop: 10,
+    padding: 10,
   },
 });
 

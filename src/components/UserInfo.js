@@ -1,17 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useSelector } from "react-redux";
-import { selectUser } from "../features/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser, setUser } from "../features/user/userSlice";
+import { getAuth } from "firebase/auth";
+import { setError } from "../features/error/errorSlice";
 
 const UserInfo = () => {
   const { top } = useSafeAreaInsets();
   const user = useSelector(selectUser);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    getAuth().onAuthStateChanged((user) => {
+      if (user) {
+        dispatch(setUser({ id: user.uid, email: user.email }));
+      } else {
+        dispatch(setUser(null));
+        dispatch(setError("User logged out"));
+      }
+    });
+  }, []);
 
   return (
     <View style={[styles.UserInfoContainer, { top }]}>
-      {user ? <Text>Logged in as: {user}</Text> : <Text>Not Logged In</Text>}
+      {user ? (
+        <Text>Logged in as: {user?.email}</Text>
+      ) : (
+        <Text>Not Logged In</Text>
+      )}
     </View>
   );
 };

@@ -1,40 +1,53 @@
 import { Image, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
+
 import { selectSelectedMarker } from "../features/markers/markersSlice";
 import { clearModal, setModal } from "../features/modal/modalSlice";
-import { deletePinRemote } from "../services/services";
+import { shortenString } from "../helpers";
+import { deleteMarkerRemote } from "../services/services";
+import { BUTTON_ROW_CONTAINER } from "../styles/buttonStyles";
 
 const MarkerInfo = () => {
   const dispatch = useDispatch();
-  const marker = useSelector(selectSelectedMarker);
+  const { longitude, latitude, name, image, rating, notes } =
+    useSelector(selectSelectedMarker);
 
   const deletePin = async () => {
-    await deletePinRemote(marker);
+    await deleteMarkerRemote(marker);
     await dispatch(clearModal());
   };
 
   const addPicture = () => {
     dispatch(setModal("addPicture"));
-    console.log("add picture");
   };
 
   return (
     <View styles={styles.container}>
-      {marker && (
-        <>
-          <Text>Latitude: {marker.location?.latitude} </Text>
-          <Text>Longitude: {marker.location?.longitude} </Text>
-          <Text>Type: {marker.type}</Text>
-          <Text>Reference:</Text>
-          <Image source={marker.picture} />
-          <Text>Water Quality</Text>
-          <Text>Taste</Text>
-          <Text>Notes</Text>
-          <Button onPress={addPicture}>Add Picture</Button>
-          <Button onPress={deletePin}>Delete</Button>
-        </>
-      )}
+      <View style={styles.locationContainer}>
+        <Text style={styles.locationText}>
+          Long: {shortenString(longitude.toString(), 8)}
+        </Text>
+        <Text style={styles.locationText}>
+          Lat: {shortenString(latitude.toString(), 8)}
+        </Text>
+      </View>
+      <View style={styles.locationDetails}>
+        <Text>Type: {name}</Text>
+        {image && <Image source={image} />}
+        <Text>Water Quality: {rating}</Text>
+        <Text>Reference: N/A</Text>
+        <Text>Taste: GOOD</Text>
+        <Text>Notes: {notes}</Text>
+      </View>
+      <View style={{ ...BUTTON_ROW_CONTAINER }}>
+        <Button mode={"contained-tonal"} onPress={addPicture}>
+          Add Picture
+        </Button>
+        <Button mode={"outlined"} onPress={deletePin}>
+          Delete
+        </Button>
+      </View>
     </View>
   );
 };
@@ -42,9 +55,27 @@ const MarkerInfo = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
-    padding: 20,
-    margin: 20,
     borderRadius: 10,
+  },
+  locationContainer: {
+    backgroundColor: "rgba(0,0,0,0.1)",
+    borderRadius: 30,
+    borderColor: "rgba(0,0,0,0.3)",
+    borderWidth: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 10,
+    width: "100%",
+  },
+  locationDetails: {
+    justifyContent: "space-between",
+    marginVertical: 10,
+    width: "100%",
+  },
+  locationText: {
+    color: "rgba(0,0,0,0.75)",
+    fontSize: 20,
+    fontWeight: "bold",
   },
 });
 
