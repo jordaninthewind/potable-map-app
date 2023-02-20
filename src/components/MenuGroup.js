@@ -8,11 +8,14 @@ import { setModal } from "../features/modal/modalSlice";
 import { selectUser, setUser } from "../features/user/userSlice";
 import { setLoading, setLocation } from "../features/markers/markersSlice";
 import { getCurrentPosition } from "../services/services";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getAuth } from "firebase/auth";
 
 const MenuGroup = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const user = useSelector(selectUser);
+  const auth = getAuth();
 
   const onStateChange = ({ open }) => setOpen(open);
 
@@ -21,8 +24,7 @@ const MenuGroup = () => {
   };
 
   const handleLogout = () => {
-    console.log("logout");
-    dispatch(setUser(null));
+    auth.signOut();
   };
 
   const updatePosition = async () => {
@@ -70,10 +72,8 @@ const MenuGroup = () => {
       }}
       icon={"menu"}
       fabStyle={styles.fabStyle}
-      mode="flat"
       open={open}
       visible={true}
-      size="large"
       onLongPress={() => {
         console.log("long press");
       }}

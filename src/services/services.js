@@ -11,7 +11,8 @@ import {
 } from "firebase/firestore";
 
 import { db } from "../../firebaseConfig";
-import { PIN_DATABASE } from "../constants";
+import { MARKER_DATABASE } from "../constants";
+import { setLoading, setMarkers } from "../features/markers/markersSlice";
 
 export const requestLocationPermission = async () => {
   try {
@@ -20,6 +21,20 @@ export const requestLocationPermission = async () => {
     return status;
   } catch (error) {
     throw error;
+  }
+};
+
+export const getDevicePermissions = () => async (dispatch) => {
+  try {
+    const permission = await requestLocationPermission();
+
+    if (permission === "granted") {
+      await updateLocation();
+    } else {
+      throw new Error("Location permission not granted");
+    }
+  } catch (error) {
+    dispatch(setError(error));
   }
 };
 
@@ -44,40 +59,66 @@ export const getCurrentPosition = async () => {
   }
 };
 
-export const getLocalPins = async () => {
-  console.log("getting local pins...");
+export const getLocalMarkers = () => async (dispatch) => {
+  dispatch(setLoading(true));
 
   try {
-    const querySnapshot = await getDocs(collection(db, PIN_DATABASE));
-    const pins = querySnapshot.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
+    const querySnapshot = await getDocs(collection(db, MARKER_DATABASE));
+    const markers = querySnapshot.docs.map((doc) => {
+      const { name, description, imageUrl, location, createdAt } = doc.data();
 
-    return pins;
+      return {
+        id: doc.id,
+        name,
+        description,
+        imageUrl,
+        latitude: location.latitude,
+        longitude: location.longitude,
+        createdAt: createdAt.toDate().toString(),
+      };
+    });
+
+    dispatch(setMarkers(markers));
   } catch (error) {
-    throw error;
+    dispatch(setError(error));
+  } finally {
+    dispatch(setLoading(false));
   }
 };
 
-export const addPinRemote = async (pin) => {
-  console.log("adding pin...");
+export const addMarkerRemote =
+  ({ name, description, imageUrl, location }) =>
+  async (dispatch, getState) => {
+    dispatch(setLoading(true));
 
+    try {
+      const pinObject = {
+        name,
+        description,
+        imageUrl,
+        location,
+        createdAt: new Date(),
+      };
+
+      const docRef = await addDoc(collection(db, MARKER_DATABASE), pinObject);
+
+      return docRef.id;
+    } catch (error) {
+      dispatch(setError(error));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const deleteMarkerRemote = (marker) => async (dispatch) => {
+  dispatch(setLoading(true));
   try {
-    const docRef = await addDoc(collection(db, PIN_DATABASE), pin);
-
-    return docRef.id;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const deletePinRemote = async (marker) => {
-  try {
-    const docToDelete = doc(db, PIN_DATABASE, marker.id);
+    const docToDelete = doc(db, MARKER_DATABASE, marker.id);
     const deleted = await deleteDoc(docToDelete);
     console.log("deleted", deleted);
   } catch (error) {
-    throw error;
+    dispatch(setError(error));
+  } finally {
+    dispatch(setLoading(false));
   }
 };
