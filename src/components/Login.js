@@ -2,10 +2,10 @@ import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
 import { useDispatch } from "react-redux";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 import { clearModal, setModal } from "../features/modal/modalSlice";
 import { setUser } from "../features/user/userSlice";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { setError } from "../features/error/errorSlice";
 
 const Login = () => {
@@ -18,29 +18,24 @@ const Login = () => {
 
   const onLogin = async () => {
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      console.log("login");
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
 
-      const user = userCredential.user;
-      console.log(user);
-      dispatch(setUser(user));
+      dispatch(setUser({ id: user.uid, email: user.email }));
+
+      dispatch(clearModal());
+      dispatch(setError("Logged in successfully!"));
     } catch (error) {
-      dispatch(setError(error));
+      const { message } = error;
+
+      dispatch(setError(message));
     }
-    // dispatch(clearModal());
   };
 
   const cancelLogin = () => {
-    console.log("cancel");
     dispatch(clearModal());
   };
 
   const openRegisterModal = () => {
-    console.log("register");
     dispatch(setModal("register"));
   };
 
@@ -52,14 +47,16 @@ const Login = () => {
           mode="outlined"
           label="Email Address"
           keyboardType="email-address"
-          onChangeText={(e) => setEmail(e)}
+          clearTextOnFocus
+          autoCapitalize="none"
+          onChangeText={(val) => setEmail(val)}
         />
         <TextInput
           value={password}
           mode="outlined"
           label="Password"
           secureTextEntry={passwordVisible}
-          onChangeText={(e) => setPassword(e)}
+          onChangeText={(val) => setPassword(val)}
           right={
             <TextInput.Icon
               icon="eye"

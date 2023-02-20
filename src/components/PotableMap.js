@@ -7,19 +7,13 @@ import MarkerCallout from "./MarkerCallout";
 import {
   addMarker,
   selectMarkers,
-  setMarkers,
   selectLocation,
   setLoading,
   setLocation,
   setSelectedMarker,
 } from "../features/markers/markersSlice";
 import { setError } from "../features/error/errorSlice";
-import {
-  addPinRemote,
-  getCurrentPosition,
-  getLocalPins,
-  requestLocationPermission,
-} from "../services/services";
+import { getCurrentPosition, getLocalMarkers } from "../services/services";
 import { setModal } from "../features/modal/modalSlice";
 
 const PotableMap = () => {
@@ -32,96 +26,65 @@ const PotableMap = () => {
   const location = useSelector(selectLocation);
 
   useEffect(() => {
-    const init = async () => {
-      try {
-        const permission = await requestLocationPermission();
-
-        if (permission === "granted") {
-          await updateLocation();
-        } else {
-          throw new Error("Location permission not granted");
-        }
-      } catch (error) {
-        dispatch(setError(error));
-      }
-    };
-
-    init();
+    // };
+    // init();
   }, []);
 
-  useEffect(() => {
-    const updateLocation = async () => {
-      dispatch(setLoading(true));
+  const updateLocation = async () => {
+    dispatch(setLoading(true));
 
-      try {
-        const position = await getCurrentPosition();
+    try {
+      const position = await getCurrentPosition();
 
-        dispatch(setLocation(position));
-      } catch (error) {
-        dispatch(setError(error));
-      } finally {
-        dispatch(setLoading(false));
-      }
-    };
-
-    updateLocation();
-  }, []);
-
-  useEffect(() => {
-    console.log("location", location);
-    if (mapRef.current) {
-      mapRef.current.animateToRegion(location, 1000);
+      dispatch(setLocation(position));
+    } catch ({ message }) {
+      dispatch(setError(message));
+    } finally {
+      dispatch(setLoading(false));
     }
-    //   mapRef.current?.animateCamera({
-    //     center: location,
-    //     pitch: 0,
-    //     heading: 0,
-    //     altitude: 1000,
-    //     zoom: 15,
-    //   });
+  };
+
+  useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.animateToRegion(location, 3000);
+    }
   }, [location]);
 
   const openAddMarkerScreen = ({ nativeEvent }) => {
     Vibration.vibrate();
+    addMarker(nativeEvent.coordinate);
+    // TODO: Add error if map not zoomed in enough
 
-    // const pinToAdd = {
-    //   location: nativeEvent.coordinate,
-    //   title: "New Pin",
-    //   user_id: "1",
-    // };
-
-    // addPinRemote(pinToAdd);
-    dispatch(setSelectedMarker({ location: nativeEvent.coordinate }));
+    dispatch(setSelectedMarker(nativeEvent.coordinate));
     dispatch(setModal("addMarker"));
-    // dispatch(addMarker(nativeEvent.coordinate));
-    // dispatch(setMarkers([...markers, nativeEvent.coordinate]));
   };
 
   useEffect(() => {
-    const getMarkers = async () => {
-      const pins = await getLocalPins();
+    dispatch(getLocalMarkers());
+    // const getMarkers = async () => {
+    //   const markers = await dispatch(getLocalMarkers());
 
-      dispatch(setMarkers(pins));
-    };
+    //   dispatch(setMarkers(markers));
+    // };
 
-    getMarkers();
+    // getMarkers();
   }, []);
 
-  const updateMarkerLocation = ({ nativeEvent, marker }) => {
-    console.log("updateMarkerLocation", nativeEvent);
+  // const updateMarkerLocation = ({ nativeEvent, marker }) => {
+  //   console.log("updateMarkerLocation", nativeEvent);
 
-    updateMarkerLocation;
-  };
+  //   updateMarkerLocation;
+  // };
 
-  const onMove = () => {
-    console.log("onMove");
-  };
+  // const onMove = () => {
+  //   console.log("onMove");
+  // };
 
   return (
     <MapView
       ref={mapRef}
       onLongPress={openAddMarkerScreen}
-      onRegionChangeComplete={onMove}
+      // onRegionChangeComplete={onMove}
       region={location}
       // provider="google"
       showsPointsOfInterest={false}
@@ -131,15 +94,16 @@ const PotableMap = () => {
       userInterfaceStyle={colorScheme}
     >
       {markers?.map((marker, index) => {
+        const { latitude, longitude, title } = marker;
         return (
           <Marker
             calloutVisible={true}
-            coordinate={marker.location}
+            coordinate={{ latitude, longitude }}
             draggable
-            onDragEnd={(e) => updateMarkerLocation({ nativeEvent: e, marker })}
+            // onDragEnd={(e) => updateMarkerLocation({ nativeEvent: e, marker })}
             key={`pin${index}`}
             pinColor="blue"
-            title={marker.title}
+            title={title}
           >
             <MarkerCallout marker={marker} />
           </Marker>
