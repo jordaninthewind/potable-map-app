@@ -6,7 +6,7 @@
 
 Todos:
     - ~~Add firebase for db~~
-    - Add firebase for auth
+    - ~~Add firebase for auth~~
     - ~~Add marker component, add ability to add markers~~
     - Find ways to crowd-source or to integrate with DBs that have public data for this
     - Customize analytics
