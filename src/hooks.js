@@ -1,65 +1,27 @@
 import { useState, useEffect, useContext } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AppStateContext } from "./contexts";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-export const useAsyncStorage = () => {
-  const [value, setValue] = useState(null);
+const auth = getAuth();
 
-  const setItem = async (key, value) => {
-    await AsyncStorage.setItem(key, value);
-    setValue(value);
-  };
-
-  const getItem = async (key) => {
-    const value = await AsyncStorage.getItem(key);
-    setValue(value);
-
-    return value;
-  };
-
-  const removeItem = async (key) => {
-    await AsyncStorage.removeItem(key);
-    setValue(null);
-  };
-
-  return { value, setItem, getItem, removeItem };
-};
-
-export const useUser = () => {
-  const { user, setUser } = useContext(AppStateContext);
-  const { setItem } = useAsyncStorage();
-
-  const addUser = (user) => {
-    setUser(user);
-    setItem("user", JSON.stringify(user));
-  };
-
-  const removeUser = () => {
-    setUser(null);
-    setItem("user", "");
-  };
-
-  return { user, addUser, removeUser };
-};
-
-export const useAuth = () => {
-  const { user, addUser, removeUser } = useUser();
-  const { getItem } = useAsyncStorage();
+export function useAuthentication() {
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const user = getItem("user");
-    if (user) {
-      addUser(user);
-    }
+    const unsubscribeFromAuthStatuChanged = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        setUser(user);
+      } else {
+        // User is signed out
+        setUser(undefined);
+      }
+    });
+
+    return unsubscribeFromAuthStatuChanged;
   }, []);
 
-  const login = (user) => {
-    addUser(user);
+  return {
+    user,
   };
-
-  const logout = () => {
-    removeUser();
-  };
-
-  return { user, login, logout };
-};
+}
