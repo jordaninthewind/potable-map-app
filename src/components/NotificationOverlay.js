@@ -4,23 +4,33 @@ import { clearError, selectError } from "../features/error/errorSlice";
 
 const NotificationOverlay = () => {
   const dispatch = useDispatch();
-  const errorMessage = useSelector(selectError);
+  const error = useSelector(selectError);
 
   const resetError = () => {
     dispatch(clearError());
   };
 
+  const handleAction = () => {
+    if (error.action) {
+      error.action.onPress();
+    }
+
+    resetError();
+  };
+
   return (
     <>
-      {errorMessage && (
+      {error && (
         <Snackbar
-          action={{ label: "Dismiss", onPress: resetError }}
+          action={{
+            label: error.action ? error.action?.label : "Dismiss",
+            onPress: handleAction,
+          }}
+        >
           elevation={0}
           onDismiss={resetError}
-          visible={!!errorMessage}
-          wrapperStyle={{ zIndex: 100 }}
-        >
-          {errorMessage?.toString()}
+          visible={!!error}
+          wrapperStyle={{ zIndex: 100 }}>{error.message}
         </Snackbar>
       )}
     </>

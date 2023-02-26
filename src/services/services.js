@@ -33,8 +33,8 @@ export const getDevicePermissions = () => async (dispatch) => {
     } else {
       throw new Error("Location permission not granted");
     }
-  } catch (error) {
-    dispatch(setError(error));
+  } catch ({ message }) {
+    dispatch(setError({ message }));
   }
 };
 
@@ -79,8 +79,8 @@ export const getLocalMarkers = () => async (dispatch) => {
     });
 
     dispatch(setMarkers(markers));
-  } catch (error) {
-    dispatch(setError(error));
+  } catch ({ message }) {
+    dispatch(setError({ message }));
   } finally {
     dispatch(setLoading(false));
   }
@@ -103,8 +103,8 @@ export const addMarkerRemote =
       const docRef = await addDoc(collection(db, MARKER_DATABASE), pinObject);
 
       return docRef.id;
-    } catch (error) {
-      dispatch(setError(error));
+    } catch ({ message }) {
+      dispatch(setError({ message }));
     } finally {
       dispatch(setLoading(false));
     }
@@ -116,8 +116,8 @@ export const deleteMarkerRemote = (marker) => async (dispatch) => {
     const docToDelete = doc(db, MARKER_DATABASE, marker.id);
     const deleted = await deleteDoc(docToDelete);
     console.log("deleted", deleted);
-  } catch (error) {
-    dispatch(setError(error));
+  } catch ({ message }) {
+    dispatch(setError({ message }));
   } finally {
     dispatch(setLoading(false));
   }
