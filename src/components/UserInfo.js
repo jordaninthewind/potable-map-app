@@ -18,7 +18,7 @@ const UserInfo = () => {
         dispatch(setUser({ id: user.uid, email: user.email }));
       } else {
         dispatch(setUser(null));
-        dispatch(setError("User logged out"));
+        dispatch(setError({ message: "User logged out" }));
       }
     });
   }, []);

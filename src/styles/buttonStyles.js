@@ -10,7 +10,8 @@ export const BASE_BUTTON = {
   width: 120,
 };
 
-export const BUTTON_ROW_CONTAINER = {
+export const ITEM_ROW_CONTAINER = {
+  alignItems: "center",
   flexDirection: "row",
   justifyContent: "space-evenly",
 };

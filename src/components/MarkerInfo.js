@@ -6,7 +6,7 @@ import { selectSelectedMarker } from "../features/markers/markersSlice";
 import { clearModal, setModal } from "../features/modal/modalSlice";
 import { shortenString } from "../helpers";
 import { deleteMarkerRemote } from "../services/services";
-import { BUTTON_ROW_CONTAINER } from "../styles/buttonStyles";
+import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
 
 const MarkerInfo = () => {
   const dispatch = useDispatch();
@@ -40,7 +40,7 @@ const MarkerInfo = () => {
         <Text>Taste: GOOD</Text>
         <Text>Notes: {notes}</Text>
       </View>
-      <View style={{ ...BUTTON_ROW_CONTAINER }}>
+      <View style={{ ...ITEM_ROW_CONTAINER }}>
         <Button mode={"contained-tonal"} onPress={addPicture}>
           Add Picture
         </Button>

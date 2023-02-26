@@ -10,7 +10,7 @@ import {
 } from "../features/markers/markersSlice";
 import { clearModal } from "../features/modal/modalSlice";
 import { addMarkerRemote } from "../services/services";
-import { BASE_BUTTON, BUTTON_ROW_CONTAINER } from "../styles/buttonStyles";
+import { BASE_BUTTON, ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
 
 const AddMarkerModal = () => {
   const dispatch = useDispatch();
@@ -84,7 +84,7 @@ const AddMarkerModal = () => {
           />
         </>
       )}
-      <View style={{ ...BUTTON_ROW_CONTAINER }}>
+      <View style={{ ...ITEM_ROW_CONTAINER }}>
         <Button mode="outlined" onPress={onCancel}>
           Cancel
         </Button>

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useColorScheme, StyleSheet, Vibration } from "react-native";
+import { useColorScheme, StyleSheet, Vibration, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -15,20 +15,17 @@ import {
 import { setError } from "../features/error/errorSlice";
 import { getCurrentPosition, getLocalMarkers } from "../services/services";
 import { setModal } from "../features/modal/modalSlice";
+import { selectTheme } from "../features/app/appSlice";
 
 const PotableMap = () => {
   const mapRef = useRef(null);
 
   const dispatch = useDispatch();
   const colorScheme = useColorScheme();
+  const darkMode = useSelector(selectTheme);
 
   const markers = useSelector(selectMarkers);
   const location = useSelector(selectLocation);
-
-  useEffect(() => {
-    // };
-    // init();
-  }, []);
 
   const updateLocation = async () => {
     dispatch(setLoading(true));
@@ -38,7 +35,7 @@ const PotableMap = () => {
 
       dispatch(setLocation(position));
     } catch ({ message }) {
-      dispatch(setError(message));
+      dispatch(setError({ message }));
     } finally {
       dispatch(setLoading(false));
     }
@@ -85,16 +82,17 @@ const PotableMap = () => {
       ref={mapRef}
       onLongPress={openAddMarkerScreen}
       // onRegionChangeComplete={onMove}
+      userInterfaceStyle={darkMode}
       region={location}
       // provider="google"
       showsPointsOfInterest={false}
       showsUserLocation={true}
       showsTraffic={true}
       style={styles.map}
-      userInterfaceStyle={colorScheme}
+      // userInterfaceStyle={colorScheme}
     >
       {markers?.map((marker, index) => {
-        const { latitude, longitude, title } = marker;
+        const { latitude, longitude, title, type } = marker;
         return (
           <Marker
             calloutVisible={true}
@@ -105,6 +103,7 @@ const PotableMap = () => {
             pinColor="blue"
             title={title}
           >
+            <View style={[styles.marker, styles.type]} />
             <MarkerCallout marker={marker} />
           </Marker>
         );
@@ -121,6 +120,14 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     zIndex: 0,
+  },
+  marker: {
+    backgroundColor: "lightblue",
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: "blue",
+    height: 10,
+    width: 10,
   },
 });
 
