@@ -1,6 +1,8 @@
+import { useCallback, useMemo, useRef } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
 import { selectSelectedMarker } from "../features/markers/markersSlice";
 import { clearModal, setModal } from "../features/modal/modalSlice";
@@ -9,6 +11,10 @@ import { deleteMarkerRemote } from "../services/services";
 import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
 
 const MarkerInfo = () => {
+  const handleSheetChange = useCallback((index) => {
+    console.log("handleSheetChange", index);
+  }, []);
+
   const dispatch = useDispatch();
   const { longitude, latitude, name, image, rating, notes } =
     useSelector(selectSelectedMarker);
@@ -23,19 +29,15 @@ const MarkerInfo = () => {
   };
 
   return (
-    <View styles={styles.container}>
-      <View style={styles.locationContainer}>
-        <Text style={styles.locationText}>
-          Long: {shortenString(longitude.toString(), 8)}
-        </Text>
-        <Text style={styles.locationText}>
-          Lat: {shortenString(latitude.toString(), 8)}
-        </Text>
+    <BottomSheetScrollView>
+      <View style={styles.nameContainer}>
+        <Text variant="titleLarge">{name}</Text>
       </View>
-      <View style={styles.locationDetails}>
-        <Text>Type: {name}</Text>
+      <View style={styles.locationDetailsContainer}>
         {image && <Image source={image} />}
         <Text>Water Quality: {rating}</Text>
+        <Text>Longitude: {shortenString(longitude.toString(), 8)}</Text>
+        <Text>Latitude: {shortenString(latitude.toString(), 8)}</Text>
         <Text>Reference: N/A</Text>
         <Text>Taste: GOOD</Text>
         <Text>Notes: {notes}</Text>
@@ -48,28 +50,24 @@ const MarkerInfo = () => {
           Delete
         </Button>
       </View>
-    </View>
+    </BottomSheetScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "white",
-    borderRadius: 10,
-  },
   locationContainer: {
     backgroundColor: "rgba(0,0,0,0.1)",
-    borderRadius: 30,
-    borderColor: "rgba(0,0,0,0.3)",
-    borderWidth: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 10,
-    width: "100%",
   },
-  locationDetails: {
+  nameContainer: {
+    alignItems: "center",
+    backgroundColor: "rgba(255,0,0,0.1)",
+    borderRadius: 30,
+    justifyContent: "center",
+    paddingVertical: 10,
+  },
+  locationDetailsContainer: {
     justifyContent: "space-between",
-    marginVertical: 10,
+    marginVertical: 20,
     width: "100%",
   },
   locationText: {

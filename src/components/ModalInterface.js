@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Modal, Text } from "react-native-paper";
+import BottomSheet from "@gorhom/bottom-sheet";
 import { useDispatch, useSelector } from "react-redux";
 
 import { clearModal, selectModal } from "../features/modal/modalSlice";
@@ -8,48 +8,89 @@ import AddPicture from "./AddPicture";
 import Login from "./Login";
 import MarkerInfo from "./MarkerInfo";
 import Register from "./Register";
+import { useEffect, useRef, useState } from "react";
 
 const ModalInterface = () => {
   const dispatch = useDispatch();
+  const bottomSheetRef = useRef(null);
   const modal = useSelector(selectModal);
+  const [component, setComponent] = useState(null);
 
-  const onDismiss = () => dispatch(clearModal());
+  useEffect(() => {
+    const component = getComponent();
+    setComponent(component);
+  }, [modal]);
+
+  const handleSheetChange = (index) => {
+    console.log("handleSheetChange", index);
+    if (index === 0) {
+      dispatch(clearModal());
+    }
+  };
 
   const getComponent = () => {
     switch (modal) {
       case "login":
-        return <Login />;
+        return {
+          component: <Login />,
+          index: 1,
+          snapPoints: ["5%", "45%", "75%"],
+        };
       case "register":
-        return <Register />;
+        return {
+          component: <Register />,
+          index: 1,
+          snapPoints: ["5%", "75%"],
+        };
       case "markerInfo":
-        return <MarkerInfo />;
+        return {
+          component: <MarkerInfo />,
+          index: 1,
+          snapPoints: ["10%", "40%"],
+        };
       case "addMarker":
-        return <AddMarkerModal />;
+        return {
+          component: <AddMarkerModal />,
+          index: 1,
+          snapPoints: ["5%", "40%", "70%"],
+        };
       case "addPicture":
-        return <AddPicture />;
+        return {
+          component: <AddPicture />,
+          index: 1,
+          snapPoints: ["5%", "70%"],
+        };
       default:
-        return null;
+        return { component: null, snapPoints: ["10%"] };
     }
   };
 
   return (
-    <Modal
-      dismissable={true}
-      visible={modal !== null}
-      onDismiss={onDismiss}
-      contentContainerStyle={styles.container}
-    >
-      {getComponent()}
-    </Modal>
+    <>
+      {component?.component && (
+        <BottomSheet
+          ref={bottomSheetRef}
+          style={styles.container}
+          // animateOnMount={true}
+          // keyboardBehavior="extend"
+          keyboardBlurBehavior="restore"
+          // android_keyboardInputMode="adjustPan"
+          snapPoints={component.snapPoints}
+          // handleHeight={20}
+          // enablePanDownToClose
+          index={component.index}
+          onChange={handleSheetChange}
+        >
+          {component.component}
+        </BottomSheet>
+      )}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
-    padding: 20,
-    margin: 20,
-    borderRadius: 10,
+    paddingHorizontal: 20,
   },
 });
 
