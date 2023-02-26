@@ -10,11 +10,14 @@ import { setLoading, setLocation } from "../features/markers/markersSlice";
 import { getCurrentPosition } from "../services/services";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getAuth } from "firebase/auth";
+import { selectTheme, setTheme } from "../features/app/appSlice";
 
 const MenuGroup = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const user = useSelector(selectUser);
+  const darkMode = useSelector(selectTheme);
+
   const auth = getAuth();
 
   const onStateChange = ({ open }) => setOpen(open);
@@ -27,6 +30,35 @@ const MenuGroup = () => {
     auth.signOut();
   };
 
+  const toggleColorScheme = async () => {
+    await dispatch(setTheme(darkMode ? "dark" : "light"));
+    await AsyncStorage.setItem("theme", darkMode ? "dark" : "light");
+  };
+
+  const baseMenuItems = [
+    {
+      icon: "plus",
+      label: "Add Source",
+      onPress: () => {},
+      style: { backgroundColor: "white" },
+      ...baseFabStyle,
+    },
+    {
+      icon: "crosshairs-gps",
+      label: "Get Current Location",
+      onPress: updatePosition,
+      style: { backgroundColor: "white" },
+      ...baseFabStyle,
+    },
+    {
+      icon: "lightbulb-on",
+      label: `Toggle ${true ? "Dark" : "Light"} Mode`,
+      onPress: toggleColorScheme,
+      style: { backgroundColor: "white" },
+      ...baseFabStyle,
+    },
+  ];
+
   const updatePosition = async () => {
     dispatch(setLoading(true));
 
@@ -34,8 +66,8 @@ const MenuGroup = () => {
       const position = await getCurrentPosition();
 
       dispatch(setLocation(position));
-    } catch (error) {
-      dispatch(setError(error.message));
+    } catch ({ message }) {
+      dispatch(setError({ message }));
     } finally {
       dispatch(setLoading(false));
     }
@@ -43,29 +75,50 @@ const MenuGroup = () => {
 
   return (
     <FAB.Group
-      actions={[
-        {
-          icon: "plus",
-          label: "Add Source",
-          onPress: () => {},
-          style: { backgroundColor: "white" },
-          ...baseFabStyle,
-        },
-        {
-          icon: "crosshairs-gps",
-          label: "Get Current Location",
-          onPress: updatePosition,
-          style: { backgroundColor: "white" },
-          ...baseFabStyle,
-        },
-        {
-          icon: user ? "logout" : "login",
-          label: user ? "Logout" : "Login",
-          onPress: user ? handleLogout : openLoginModal,
-          style: { backgroundColor: "white" },
-          ...baseFabStyle,
-        },
-      ]}
+      actions={
+        user
+          ? [
+              {
+                icon: "account-details",
+                label: "Account Details",
+                onPress: () => {},
+                style: { backgroundColor: "white" },
+                ...baseFabStyle,
+              },
+              ...baseMenuItems,
+              {
+                icon: "logout",
+                label: "Logout",
+                onPress: handleLogout,
+                style: { backgroundColor: "white" },
+                ...baseFabStyle,
+              },
+            ]
+          : [
+              {
+                icon: "plus",
+                label: "Add Source",
+                onPress: () => {},
+                style: { backgroundColor: "white" },
+                ...baseFabStyle,
+              },
+              {
+                icon: "crosshairs-gps",
+                label: "Get Current Location",
+                onPress: updatePosition,
+                style: { backgroundColor: "white" },
+                ...baseFabStyle,
+              },
+              ...baseMenuItems,
+              {
+                icon: "login",
+                label: "Login",
+                onPress: openLoginModal,
+                style: { backgroundColor: "white" },
+                ...baseFabStyle,
+              },
+            ]
+      }
       onStateChange={onStateChange}
       onPress={() => {
         console.log("menu opened");
