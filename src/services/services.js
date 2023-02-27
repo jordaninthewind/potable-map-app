@@ -1,5 +1,6 @@
 import {
   getCurrentPositionAsync,
+  getLastKnownPositionAsync,
   requestForegroundPermissionsAsync,
 } from "expo-location";
 import {
@@ -12,7 +13,12 @@ import {
 
 import { db } from "../../firebaseConfig";
 import { MARKER_DATABASE } from "../constants";
-import { setLoading, setMarkers } from "../features/markers/markersSlice";
+import { setError } from "../features/error/errorSlice";
+import {
+  setLoading,
+  setMarkers,
+  setTempMarker,
+} from "../features/markers/markersSlice";
 
 export const requestLocationPermission = async () => {
   try {
@@ -39,21 +45,15 @@ export const getDevicePermissions = () => async (dispatch) => {
 };
 
 export const getCurrentPosition = async () => {
-  console.log("getting current position...");
-
   try {
-    const { coords } = await getCurrentPositionAsync();
+    // TODO: Add follow location listener
+    const { coords } = await getLastKnownPositionAsync();
 
-    const { latitude, longitude } = coords;
-
-    const location = {
-      longitude,
-      latitude,
+    return {
+      ...coords,
       latitudeDelta: 0.1,
       longitudeDelta: 0.1,
     };
-
-    return location;
   } catch (error) {
     throw error;
   }
