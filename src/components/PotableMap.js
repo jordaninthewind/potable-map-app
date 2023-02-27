@@ -1,56 +1,49 @@
 import { useEffect, useRef } from "react";
-import { useColorScheme, StyleSheet, Vibration, View } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+import { StyleSheet, Vibration } from "react-native";
+import MapView from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 
-import MarkerCallout from "./MarkerCallout";
 import {
-  addMarker,
   selectMarkers,
+  setTempMarker,
   selectLocation,
-  setLoading,
-  setLocation,
   setSelectedMarker,
+  selectSelectedMarker,
+  selectTempMarker,
 } from "../features/markers/markersSlice";
-import { setError } from "../features/error/errorSlice";
-import { getCurrentPosition, getLocalMarkers } from "../services/services";
+import { getLocalMarkers } from "../services/services";
 import { setModal } from "../features/modal/modalSlice";
 import { selectTheme } from "../features/app/appSlice";
+
+import { PotableMarker } from "./PotableMarker";
 
 const PotableMap = () => {
   const mapRef = useRef(null);
 
   const dispatch = useDispatch();
-  const colorScheme = useColorScheme();
   const darkMode = useSelector(selectTheme);
 
   const markers = useSelector(selectMarkers);
   const location = useSelector(selectLocation);
-
-  const updateLocation = async () => {
-    dispatch(setLoading(true));
-
-    try {
-      const position = await getCurrentPosition();
-
-      dispatch(setLocation(position));
-    } catch ({ message }) {
-      dispatch(setError({ message }));
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
+  const selectedMarker = useSelector(selectSelectedMarker);
+  const tempMarker = useSelector(selectTempMarker);
 
   useEffect(() => {
-    if (mapRef.current) {
-      mapRef.current.animateToRegion(location, 3000);
+    if (selectedMarker) {
+      const location = {
+        latitude: selectedMarker.latitude,
+        longitude: selectedMarker.longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      };
+
+      mapRef.current.animateToRegion(location, 1000);
     }
-  }, [location]);
+  }, [selectedMarker]);
 
   const openAddMarkerScreen = ({ nativeEvent }) => {
     Vibration.vibrate();
-    addMarker(nativeEvent.coordinate);
-    // TODO: Add error if map not zoomed in enough
+    dispatch(setTempMarker(nativeEvent.coordinate));
 
     dispatch(setSelectedMarker(nativeEvent.coordinate));
     dispatch(setModal("addMarker"));
@@ -58,13 +51,6 @@ const PotableMap = () => {
 
   useEffect(() => {
     dispatch(getLocalMarkers());
-    // const getMarkers = async () => {
-    //   const markers = await dispatch(getLocalMarkers());
-
-    //   dispatch(setMarkers(markers));
-    // };
-
-    // getMarkers();
   }, []);
 
   // const updateMarkerLocation = ({ nativeEvent, marker }) => {
@@ -73,41 +59,31 @@ const PotableMap = () => {
   //   updateMarkerLocation;
   // };
 
-  // const onMove = () => {
-  //   console.log("onMove");
-  // };
+  const onMove = () => {
+    console.log("onMove");
+  };
 
   return (
     <MapView
       ref={mapRef}
       onLongPress={openAddMarkerScreen}
-      // onRegionChangeComplete={onMove}
+      onRegionChangeComplete={onMove}
       userInterfaceStyle={darkMode}
       region={location}
-      // provider="google"
       showsPointsOfInterest={false}
       showsUserLocation={true}
-      showsTraffic={true}
       style={styles.map}
-      // userInterfaceStyle={colorScheme}
     >
       {markers?.map((marker, index) => {
-        const { latitude, longitude, title, type } = marker;
         return (
-          <Marker
-            calloutVisible={true}
-            coordinate={{ latitude, longitude }}
-            draggable
-            // onDragEnd={(e) => updateMarkerLocation({ nativeEvent: e, marker })}
-            key={`pin${index}`}
-            pinColor="blue"
-            title={title}
-          >
-            <View style={[styles.marker, styles.type]} />
-            <MarkerCallout marker={marker} />
-          </Marker>
+          <PotableMarker
+            key={index}
+            marker={marker}
+            selectedId={selectedMarker?.id}
+          />
         );
       })}
+      {tempMarker && <PotableMarker marker={tempMarker} type={"temp"} />}
     </MapView>
   );
 };

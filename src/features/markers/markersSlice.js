@@ -6,6 +6,7 @@ const initialState = {
   selectedMarker: null,
   location: DEFAULT_REGION,
   loading: false,
+  tempMarker: null,
 };
 
 const markersSlice = createSlice({
@@ -32,6 +33,12 @@ const markersSlice = createSlice({
     setLocation(state, action) {
       state.location = action.payload;
     },
+    setTempMarker(state, action) {
+      state.tempMarker = action.payload;
+    },
+    resetTempMarker(state) {
+      state.tempMarker = null;
+    },
     setLoading(state, action) {
       state.loading = action.payload;
     },
@@ -46,6 +53,8 @@ export const {
   setLocation,
   setLoading,
   setSelectedMarker,
+  setTempMarker,
+  resetTempMarker,
 } = markersSlice.actions;
 
 export const selectMarkers = (state) => state.markers.entities;
@@ -55,6 +64,7 @@ export const selectMarkersCount = createSelector(
 );
 
 export const selectSelectedMarker = (state) => state.markers.selectedMarker;
+export const selectTempMarker = (state) => state.markers.tempMarker;
 
 export const selectLoading = (state) => state.markers.loading;
 
