@@ -23,10 +23,7 @@ const Register = () => {
   const [verifyPassword, setVerifyPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
   const [state, setState] = useState("");
-  const [zip, setZip] = useState("");
   const [country, setCountry] = useState("");
   const [agreed, setAgreed] = useState(false);
 
@@ -40,8 +37,11 @@ const Register = () => {
       );
 
       dispatch(setUser(userCredential.user));
+      dispatch(setModal("profile"));
     } catch ({ message }) {
       dispatch(setError({ message }));
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 
