@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useRef } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,10 +10,6 @@ import { deleteMarkerRemote } from "../services/services";
 import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
 
 const MarkerInfo = () => {
-  const handleSheetChange = useCallback((index) => {
-    console.log("handleSheetChange", index);
-  }, []);
-
   const dispatch = useDispatch();
   const { longitude, latitude, name, image, rating, notes } =
     useSelector(selectSelectedMarker);
@@ -40,6 +35,7 @@ const MarkerInfo = () => {
         <Text>Latitude: {shortenString(latitude.toString(), 8)}</Text>
         <Text>Reference: N/A</Text>
         <Text>Taste: GOOD</Text>
+        <Text>Distance: Pretty Close</Text>
         <Text>Notes: {notes}</Text>
       </View>
       <View style={{ ...ITEM_ROW_CONTAINER }}>
