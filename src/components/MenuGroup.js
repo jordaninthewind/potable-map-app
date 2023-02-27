@@ -33,6 +33,23 @@ const MenuGroup = () => {
   const toggleColorScheme = async () => {
     await dispatch(setTheme(darkMode ? "dark" : "light"));
     await AsyncStorage.setItem("theme", darkMode ? "dark" : "light");
+    dispatch(
+      setError({ message: `Switched to ${darkMode ? "dark" : "light"} mode` })
+    );
+  };
+
+  const updatePosition = async () => {
+    dispatch(setLoading(true));
+
+    try {
+      const position = await getCurrentPosition();
+
+      dispatch(setLocation(position));
+    } catch ({ message }) {
+      dispatch(setError({ message }));
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
 
   const baseMenuItems = [
@@ -59,20 +76,6 @@ const MenuGroup = () => {
     },
   ];
 
-  const updatePosition = async () => {
-    dispatch(setLoading(true));
-
-    try {
-      const position = await getCurrentPosition();
-
-      dispatch(setLocation(position));
-    } catch ({ message }) {
-      dispatch(setError({ message }));
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
   return (
     <FAB.Group
       actions={
@@ -95,20 +98,6 @@ const MenuGroup = () => {
               },
             ]
           : [
-              {
-                icon: "plus",
-                label: "Add Source",
-                onPress: () => {},
-                style: { backgroundColor: "white" },
-                ...baseFabStyle,
-              },
-              {
-                icon: "crosshairs-gps",
-                label: "Get Current Location",
-                onPress: updatePosition,
-                style: { backgroundColor: "white" },
-                ...baseFabStyle,
-              },
               ...baseMenuItems,
               {
                 icon: "login",
@@ -123,14 +112,14 @@ const MenuGroup = () => {
       onPress={() => {
         console.log("menu opened");
       }}
-      icon={"menu"}
+      icon={open ? "close" : "menu"}
       fabStyle={styles.fabStyle}
       open={open}
-      visible={true}
+      visible
       onLongPress={() => {
         console.log("long press");
       }}
-      backdropColor="rgba(0,0,0,0)"
+      backdropColor="rgba(255,255,255,0.5)"
     />
   );
 };
@@ -150,7 +139,7 @@ const baseFabStyle = {
     textShadowRadius: 5,
   },
   containerStyle: {
-    backgroundColor: "rgba(255,255,255,0.75)",
+    backgroundColor: "rgba(255,255,255,1)",
     borderRadius: 10,
   },
 };
