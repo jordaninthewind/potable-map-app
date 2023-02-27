@@ -5,10 +5,9 @@ import { FAB } from "react-native-paper";
 
 import { setError } from "../features/error/errorSlice";
 import { setModal } from "../features/modal/modalSlice";
-import { selectUser, setUser } from "../features/user/userSlice";
+import { selectUser } from "../features/user/userSlice";
 import { setLoading, setLocation } from "../features/markers/markersSlice";
 import { getCurrentPosition } from "../services/services";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getAuth } from "firebase/auth";
 import { selectTheme, setTheme } from "../features/app/appSlice";
 
@@ -16,7 +15,7 @@ const MenuGroup = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const user = useSelector(selectUser);
-  const darkMode = useSelector(selectTheme);
+  const colorScheme = useSelector(selectTheme);
 
   const auth = getAuth();
 
@@ -31,10 +30,13 @@ const MenuGroup = () => {
   };
 
   const toggleColorScheme = async () => {
-    await dispatch(setTheme(darkMode ? "dark" : "light"));
-    await AsyncStorage.setItem("theme", darkMode ? "dark" : "light");
+    await dispatch(setTheme(colorScheme === "dark" ? "light" : "dark"));
+
     dispatch(
-      setError({ message: `Switched to ${darkMode ? "dark" : "light"} mode` })
+      setError({
+        message:
+          colorScheme === "dark" ? "Dark Mode Enabled" : "Light Mode Enabled",
+      })
     );
   };
 

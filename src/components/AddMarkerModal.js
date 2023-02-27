@@ -1,8 +1,9 @@
-import { GeoPoint } from "firebase/firestore";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { ActivityIndicator, Button, Text, TextInput } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
+import { ActivityIndicator, Button, Text, TextInput } from "react-native-paper";
+import { GeoPoint } from "firebase/firestore";
+
 import {
   resetSelectedMarker,
   selectLoading,
