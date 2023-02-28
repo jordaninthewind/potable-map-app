@@ -20,8 +20,8 @@
     "expo": "~47.0.12",
     "expo-auth-session": "~3.8.0",
     "expo-camera": "~13.1.0",
-    "expo-dev-client": "~2.0.1",
     "expo-location": "~15.0.1",
+    "expo-navigation-bar": "~2.0.1",
     "expo-random": "~13.0.0",
     "expo-status-bar": "~1.4.2",
     "expo-task-manager": "~11.0.1",
@@ -40,7 +40,11 @@
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
+    "@expo/config-plugins": "^5.0.4",
     "@expo/webpack-config": "^18.0.1",
+    "expo-cli": "^6.3.2",
+    "expo-dev-client": "~2.0.1",
+    "expo-modules-autolinking": "~1.0.0",
     "patch-package": "^6.5.1",
     "postinstall-postinstall": "^2.1.0"
   },
