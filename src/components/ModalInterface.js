@@ -9,21 +9,26 @@ import Login from "./Login";
 import MarkerInfo from "./MarkerInfo";
 import Register from "./Register";
 import { useEffect, useRef, useState } from "react";
+import EditMarker from "./EditMarker";
+import { resetMapState } from "../services/services";
+import { selectTheme } from "../features/app/appSlice";
 
 const ModalInterface = () => {
   const dispatch = useDispatch();
   const bottomSheetRef = useRef(null);
   const modal = useSelector(selectModal);
+  const colorScheme = useSelector(selectTheme);
   const [component, setComponent] = useState(null);
 
   useEffect(() => {
-    const component = getComponent();
-    setComponent(component);
+    setComponent(getComponent());
   }, [modal]);
 
-  const handleSheetChange = (index) => {
-    console.log("handleSheetChange", index);
+  const handleSheetChange = async (index) => {
     if (index === 0) {
+      await bottomSheetRef.current?.close();
+
+      dispatch(resetMapState());
       dispatch(clearModal());
     }
   };
@@ -34,7 +39,7 @@ const ModalInterface = () => {
         return {
           component: <Login />,
           index: 1,
-          snapPoints: ["5%", "45%", "75%"],
+          snapPoints: ["5%", "80%"],
         };
       case "register":
         return {
@@ -46,19 +51,25 @@ const ModalInterface = () => {
         return {
           component: <MarkerInfo />,
           index: 1,
-          snapPoints: ["10%", "40%"],
+          snapPoints: ["10%", "65%"],
         };
       case "addMarker":
         return {
           component: <AddMarkerModal />,
           index: 1,
-          snapPoints: ["5%", "40%", "70%"],
+          snapPoints: ["5%", "70%"],
         };
       case "addPicture":
         return {
           component: <AddPicture />,
           index: 1,
-          snapPoints: ["5%", "70%"],
+          snapPoints: ["5%", "85%"],
+        };
+      case "editMarker":
+        return {
+          component: <EditMarker />,
+          index: 1,
+          snapPoints: ["5%", "85%"],
         };
       default:
         return { component: null, snapPoints: ["10%"] };
@@ -69,9 +80,10 @@ const ModalInterface = () => {
     <>
       {component?.component && (
         <BottomSheet
+          animateOnMount
           ref={bottomSheetRef}
           style={styles.container}
-          // animateOnMount={true}
+          backgroundStyle={styles[colorScheme]}
           // keyboardBehavior="extend"
           keyboardBlurBehavior="restore"
           // android_keyboardInputMode="adjustPan"
@@ -91,6 +103,12 @@ const ModalInterface = () => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
+  },
+  light: {
+    backgroundColor: "white",
+  },
+  dark: {
+    backgroundColor: "lightgrey",
   },
 });
 
