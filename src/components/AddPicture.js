@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { IconButton, Text } from "react-native-paper";
+import { Button, IconButton, Text } from "react-native-paper";
 import { Camera, CameraType } from "expo-camera";
 
 import { uploadWaterSourcePhoto } from "../services/storageService";
-import { BASE_BUTTON } from "../styles/buttonStyles";
+import { setModal } from "../features/modal/modalSlice";
+import { BASE_BUTTON, ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
 
 const AddPicture = () => {
-  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
   const [savedPicture, setSavedPicture] = useState(false);
   const [devicePermission, setDevicePermission] = useState(true);
   const [type, setType] = useState(CameraType.front);
@@ -38,6 +40,10 @@ const AddPicture = () => {
 
   const clearPicture = () => {
     setSavedPicture(null);
+  };
+
+  const goBack = () => {
+    dispatch(setModal("markerInfo"));
   };
 
   const savePicture = async () => {
@@ -92,43 +98,22 @@ const AddPicture = () => {
               <Text>Camera permission denied</Text>
             </View>
           )}
+          <View style={styles.buttonContainer}>
+            <Button type="outlined" onPress={goBack}>
+              Go back
+            </Button>
+          </View>
         </View>
       ) : (
         <>
           <Image style={styles.imageContainer} source={savedPicture} />
           <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              onPress={savePicture}
-              style={{
-                ...BASE_BUTTON,
-              }}
-            >
-              <Text
-                style={{
-                  color: "#fff",
-                  fontWeight: "bold",
-                  textAlign: "center",
-                }}
-              >
-                Use
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={clearPicture}
-              style={{
-                ...BASE_BUTTON,
-              }}
-            >
-              <Text
-                style={{
-                  color: "#fff",
-                  fontWeight: "bold",
-                  textAlign: "center",
-                }}
-              >
-                Retake
-              </Text>
-            </TouchableOpacity>
+            <Button onPress={clearPicture} mode="outlined">
+              Retake
+            </Button>
+            <Button onPress={savePicture} mode="contained">
+              Use
+            </Button>
           </View>
         </>
       )}
@@ -141,18 +126,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
     borderRadius: 10,
-    height: 450,
+    height: 500,
     justifyContent: "space-between",
-    width: 300,
   },
   image: {
     borderRadius: 10,
   },
   buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    ...ITEM_ROW_CONTAINER,
     width: "100%",
-    padding: 20,
+    marginVertical: 20,
   },
   permissionDeniedContainer: {
     alignItems: "center",
