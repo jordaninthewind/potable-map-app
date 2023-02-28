@@ -45,6 +45,7 @@ const markersSlice = createSlice({
   },
 });
 
+// Actions
 export const {
   setMarkers,
   addMarker,
@@ -57,17 +58,11 @@ export const {
   resetTempMarker,
 } = markersSlice.actions;
 
+// Selectors
+export const selectLoading = (state) => state.markers.loading;
+export const selectLocation = (state) => state.markers.location;
 export const selectMarkers = (state) => state.markers.entities;
-export const selectMarkersCount = createSelector(
-  selectMarkers,
-  (markers) => markers.length
-);
-
 export const selectSelectedMarker = (state) => state.markers.selectedMarker;
 export const selectTempMarker = (state) => state.markers.tempMarker;
-
-export const selectLoading = (state) => state.markers.loading;
-
-export const selectLocation = (state) => state.markers.location;
 
 export default markersSlice.reducer;

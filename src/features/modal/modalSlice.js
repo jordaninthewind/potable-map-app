@@ -15,10 +15,10 @@ const modalSlice = createSlice({
   },
 });
 
-// Selectors
-export const selectModal = (state) => state.modal.screen;
-
 // Actions
 export const { setModal, clearModal } = modalSlice.actions;
+
+// Selectors
+export const selectModal = (state) => state.modal.screen;
 
 export default modalSlice.reducer;

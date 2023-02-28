@@ -12,8 +12,10 @@ const appSlice = createSlice({
   },
 });
 
+// Actions
 export const { setTheme } = appSlice.actions;
 
+// Selectors
 export const selectTheme = (state) => state.app.theme;
 
 export default appSlice.reducer;
