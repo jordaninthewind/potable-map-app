@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { ActivityIndicator, Button, Text, TextInput } from "react-native-paper";
 import { GeoPoint } from "firebase/firestore";
 
 import {
-  resetSelectedMarker,
   selectLoading,
   selectSelectedMarker,
+  resetTempMarker,
 } from "../features/markers/markersSlice";
 import { clearModal } from "../features/modal/modalSlice";
 import { addMarkerRemote } from "../services/services";
@@ -24,9 +24,14 @@ const AddMarkerModal = () => {
   const [rating, setRating] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
+  useEffect(() => {
+    return () => {
+      dispatch(resetTempMarker());
+    };
+  }, []);
+
   const onCancel = () => {
     dispatch(clearModal());
-    dispatch(resetSelectedMarker());
   };
 
   const structureMarker = () => {
@@ -85,7 +90,7 @@ const AddMarkerModal = () => {
           />
         </>
       )}
-      <View style={{ ...ITEM_ROW_CONTAINER }}>
+      <View style={styles.buttonContainer}>
         <Button mode="outlined" onPress={onCancel}>
           Cancel
         </Button>
@@ -99,8 +104,7 @@ const AddMarkerModal = () => {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
+    ...ITEM_ROW_CONTAINER,
     marginTop: 20,
   },
   buttonStyle: {

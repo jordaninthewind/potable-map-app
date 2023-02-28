@@ -1,5 +1,5 @@
 import {
-  getCurrentPositionAsync,
+  // getCurrentPositionAsync,
   getLastKnownPositionAsync,
   requestForegroundPermissionsAsync,
 } from "expo-location";
@@ -17,9 +17,12 @@ import { setError } from "../features/error/errorSlice";
 import {
   setLoading,
   setMarkers,
+  setSelectedMarker,
   setTempMarker,
 } from "../features/markers/markersSlice";
+import { clearModal } from "../features/modal/modalSlice";
 
+// Device / Location Services
 export const requestLocationPermission = async () => {
   try {
     let { status } = await requestForegroundPermissionsAsync();
@@ -59,6 +62,7 @@ export const getCurrentPosition = async () => {
   }
 };
 
+// Markers Services
 export const getLocalMarkers = () => async (dispatch) => {
   dispatch(setLoading(true));
 
@@ -121,4 +125,11 @@ export const deleteMarkerRemote = (marker) => async (dispatch) => {
   } finally {
     dispatch(setLoading(false));
   }
+};
+
+// Map Services
+export const resetMapState = () => async (dispatch) => {
+  dispatch(clearModal());
+  dispatch(setTempMarker(null));
+  dispatch(setSelectedMarker(null));
 };
