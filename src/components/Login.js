@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { Button, Text, TextInput } from "react-native-paper";
+import { Keyboard, StyleSheet, View } from "react-native";
+import { Button, TextInput } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
@@ -56,6 +56,7 @@ const Login = () => {
           label="Email Address"
           keyboardType="email-address"
           autoCapitalize="none"
+          autoFocus
           onChangeText={(val) => setEmail(val)}
           right={
             <TextInput.Icon
