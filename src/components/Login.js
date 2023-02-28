@@ -55,7 +55,6 @@ const Login = () => {
           mode="outlined"
           label="Email Address"
           keyboardType="email-address"
-          clearTextOnFocus
           autoCapitalize="none"
           onChangeText={(val) => setEmail(val)}
           right={

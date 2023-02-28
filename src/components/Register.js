@@ -29,6 +29,7 @@ const Register = () => {
 
   const onRegister = async () => {
     dispatch(setLoading(true));
+
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -79,7 +80,6 @@ const Register = () => {
           label="Password"
           mode="outlined"
           value={password}
-          clearTextOnFocus
           onChangeText={(e) => setPassword(e)}
           secureTextEntry={passwordVisible}
           right={
@@ -94,7 +94,6 @@ const Register = () => {
           label="Verify Password"
           type="password"
           value={verifyPassword}
-          clearTextOnFocus
           onChangeText={(e) => setVerifyPassword(e)}
           secureTextEntry={passwordVisible}
           right={
