@@ -7,15 +7,17 @@ import {
   selectMarkers,
   setTempMarker,
   selectLocation,
-  setSelectedMarker,
   selectSelectedMarker,
   selectTempMarker,
+  resetSelectedMarker,
+  resetTempMarker,
 } from "../features/markers/markersSlice";
 import { getLocalMarkers } from "../services/services";
-import { setModal } from "../features/modal/modalSlice";
+import { clearModal, setModal } from "../features/modal/modalSlice";
 import { selectTheme } from "../features/app/appSlice";
 
 import { PotableMarker } from "./PotableMarker";
+import { centerMarkerInScreen } from "../helpers";
 
 const PotableMap = () => {
   const mapRef = useRef(null);
@@ -30,22 +32,35 @@ const PotableMap = () => {
 
   useEffect(() => {
     if (selectedMarker) {
-      const location = {
-        latitude: selectedMarker.latitude,
+      const selectedlocation = {
+        latitude: centerMarkerInScreen(selectedMarker.latitude),
         longitude: selectedMarker.longitude,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
+        latitudeDelta: 0.001,
+        longitudeDelta: 0.001,
       };
 
-      mapRef.current.animateToRegion(location, 1000);
+      mapRef.current.animateToRegion(selectedlocation, 750);
+    } else if (tempMarker) {
+      const tempLocation = {
+        latitude: centerMarkerInScreen(tempMarker.latitude),
+        longitude: tempMarker.longitude,
+        latitudeDelta: 0.001,
+        longitudeDelta: 0.001,
+      };
+
+      mapRef.current.animateToRegion(tempLocation, 1000);
+    } else {
+      mapRef.current.animateToRegion(location, 750);
     }
-  }, [selectedMarker]);
+  }, [selectedMarker, tempMarker]);
+
+  useEffect(() => {}, [tempMarker]);
 
   const openAddMarkerScreen = ({ nativeEvent }) => {
     Vibration.vibrate();
-    dispatch(setTempMarker(nativeEvent.coordinate));
 
-    dispatch(setSelectedMarker(nativeEvent.coordinate));
+    dispatch(resetSelectedMarker());
+    dispatch(setTempMarker(nativeEvent.coordinate));
     dispatch(setModal("addMarker"));
   };
 
@@ -63,6 +78,18 @@ const PotableMap = () => {
     console.log("onMove");
   };
 
+  const handleMapPress = async () => {
+    if (selectedMarker) {
+      await dispatch(clearModal());
+      dispatch(resetSelectedMarker());
+    }
+
+    if (tempMarker) {
+      await dispatch(clearModal());
+      dispatch(resetTempMarker());
+    }
+  };
+
   return (
     <MapView
       ref={mapRef}
@@ -73,6 +100,7 @@ const PotableMap = () => {
       showsPointsOfInterest={false}
       showsUserLocation={true}
       style={styles.map}
+      onPress={handleMapPress}
     >
       {markers?.map((marker, index) => {
         return (
@@ -89,21 +117,8 @@ const PotableMap = () => {
 };
 
 const styles = StyleSheet.create({
-  callout: {
-    padding: 30,
-  },
   map: {
     height: "100%",
-    width: "100%",
-    zIndex: 0,
-  },
-  marker: {
-    backgroundColor: "lightblue",
-    borderRadius: 50,
-    borderWidth: 1,
-    borderColor: "blue",
-    height: 10,
-    width: 10,
   },
 });
 
