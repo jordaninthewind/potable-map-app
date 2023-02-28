@@ -1,39 +1,41 @@
-import { Snackbar } from "react-native-paper";
+import { Portal, Provider, Snackbar } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import { clearError, selectError } from "../features/error/errorSlice";
+import {
+  clearError,
+  selectError,
+  selectErrorAction,
+} from "../features/error/errorSlice";
 
 const NotificationOverlay = () => {
   const dispatch = useDispatch();
-  const error = useSelector(selectError);
+  const message = useSelector(selectError);
+  const action = useSelector(selectErrorAction);
 
   const resetError = () => {
     dispatch(clearError());
   };
 
   const handleAction = () => {
-    if (error.action) {
-      error.action.onPress();
+    if (action) {
+      console.log("action", action);
+      // action.onPress();
     }
 
     resetError();
   };
 
   return (
-    <>
-      {error && (
-        <Snackbar
-          action={{
-            label: error.action ? error.action?.label : "Dismiss",
-            onPress: handleAction,
-          }}
-        >
-          elevation={0}
-          onDismiss={resetError}
-          visible={!!error}
-          wrapperStyle={{ zIndex: 100 }}>{error.message}
-        </Snackbar>
-      )}
-    </>
+    <Snackbar
+      action={{
+        label: action && "Dismiss",
+        onPress: handleAction,
+      }}
+      duration={Snackbar.DURATION_MEDIUM}
+      onDismiss={resetError}
+      visible={!!message}
+    >
+      {message}
+    </Snackbar>
   );
 };
 
