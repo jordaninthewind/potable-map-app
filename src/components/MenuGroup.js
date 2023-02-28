@@ -25,10 +25,6 @@ const MenuGroup = () => {
     dispatch(setModal("login"));
   };
 
-  const handleLogout = () => {
-    auth.signOut();
-  };
-
   const toggleColorScheme = async () => {
     await dispatch(setTheme(colorScheme === "dark" ? "light" : "dark"));
 
@@ -52,6 +48,10 @@ const MenuGroup = () => {
     } finally {
       dispatch(setLoading(false));
     }
+  };
+
+  const handleLogout = () => {
+    auth.signOut();
   };
 
   const baseMenuItems = [
@@ -95,8 +95,8 @@ const MenuGroup = () => {
                 icon: "logout",
                 label: "Logout",
                 onPress: handleLogout,
-                style: { backgroundColor: "white" },
                 ...baseFabStyle,
+                style: { backgroundColor: "white" },
               },
             ]
           : [
@@ -121,6 +121,7 @@ const MenuGroup = () => {
       onLongPress={() => {
         console.log("long press");
       }}
+      style={{ position: "absolute", bottom: 90 }}
       backdropColor="rgba(255,255,255,0.5)"
     />
   );

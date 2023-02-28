@@ -64,6 +64,7 @@ https://docs.swmansion.com/react-native-gesture-handler/
         - Add controls on who can update pins (auth-based)
     - Finish picture storage and linking with pin
     - Add React Navigation
+    - Add map color / icon reference
     - ...profit
 
 ### Done:

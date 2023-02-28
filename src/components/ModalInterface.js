@@ -45,7 +45,7 @@ const ModalInterface = () => {
         return {
           component: <Register />,
           index: 1,
-          snapPoints: ["5%", "75%"],
+          snapPoints: ["5%", "85%"],
         };
       case "markerInfo":
         return {
