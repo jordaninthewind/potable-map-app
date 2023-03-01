@@ -25,17 +25,6 @@ const MenuGroup = () => {
     dispatch(setModal("login"));
   };
 
-  const toggleColorScheme = async () => {
-    await dispatch(setTheme(colorScheme === "dark" ? "light" : "dark"));
-
-    dispatch(
-      setError({
-        message:
-          colorScheme === "dark" ? "Dark Mode Enabled" : "Light Mode Enabled",
-      })
-    );
-  };
-
   const updatePosition = async () => {
     dispatch(setLoading(true));
 
@@ -66,13 +55,6 @@ const MenuGroup = () => {
       icon: "crosshairs-gps",
       label: "Get Current Location",
       onPress: updatePosition,
-      style: { backgroundColor: "white" },
-      ...baseFabStyle,
-    },
-    {
-      icon: "lightbulb-on",
-      label: `Toggle ${true ? "Dark" : "Light"} Mode`,
-      onPress: toggleColorScheme,
       style: { backgroundColor: "white" },
       ...baseFabStyle,
     },
@@ -121,7 +103,6 @@ const MenuGroup = () => {
       onLongPress={() => {
         console.log("long press");
       }}
-      style={{ position: "absolute", bottom: 90 }}
       backdropColor="rgba(255,255,255,0.5)"
     />
   );

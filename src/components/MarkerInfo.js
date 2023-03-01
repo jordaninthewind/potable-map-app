@@ -61,7 +61,7 @@ const MarkerInfo = () => {
           />
         </View>
       </View>
-      <View style={[ITEM_ROW_CONTAINER, styles.columnElement]}>
+      <View style={styles.columnElement}>
         <Button mode="outlined" onPress={editMarkerInfo}>
           {user ? "edit source" : "login to edit"}
         </Button>

@@ -48,14 +48,13 @@ const AddMarkerModal = () => {
 
   const onSubmit = () => {
     dispatch(addMarkerRemote(structureMarker()));
-
     dispatch(clearModal());
   };
 
   return (
     <View>
-      <Text variant="headlineMedium" style={{ textAlign: "center" }}>
-        Add Marker
+      <Text variant="headlineSmall" style={{ textAlign: "center" }}>
+        Add a water source
       </Text>
       {!loading && (
         <>
