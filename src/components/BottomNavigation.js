@@ -1,12 +1,28 @@
 import { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
-import {
-  BottomNavigation as PaperBottomNavigation,
-  Text,
-} from "react-native-paper";
+import { BottomNavigation as PaperBottomNavigation } from "react-native-paper";
+
+import Settings from "./Settings";
+import PotableMap from "./PotableMap";
+import MenuGroup from "./MenuGroup";
+import ModalInterface from "./ModalInterface";
 
 import { selectTheme } from "../features/app/appSlice";
+
+const MapScreen = () => (
+  <View style={{ flex: 1 }}>
+    <PotableMap />
+    <MenuGroup />
+    <ModalInterface />
+  </View>
+);
+
+const SettingsScreen = () => (
+  <View style={{ flex: 1 }}>
+    <Settings />
+  </View>
+);
 
 const BottomNavigation = () => {
   const colorScheme = useSelector(selectTheme);
@@ -20,12 +36,6 @@ const BottomNavigation = () => {
       unfocusedIcon: "map-outline",
     },
     {
-      key: "list",
-      title: "Nearby",
-      focusedIcon: "view-list",
-      unfocusedIcon: "view-list-outline",
-    },
-    {
       key: "settings",
       title: "Settings",
       focusedIcon: "cog",
@@ -34,38 +44,34 @@ const BottomNavigation = () => {
   ]);
 
   const renderScene = PaperBottomNavigation.SceneMap({
-    map: () => <Text>Scene 1</Text>,
-    list: () => <Text>Scene 2</Text>,
-    settings: () => <Text>Scene 3</Text>,
+    map: MapScreen,
+    settings: SettingsScreen,
   });
 
   return (
-    <PaperBottomNavigation
-      style={styles.container}
-      navigationState={{ index, routes }}
-      onIndexChange={setIndex}
-      renderScene={() => <Text>Scene 1</Text>}
-      barStyle={styles[colorScheme].background}
-      inactiveColor={
-        colorScheme === "dark" ? "rgb(200,200,200)" : "rgb(100,100,100)"
-      }
-      activeColor={
-        colorScheme === "dark" ? "rgb(100,100,100)" : "rgb(75,75,75)"
-      }
-    />
+    <View style={styles.container}>
+      <PaperBottomNavigation
+        style={styles.navContainer}
+        navigationState={{ index, routes }}
+        onIndexChange={setIndex}
+        renderScene={renderScene}
+        barStyle={styles[colorScheme].background}
+        inactiveColor={
+          colorScheme === "dark" ? "rgb(200,200,200)" : "rgb(100,100,100)"
+        }
+        activeColor={
+          colorScheme === "dark" ? "rgb(100,100,100)" : "rgb(75,75,75)"
+        }
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  container: { height: "100%" },
+  navContainer: {
     borderTopColor: "grey",
     borderTopWidth: 1,
-    flex: 1,
-    zIndex: 100,
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
   },
   light: {
     background: {
