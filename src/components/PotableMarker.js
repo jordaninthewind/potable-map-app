@@ -51,15 +51,19 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     backgroundColor: "transparent",
     borderColor: "cyan",
-    borderWidth: 5,
-    height: 20,
-    width: 20,
+    borderWidth: 3,
+    height: 15,
+    width: 15,
   },
   temp: {
     borderColor: "lime",
+    height: 25,
+    width: 25,
   },
   selected: {
     borderColor: "orange",
-    borderWidth: 3,
+    borderWidth: 2,
+    height: 20,
+    width: 20,
   },
 });
