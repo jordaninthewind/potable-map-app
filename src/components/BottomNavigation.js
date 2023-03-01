@@ -7,11 +7,13 @@ import Settings from "./Settings";
 import PotableMap from "./PotableMap";
 import MenuGroup from "./MenuGroup";
 import ModalInterface from "./ModalInterface";
+import UserInfo from "./UserInfo";
 
 import { selectTheme } from "../features/app/appSlice";
 
 const MapScreen = () => (
   <View style={{ flex: 1 }}>
+    <UserInfo />
     <PotableMap />
     <MenuGroup />
     <ModalInterface />
