@@ -12,3 +12,5 @@ export const PRIMARY_TEXT_SHADOW = {
   textShadowOffset: { width: 1, height: 2 },
   textShadowRadius: 2,
 };
+
+export const COLOR_WARNING = "rgba(255, 50, 100, 0.75)";
