@@ -5,6 +5,7 @@ import {
   BottomNavigation as PaperBottomNavigation,
   Text,
 } from "react-native-paper";
+
 import { selectTheme } from "../features/app/appSlice";
 
 const BottomNavigation = () => {
