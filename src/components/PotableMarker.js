@@ -49,19 +49,17 @@ export const PotableMarker = ({ marker, selectedId = null, type = null }) => {
 const styles = StyleSheet.create({
   marker: {
     borderRadius: 50,
-    backgroundColor: "white",
+    backgroundColor: "transparent",
     borderColor: "cyan",
-    borderWidth: 4,
-    height: 15,
-    width: 15,
-  },
-  temp: {
-    borderColor: "lime",
     borderWidth: 5,
     height: 20,
     width: 20,
   },
+  temp: {
+    borderColor: "lime",
+  },
   selected: {
     borderColor: "orange",
+    borderWidth: 3,
   },
 });
