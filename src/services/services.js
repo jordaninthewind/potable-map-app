@@ -1,7 +1,7 @@
 import {
-  // getCurrentPositionAsync,
   getLastKnownPositionAsync,
   requestForegroundPermissionsAsync,
+  // watchPositionAsync,
 } from "expo-location";
 import {
   addDoc,
@@ -23,11 +23,13 @@ import {
 import { clearModal } from "../features/modal/modalSlice";
 
 // Device / Location Services
-export const requestLocationPermission = async () => {
+export const requestLocationPermission = () => async (dispatch) => {
   try {
     let { status } = await requestForegroundPermissionsAsync();
 
-    return status;
+    const hasPermissions = status === "granted";
+
+    dispatch(setDeviceLocationPermission(hasPermissions));
   } catch (error) {
     throw error;
   }
@@ -49,8 +51,19 @@ export const getDevicePermissions = () => async (dispatch) => {
 
 export const getCurrentPosition = async () => {
   try {
-    // TODO: Add follow location listener
     const { coords } = await getLastKnownPositionAsync();
+
+    // TODO: Add follow location listener
+    // await watchPositionAsync(
+    //   {
+    //     accuracy: 6,
+    //     timeInterval: 1000,
+    //     distanceInterval: 1,
+    //   },
+    //   (position) => {
+    //     console.log("position", position);
+    //   }
+    // );
 
     return {
       ...coords,
@@ -132,4 +145,14 @@ export const resetMapState = () => async (dispatch) => {
   dispatch(clearModal());
   dispatch(setTempMarker(null));
   dispatch(setSelectedMarker(null));
+};
+
+// App Services
+export const initApp = () => async (dispatch) => {
+  try {
+    await dispatch(getDevicePermissions());
+    await dispatch(getLocalMarkers());
+  } catch ({ message }) {
+    dispatch(setError({ message }));
+  }
 };

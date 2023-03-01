@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = { theme: "light" };
+const initialState = { theme: "light", deviceLocationPermission: null };
 
 const appSlice = createSlice({
   name: "app",
@@ -9,13 +9,18 @@ const appSlice = createSlice({
     setTheme: (state, action) => {
       state.theme = action.payload;
     },
+    setDeviceLocationPermission: (state, action) => {
+      state.deviceLocationPermission = action.payload;
+    },
   },
 });
 
 // Actions
-export const { setTheme } = appSlice.actions;
+export const { setTheme, setDeviceLocationPermission } = appSlice.actions;
 
 // Selectors
 export const selectTheme = (state) => state.app.theme;
+export const selectDevicePermissions = (state) =>
+  state.app.deviceLocationPermission;
 
 export default appSlice.reducer;
