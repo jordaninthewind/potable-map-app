@@ -4,8 +4,9 @@ import { selectTheme } from "../features/app/appSlice";
 
 const PotableStatusBar = () => {
   const theme = useSelector(selectTheme);
+  const textStyle = theme === "dark" ? "light" : "dark";
 
-  return <StatusBar style={theme === "dark" ? "light" : "dark"} />;
+  return <StatusBar style={textStyle} />;
 };
 
 export default PotableStatusBar;

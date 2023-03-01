@@ -11,8 +11,6 @@ const PotableApp = () => {
     <>
       <PotableStatusBar />
       <Loader />
-      <PotableMap />
-      <MenuGroup />
       <ModalInterface />
       <NotificationOverlay />
       <BottomNavigation />
