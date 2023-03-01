@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
-import { BottomNavigation, Text } from "react-native-paper";
+import {
+  BottomNavigation as PaperBottomNavigation,
+  Text,
+} from "react-native-paper";
 import { selectTheme } from "../features/app/appSlice";
 
-const Navigation = () => {
+const BottomNavigation = () => {
   const colorScheme = useSelector(selectTheme);
+
   const [index, setIndex] = useState(0);
   const [routes] = useState([
     {
@@ -15,16 +19,10 @@ const Navigation = () => {
       unfocusedIcon: "map-outline",
     },
     {
-      key: "about",
-      title: "About",
-      focusedIcon: "library",
-      unfocusedIcon: "library",
-    },
-    {
-      key: "recents",
-      title: "Recents",
-      focusedIcon: "history",
-      unfocusedIcon: "history",
+      key: "list",
+      title: "Nearby",
+      focusedIcon: "view-list",
+      unfocusedIcon: "view-list-outline",
     },
     {
       key: "settings",
@@ -34,15 +32,14 @@ const Navigation = () => {
     },
   ]);
 
-  // const renderScene = BottomNavigation.SceneMap({
-  //   music: "() => {}",
-  //   albums: "() => {}",
-  //   recents: "() => {}",
-  //   notifications: "() => {}",
-  // });
+  const renderScene = PaperBottomNavigation.SceneMap({
+    map: () => <Text>Scene 1</Text>,
+    list: () => <Text>Scene 2</Text>,
+    settings: () => <Text>Scene 3</Text>,
+  });
 
   return (
-    <BottomNavigation
+    <PaperBottomNavigation
       style={styles.container}
       navigationState={{ index, routes }}
       onIndexChange={setIndex}
@@ -87,4 +84,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Navigation;
+export default BottomNavigation;
