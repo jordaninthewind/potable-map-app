@@ -10,49 +10,23 @@ import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
 import { selectLoading, setLoading } from "../features/markers/markersSlice";
 import Logo from "./Logo";
 import { validateEmail } from "../features/error/errorHelpers";
+import { signUp } from "../services/services";
 
 const Register = () => {
   const dispatch = useDispatch();
-  const loading = useSelector(selectLoading);
 
-  const auth = getAuth();
   const [passwordVisible, setPasswordVisible] = useState(true);
   const [email, setEmail] = useState("");
   const [emailValid, setEmailValid] = useState(false);
   const [password, setPassword] = useState("");
   const [verifyPassword, setVerifyPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [state, setState] = useState("");
-  const [country, setCountry] = useState("");
   const [agreed, setAgreed] = useState(false);
 
-  const onRegister = async () => {
-    dispatch(setLoading(true));
+  const onRegister = async () => dispatch(signUp({ email, password }));
 
-    try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+  const cancelSignUp = () => dispatch(clearModal());
 
-      dispatch(setUser(userCredential.user));
-      dispatch(setModal("profile"));
-    } catch ({ message }) {
-      dispatch(setError({ message }));
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
-  const cancelSignUp = () => {
-    dispatch(clearModal());
-  };
-
-  const returnToLogin = () => {
-    dispatch(setModal("login"));
-  };
+  const returnToLogin = () => dispatch(setModal("login"));
 
   return (
     <View>
@@ -100,54 +74,6 @@ const Register = () => {
             <TextInput.Icon
               icon="eye"
               onPress={() => setPasswordVisible(!passwordVisible)}
-            />
-          }
-        />
-        <TextInput
-          mode="outlined"
-          label="First Name"
-          value={firstName}
-          onChangeText={(e) => setFirstName(e)}
-          right={
-            <TextInput.Icon
-              icon={firstName && "close"}
-              onPress={() => setFirstName("")}
-            />
-          }
-        />
-        <TextInput
-          mode="outlined"
-          label="Last Name"
-          value={lastName}
-          onChangeText={(e) => setLastName(e)}
-          right={
-            <TextInput.Icon
-              icon={lastName && "close"}
-              onPress={() => setLastName("")}
-            />
-          }
-        />
-        <TextInput
-          mode="outlined"
-          label="State / Province"
-          value={state}
-          onChangeText={(e) => setState(e)}
-          right={
-            <TextInput.Icon
-              icon={state && "close"}
-              onPress={() => setState("")}
-            />
-          }
-        />
-        <TextInput
-          mode="outlined"
-          label="Country"
-          value={country}
-          onChangeText={(e) => setCountry(e)}
-          right={
-            <TextInput.Icon
-              icon={country && "close"}
-              onPress={() => setCountry("")}
             />
           }
         />

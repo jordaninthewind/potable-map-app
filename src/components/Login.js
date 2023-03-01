@@ -10,6 +10,7 @@ import { setError } from "../features/error/errorSlice";
 
 import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
 import { selectLoading, setLoading } from "../features/markers/markersSlice";
+import { signIn } from "../services/services";
 import Logo from "./Logo";
 
 const Login = () => {
@@ -21,30 +22,11 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(true);
 
-  const onLogin = async () => {
-    dispatch(setLoading(true));
+  const onLogin = async () => dispatch(signIn({ email, password }));
 
-    try {
-      const { user } = await signInWithEmailAndPassword(auth, email, password);
+  const cancelLogin = () => dispatch(clearModal());
 
-      dispatch(setUser({ id: user.uid, email: user.email }));
-
-      dispatch(setError({ message: "Logged in successfully!" }));
-      dispatch(clearModal());
-    } catch ({ message }) {
-      dispatch(setError({ message }));
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
-  const cancelLogin = () => {
-    dispatch(clearModal());
-  };
-
-  const openRegisterModal = () => {
-    dispatch(setModal("register"));
-  };
+  const openRegisterModal = () => dispatch(setModal("register"));
 
   return (
     <View>
