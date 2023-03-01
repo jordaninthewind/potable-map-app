@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Button, IconButton, Text } from "react-native-paper";
 import { Camera, CameraType } from "expo-camera";
 
 import { uploadWaterSourcePhoto } from "../services/storageService";
 import { setModal } from "../features/modal/modalSlice";
-import { BASE_BUTTON, ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
+import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
 
 const AddPicture = () => {
   const dispatch = useDispatch();
@@ -43,7 +43,7 @@ const AddPicture = () => {
   };
 
   const goBack = () => {
-    dispatch(setModal("markerInfo"));
+    dispatch(setModal("editMarker"));
   };
 
   const savePicture = async () => {
@@ -122,20 +122,20 @@ const AddPicture = () => {
 };
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    ...ITEM_ROW_CONTAINER,
+    marginVertical: 20,
+    width: "100%",
+  },
+  image: {
+    borderRadius: 10,
+  },
   imageContainer: {
     alignItems: "center",
     backgroundColor: "white",
     borderRadius: 10,
     height: 500,
     justifyContent: "space-between",
-  },
-  image: {
-    borderRadius: 10,
-  },
-  buttonContainer: {
-    ...ITEM_ROW_CONTAINER,
-    width: "100%",
-    marginVertical: 20,
   },
   permissionDeniedContainer: {
     alignItems: "center",
