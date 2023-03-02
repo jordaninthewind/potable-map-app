@@ -5,15 +5,18 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { selectTheme, setTheme } from "../features/app/appSlice";
 import { setError } from "../features/error/errorSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Settings = () => {
   const dispatch = useDispatch();
   const colorTheme = useSelector(selectTheme);
-  const isDarkMode = colorTheme === "dark";
   const { top } = useSafeAreaInsets();
+  const isDarkMode = colorTheme === "dark";
 
   const toggleColorScheme = async () => {
-    await dispatch(setTheme(isDarkMode ? "light" : "dark"));
+    const themeColor = isDarkMode ? "light" : "dark";
+    await AsyncStorage.setItem("theme", themeColor);
+    await dispatch(setTheme(themeColor));
 
     dispatch(
       setError({
