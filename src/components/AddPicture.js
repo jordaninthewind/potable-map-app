@@ -8,7 +8,6 @@ import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { uploadWaterSourcePhoto } from "../services/storageService";
 import { setModal } from "../features/modal/modalSlice";
 import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
 const AddPicture = () => {
   const dispatch = useDispatch();
