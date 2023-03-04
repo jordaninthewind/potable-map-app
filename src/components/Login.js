@@ -1,32 +1,28 @@
 import { useState } from "react";
-import { Keyboard, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 import { clearModal, setModal } from "../features/modal/modalSlice";
-import { setUser } from "../features/user/userSlice";
-import { setError } from "../features/error/errorSlice";
 
 import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
-import { selectLoading, setLoading } from "../features/markers/markersSlice";
+import { selectLoading } from "../features/markers/markersSlice";
 import { signIn } from "../services/services";
 import Logo from "./Logo";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const auth = getAuth();
   const loading = useSelector(selectLoading);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(true);
 
-  const onLogin = async () => dispatch(signIn({ email, password }));
-
-  const cancelLogin = () => dispatch(clearModal());
+  const onLogin = () => dispatch(signIn({ email, password }));
 
   const openRegisterModal = () => dispatch(setModal("register"));
+
+  const cancelLogin = () => dispatch(clearModal());
 
   return (
     <View>

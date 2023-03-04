@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, TextInput } from "react-native-paper";
@@ -8,6 +8,7 @@ import { setModal } from "../features/modal/modalSlice";
 import { selectSelectedMarker } from "../features/markers/markersSlice";
 import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
 import { COLOR_WARNING } from "../constants";
+import { deleteMarkerRemote } from "../services/services";
 
 const EditMarker = () => {
   const dispatch = useDispatch();
@@ -18,17 +19,31 @@ const EditMarker = () => {
   const [rating, setRating] = useState(marker?.rating);
   const [description, setDescription] = useState(marker?.description);
 
+  const updateMarker = () => {
+    const updatedMarker = {
+      ...marker,
+      name,
+      type,
+      rating,
+      description,
+    };
+
+    dispatch(updateMarkerRemote(updatedMarker));
+  };
+
+  useEffect(() => {
+    () => dispatch(updateMarker());
+  }, [name, type, rating, description]);
+
   const goBack = () => {
     dispatch(setModal("markerInfo"));
   };
 
-  const AddPicture = () => {
+  const openCameraView = () => {
     dispatch(setModal("addPicture"));
   };
 
-  const deleteMarker = () => {};
-
-  const updateMarker = () => {};
+  const deleteMarker = () => dispatch(deleteMarkerRemote());
 
   return (
     <BottomSheetScrollView>
@@ -57,26 +72,21 @@ const EditMarker = () => {
         onChange={(e) => setRating}
         value={rating}
       />
-      <View style={[{ marginTop: 10 }]}>
-        <Button mode="contained" onPress={AddPicture}>
+      <View style={[ITEM_ROW_CONTAINER, { marginTop: 10 }]}>
+        <Button mode="outlined" onPress={openCameraView}>
           Add a Picture
         </Button>
-      </View>
-      <View style={[{ marginTop: 10 }]}>
         <Button
           mode="contained"
           buttonColor={COLOR_WARNING}
-          onPress={AddPicture}
+          onPress={deleteMarker}
         >
           Delete Marker
         </Button>
       </View>
       <View style={[ITEM_ROW_CONTAINER, { marginTop: 10 }]}>
-        <Button mode="outlined" onPress={goBack}>
+        <Button mode="text" onPress={goBack}>
           Cancel
-        </Button>
-        <Button mode="contained" onPress={updateMarker}>
-          Update
         </Button>
       </View>
     </BottomSheetScrollView>

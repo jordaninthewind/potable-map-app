@@ -17,12 +17,11 @@ const PotableApp = () => {
     dispatch(initApp());
 
     getAuth().onAuthStateChanged((user) => {
-      console.log("onAuthStateChanged: ", user);
       if (user) {
         dispatch(setUser({ id: user.uid, email: user.email }));
       } else {
         dispatch(setUser(null));
-        dispatch(setError({ message: "User logged out" }));
+        dispatch(setError({ message: "User logged out successfully" }));
       }
     });
   }, []);
@@ -32,8 +31,8 @@ const PotableApp = () => {
       <PotableStatusBar />
       <Loader />
       <ModalInterface />
-      <NotificationOverlay />
       <BottomNavigation />
+      <NotificationOverlay />
     </>
   );
 };

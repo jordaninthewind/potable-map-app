@@ -65,6 +65,10 @@ https://docs.swmansion.com/react-native-gesture-handler/
     - Finish picture storage and linking with pin
     - Add React Navigation
     - Add map color / icon reference
+    - Add list view as persistent bottom sheet content
+        - Updates on map move to show hwich are in viewport
+    - Add more firebase user info
+        - Add Google/FB login
     - ...profit
 
 ### Done:

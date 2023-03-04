@@ -4,11 +4,17 @@ import {
   // watchPositionAsync,
 } from "expo-location";
 import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+import {
   addDoc,
   collection,
   deleteDoc,
   doc,
   getDocs,
+  updateDoc,
 } from "firebase/firestore";
 
 import { db } from "../../firebaseConfig";
@@ -16,62 +22,83 @@ import { MARKER_DATABASE } from "../constants";
 import { setError } from "../features/error/errorSlice";
 import {
   setLoading,
+  setLocation,
   setMarkers,
   setSelectedMarker,
   setTempMarker,
 } from "../features/markers/markersSlice";
 import { clearModal } from "../features/modal/modalSlice";
+import { setUser } from "../features/user/userSlice";
 
-// Device / Location Services
-export const requestLocationPermission = () => async (dispatch) => {
-  try {
-    let { status } = await requestForegroundPermissionsAsync();
+// Auth Services
+export const signIn =
+  ({ email, password }) =>
+  async (dispatch) => {
+    try {
+      const user = await signInWithEmailAndPassword(getAuth(), email, password);
 
-    const hasPermissions = status === "granted";
-
-    dispatch(setDeviceLocationPermission(hasPermissions));
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getDevicePermissions = () => async (dispatch) => {
-  try {
-    const permission = await requestLocationPermission();
-
-    if (permission === "granted") {
-      await updateLocation();
-    } else {
-      throw new Error("Location permission not granted");
+      dispatch(setUser({ id: user.uid, email: user.email }));
+      dispatch(setError({ message: `Logged in successfully!` }));
+      dispatch(clearModal());
+    } catch ({ message }) {
+      dispatch(setError({ message }));
     }
+  };
+
+export const signOut = () => async (dispatch) => {
+  try {
+    await getAuth().signOut();
+
+    dispatch(setUser(null));
+    dispatch(setError({ message: `Logged out successfully!` }));
   } catch ({ message }) {
     dispatch(setError({ message }));
   }
 };
 
-export const getCurrentPosition = async () => {
+export const signUp =
+  ({ email, password }) =>
+  async (dispatch) => {
+    try {
+      const user = createUserWithEmailAndPassword({ email, password });
+
+      dispatch(setUser({ id: user.uid, email: user.email }));
+      dispatch(clearModal());
+    } catch ({ message }) {
+      dispatch(setError({ message }));
+    }
+  };
+
+// Device / Location Services
+export const requestLocationPermission = () => async (getState, dispatch) => {
+  dispatch(setLoading(true));
+
+  try {
+    let { status } = await requestForegroundPermissionsAsync();
+
+    const hasPermissions = status === "granted";
+    console.log("state", getState());
+    dispatch(setDeviceLocationPermission(hasPermissions));
+  } catch ({ message }) {
+    dispatch(setError({ message }));
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
+
+export const getCurrentPosition = () => async (dispatch) => {
   try {
     const { coords } = await getLastKnownPositionAsync();
 
-    // TODO: Add follow location listener
-    // await watchPositionAsync(
-    //   {
-    //     accuracy: 6,
-    //     timeInterval: 1000,
-    //     distanceInterval: 1,
-    //   },
-    //   (position) => {
-    //     console.log("position", position);
-    //   }
-    // );
-
-    return {
-      ...coords,
-      latitudeDelta: 0.1,
-      longitudeDelta: 0.1,
-    };
-  } catch (error) {
-    throw error;
+    dispatch(
+      setLocation({
+        ...coords,
+        latitudeDelta: 0.1,
+        longitudeDelta: 0.1,
+      })
+    );
+  } catch ({ message }) {
+    dispatch(setError({ message }));
   }
 };
 
@@ -140,6 +167,21 @@ export const deleteMarkerRemote = (marker) => async (dispatch) => {
   }
 };
 
+export const updateMarkerRemote = (marker) => async (dispatch) => {
+  dispatch(setLoading(true));
+
+  try {
+    const docToUpdate = doc(db, MARKER_DATABASE, marker.id);
+    await updateDoc(docToUpdate, marker);
+
+    dispatch(setError({ message: `Updated marker ${marker.id}` }));
+  } catch ({ message }) {
+    dispatch(setError({ message }));
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
+
 // Map Services
 export const resetMapState = () => async (dispatch) => {
   dispatch(clearModal());
@@ -150,7 +192,7 @@ export const resetMapState = () => async (dispatch) => {
 // App Services
 export const initApp = () => async (dispatch) => {
   try {
-    await dispatch(getDevicePermissions());
+    await dispatch(requestLocationPermission());
     await dispatch(getLocalMarkers());
   } catch ({ message }) {
     dispatch(setError({ message }));

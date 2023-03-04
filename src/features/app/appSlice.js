@@ -20,7 +20,7 @@ export const { setTheme, setDeviceLocationPermission } = appSlice.actions;
 
 // Selectors
 export const selectTheme = (state) => state.app.theme;
-export const selectDevicePermissions = (state) =>
+export const selectDeviceLocationPermissions = (state) =>
   state.app.deviceLocationPermission;
 
 export default appSlice.reducer;

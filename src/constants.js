@@ -13,4 +13,4 @@ export const PRIMARY_TEXT_SHADOW = {
   textShadowRadius: 2,
 };
 
-export const COLOR_WARNING = "rgba(255, 50, 100, 0.75)";
+export const COLOR_WARNING = "#FFA500";

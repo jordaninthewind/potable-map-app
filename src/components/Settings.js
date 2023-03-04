@@ -1,28 +1,37 @@
-import { StyleSheet, View } from "react-native";
+import { Linking, StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { Switch, Text } from "react-native-paper";
+import { Button, Switch, Text } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { selectTheme, setTheme } from "../features/app/appSlice";
-import { setError } from "../features/error/errorSlice";
+import {
+  selectDeviceLocationPermissions,
+  selectTheme,
+  setTheme,
+} from "../features/app/appSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { signOut } from "../services/services";
+import { selectUserEmail } from "../features/user/userSlice";
 
 const Settings = () => {
   const dispatch = useDispatch();
-  const colorTheme = useSelector(selectTheme);
   const { top } = useSafeAreaInsets();
+  const colorTheme = useSelector(selectTheme);
   const isDarkMode = colorTheme === "dark";
+  const deviceHasPermissions = useSelector(selectDeviceLocationPermissions);
+  const isLoggedIn = useSelector(selectUserEmail);
 
   const toggleColorScheme = async () => {
     const themeColor = isDarkMode ? "light" : "dark";
     await AsyncStorage.setItem("theme", themeColor);
     await dispatch(setTheme(themeColor));
+  };
 
-    dispatch(
-      setError({
-        message: isDarkMode ? "Dark Mode Enabled" : "Light Mode Enabled",
-      })
-    );
+  const logOut = () => {
+    dispatch(signOut());
+  };
+
+  const enableLocation = () => {
+    Linking.openSettings();
   };
 
   return (
@@ -45,6 +54,26 @@ const Settings = () => {
           </Text>
           <Switch value={colorTheme === "dark"} onChange={toggleColorScheme} />
         </View>
+        {isLoggedIn && (
+          <View style={styles.option}>
+            <Text variant="headlineSmall" style={styles[colorTheme].text}>
+              Log out current user
+            </Text>
+            <Button disabled={!isLoggedIn} mode={"contained"} onPress={logOut}>
+              Log out
+            </Button>
+          </View>
+        )}
+        {deviceHasPermissions && (
+          <View style={styles.option}>
+            <Text variant="headlineSmall" style={styles[colorTheme].text}>
+              Enable location services
+            </Text>
+            <Button onChange={openDeviceSettings} onPress={enableLocation}>
+              Enable in Settings
+            </Button>
+          </View>
+        )}
       </View>
     </View>
   );

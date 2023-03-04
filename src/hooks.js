@@ -1,10 +1,11 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const auth = getAuth();
 
 export function useAuthentication() {
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const unsubscribeFromAuthStatuChanged = onAuthStateChanged(auth, (user) => {
@@ -14,7 +15,7 @@ export function useAuthentication() {
         setUser(user);
       } else {
         // User is signed out
-        setUser(undefined);
+        setUser(null);
       }
     });
 

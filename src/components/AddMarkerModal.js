@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { ActivityIndicator, Button, Text, TextInput } from "react-native-paper";
+import { Button, Text, TextInput } from "react-native-paper";
 import { GeoPoint } from "firebase/firestore";
 
 import {
   selectLoading,
-  selectSelectedMarker,
   resetTempMarker,
+  selectTempMarker,
 } from "../features/markers/markersSlice";
 import { clearModal } from "../features/modal/modalSlice";
 import { addMarkerRemote } from "../services/services";
 import { BASE_BUTTON, ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
+import { setError } from "../features/error/errorSlice";
 
 const AddMarkerModal = () => {
   const dispatch = useDispatch();
-  const marker = useSelector(selectSelectedMarker);
+  const tempLocation = useSelector(selectTempMarker);
   const loading = useSelector(selectLoading);
 
   const [name, setName] = useState("");
@@ -30,10 +31,6 @@ const AddMarkerModal = () => {
     };
   }, []);
 
-  const onCancel = () => {
-    dispatch(clearModal());
-  };
-
   const structureMarker = () => {
     return {
       name,
@@ -42,13 +39,14 @@ const AddMarkerModal = () => {
       notes,
       rating,
       imageUrl,
-      location: new GeoPoint(marker.latitude, marker.longitude),
+      location: new GeoPoint(tempLocation.latitude, tempLocation.longitude),
     };
   };
 
   const onSubmit = () => {
     dispatch(addMarkerRemote(structureMarker()));
     dispatch(clearModal());
+    dispatch(setError("Marker added successfully!"));
   };
 
   return (
@@ -56,45 +54,43 @@ const AddMarkerModal = () => {
       <Text variant="headlineSmall" style={{ textAlign: "center" }}>
         Add a water source
       </Text>
-      {!loading && (
-        <>
-          <TextInput
-            style={styles.input}
-            mode="outlined"
-            label="Location Name"
-            value={name}
-            onChangeText={(text) => setName(text)}
-          />
-          <TextInput
-            style={styles.input}
-            mode="outlined"
-            label="Description"
-            value={description}
-            onChangeText={(event) => setDescription(event)}
-          />
-          <TextInput
-            style={styles.input}
-            mode="outlined"
-            multiline
-            label="Notes"
-            value={notes}
-            onChangeText={(event) => setNotes(event)}
-          />
-          <TextInput
-            style={styles.input}
-            mode="outlined"
-            label="Rating"
-            value={rating}
-            onChangeText={(event) => setRating(event)}
-          />
-        </>
-      )}
+      <Text variant="bodySmall" style={{ textAlign: "center" }}>
+        Drag and drop the marker to the most accurate location.
+      </Text>
+      <>
+        <TextInput
+          style={styles.input}
+          mode="outlined"
+          label="Location Name"
+          value={name}
+          onChangeText={(text) => setName(text)}
+        />
+        <TextInput
+          style={styles.input}
+          mode="outlined"
+          label="Description"
+          value={description}
+          onChangeText={(event) => setDescription(event)}
+        />
+        <TextInput
+          style={styles.input}
+          mode="outlined"
+          multiline
+          label="Notes"
+          value={notes}
+          onChangeText={(event) => setNotes(event)}
+        />
+        <TextInput
+          style={styles.input}
+          mode="outlined"
+          label="Rating"
+          value={rating}
+          onChangeText={(event) => setRating(event)}
+        />
+      </>
       <View style={styles.buttonContainer}>
-        <Button mode="outlined" onPress={onCancel}>
-          Cancel
-        </Button>
-        <Button mode="contained" buttonColor="#ff0000" onPress={onSubmit}>
-          {loading ? <ActivityIndicator /> : "Add Marker"}
+        <Button mode="contained" onPress={onSubmit} loading={loading}>
+          Add Marker
         </Button>
       </View>
     </View>

@@ -69,7 +69,7 @@ const ModalInterface = () => {
         return {
           component: <EditMarker />,
           index: 1,
-          snapPoints: ["5%", "85%"],
+          snapPoints: ["5%", "70%"],
         };
       default:
         return { component: null, snapPoints: ["10%"] };

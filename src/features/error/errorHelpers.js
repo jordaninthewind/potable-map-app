@@ -13,7 +13,7 @@ export const mapErrorToMessage = (error) => {
 };
 
 export const validateEmail = (email) => {
-  const re = /\S+@\S+\.\S+/;
-  console.log(re);
+  const re = /^[\w\.-]+@[\w\.-]+\.\w{2,}$/;
+
   return re.test(email);
 };

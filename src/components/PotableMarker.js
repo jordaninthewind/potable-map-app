@@ -3,7 +3,10 @@ import { StyleSheet, View } from "react-native";
 import { Marker } from "react-native-maps";
 import { useDispatch } from "react-redux";
 
-import { setSelectedMarker } from "../features/markers/markersSlice";
+import {
+  setSelectedMarker,
+  setTempMarker,
+} from "../features/markers/markersSlice";
 import { setModal } from "../features/modal/modalSlice";
 
 export const PotableMarker = ({ marker, selectedId = null, type = null }) => {
@@ -17,22 +20,19 @@ export const PotableMarker = ({ marker, selectedId = null, type = null }) => {
     dispatch(setModal("markerInfo"));
   };
 
-  const updateMarkerLocation = (location) => {
-    console.log("location", location);
-    console.log("marker", marker.id);
-    // const { latitude, longitude } = location.coordinate;
-    // const updatedMarker = { ...marker, latitude, longitude };
-
-    // dispatch(setSelectedMarker(updatedMarker));
-    // dispatch(setModal("editMarker"));
+  const updateMarkerLocation = ({ id, coordinate }) => {
+    if (id === "unknown") {
+      dispatch(setTempMarker(coordinate));
+    }
   };
 
   return (
     <Marker
+      identifier={marker.id}
       calloutVisible={true}
       coordinate={{ latitude, longitude }}
-      draggable
       onPress={openMarkerInfo}
+      draggable={type === "temp"}
       onDragEnd={(e) => updateMarkerLocation(e.nativeEvent)}
     >
       <View

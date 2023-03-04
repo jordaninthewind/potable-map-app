@@ -7,6 +7,7 @@ import { Camera, CameraType } from "expo-camera";
 import { uploadWaterSourcePhoto } from "../services/storageService";
 import { setModal } from "../features/modal/modalSlice";
 import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
 const AddPicture = () => {
   const dispatch = useDispatch();
@@ -55,7 +56,7 @@ const AddPicture = () => {
   };
 
   return (
-    <>
+    <BottomSheetScrollView>
       {!savedPicture ? (
         <View>
           {devicePermission ? (
@@ -117,7 +118,7 @@ const AddPicture = () => {
           </View>
         </>
       )}
-    </>
+    </BottomSheetScrollView>
   );
 };
 

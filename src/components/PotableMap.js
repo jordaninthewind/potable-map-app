@@ -119,6 +119,7 @@ const PotableMap = () => {
 const styles = StyleSheet.create({
   map: {
     height: "100%",
+    zIndex: -1,
   },
 });
 

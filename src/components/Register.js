@@ -2,10 +2,7 @@ import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Checkbox, Text, TextInput } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import { setError } from "../features/error/errorSlice";
 import { clearModal, setModal } from "../features/modal/modalSlice";
-import { setUser } from "../features/user/userSlice";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
 import { selectLoading, setLoading } from "../features/markers/markersSlice";
 import Logo from "./Logo";
@@ -21,6 +18,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [verifyPassword, setVerifyPassword] = useState("");
   const [agreed, setAgreed] = useState(false);
+  const loading = useSelector(selectLoading);
 
   const onRegister = async () => dispatch(signUp({ email, password }));
 
@@ -89,7 +87,7 @@ const Register = () => {
         <Button mode="outlined" onPress={cancelSignUp}>
           Cancel
         </Button>
-        <Button mode="contained" onPress={onRegister}>
+        <Button mode="contained" onPress={onRegister} loading={loading}>
           Register
         </Button>
       </View>

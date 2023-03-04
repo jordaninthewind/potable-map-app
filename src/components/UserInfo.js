@@ -1,45 +1,40 @@
-import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
-import { Text } from "react-native-paper";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Button, Text } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser, setUser } from "../features/user/userSlice";
-import { getAuth } from "firebase/auth";
-import { setError } from "../features/error/errorSlice";
+import { selectUser } from "../features/user/userSlice";
+import { setModal } from "../features/modal/modalSlice";
+import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
 
 const UserInfo = () => {
-  const { top } = useSafeAreaInsets();
-  const user = useSelector(selectUser);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    getAuth().onAuthStateChanged((user) => {
-      if (user) {
-        dispatch(setUser({ id: user.uid, email: user.email }));
-      } else {
-        dispatch(setUser(null));
-        dispatch(setError({ message: "User logged out" }));
-      }
-    });
-  }, []);
+  const user = useSelector(selectUser);
 
   return (
-    <View style={[styles.UserInfoContainer, { top }]}>
-      {user ? (
-        <Text>Logged in as: {user?.email}</Text>
-      ) : (
-        <Text>Not Logged In</Text>
+    <>
+      {!user && (
+        <View style={[styles.UserInfoContainer, ITEM_ROW_CONTAINER]}>
+          <Text>Not Logged In</Text>
+          <Button
+            compact
+            variant="text"
+            onPress={() => dispatch(setModal("login"))}
+          >
+            Log In
+          </Button>
+        </View>
       )}
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   UserInfoContainer: {
-    position: "absolute",
-    padding: 5,
-    zIndex: 1,
     backgroundColor: "white",
+    borderTopLeftRadius: 15,
+    bottom: 0,
+    paddingHorizontal: 15,
+    position: "absolute",
+    right: 0,
   },
   UserInfoText: {
     color: "black",
