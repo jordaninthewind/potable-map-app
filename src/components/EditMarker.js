@@ -43,7 +43,7 @@ const EditMarker = () => {
     dispatch(setModal("addPicture"));
   };
 
-  const deleteMarker = () => dispatch(deleteMarkerRemote());
+  const deleteMarker = () => dispatch(deleteMarkerRemote(marker));
 
   return (
     <BottomSheetScrollView>
