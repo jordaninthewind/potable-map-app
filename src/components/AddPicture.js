@@ -3,6 +3,7 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { Button, IconButton, Text } from "react-native-paper";
 import { Camera, CameraType } from "expo-camera";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
 import { uploadWaterSourcePhoto } from "../services/storageService";
 import { setModal } from "../features/modal/modalSlice";
