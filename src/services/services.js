@@ -182,6 +182,21 @@ export const updateMarkerRemote = (marker) => async (dispatch) => {
   }
 };
 
+export const addPictureToMarker = (marker, imageUrl) => async (dispatch) => {
+  dispatch(setLoading(true));
+
+  try {
+    const docToUpdate = doc(db, MARKER_DATABASE, marker.id);
+    await updateDoc(docToUpdate, { imageUrl });
+
+    dispatch(setError({ message: `Updated marker ${marker.id}` }));
+  } catch ({ message }) {
+    dispatch(setError({ message }));
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
+
 // Map Services
 export const resetMapState = () => async (dispatch) => {
   dispatch(clearModal());
