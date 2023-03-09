@@ -47,35 +47,3 @@ https://docs.swmansion.com/react-native-reanimated/
 ##### React Native Gesture Handler
 
 https://docs.swmansion.com/react-native-gesture-handler/
-
-### Spike Todos:
-
-    - Find ways to crowd-source or to integrate with DBs that have public data for this
-    - Find water (search?)
-    - Gamify App
-
-### Eng Todos:
-
-    - Theme:
-        - Fix status bar
-    - Customize analytics
-    - Add controls on who can add pins (auth-based)
-    - Update water source
-        - Add controls on who can update pins (auth-based)
-    - Finish picture storage and linking with pin
-    - Add React Navigation
-    - Add map color / icon reference
-    - Add list view as persistent bottom sheet content
-        - Updates on map move to show hwich are in viewport
-    - Add more firebase user info
-        - Add Google/FB login
-    - ...profit
-
-### Done:
-
-- ~~Add firebase for db~~
-- ~~Add firebase for auth~~
-- ~~Add marker component, add ability to add markers~~
-- ~~Add water source (add new pin)~~
-- ~~Set current location~~
-- ~~Add firestore~~
