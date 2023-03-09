@@ -1,9 +1,8 @@
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
-// const storage = getStorage();
-
-export const uploadWaterSourcePhoto = async ({ uri, id, filename }) => {
+export const uploadWaterSourcePhoto = async ({ id, filename, image }) => {
   try {
+    const uri = image.uri;
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function () {
@@ -18,13 +17,11 @@ export const uploadWaterSourcePhoto = async ({ uri, id, filename }) => {
       xhr.send(null);
     });
 
-    const fileRef = ref(getStorage(), `/water-sources/${id}/${filename}.jpg"`);
+    const fileRef = ref(getStorage(), `/water-sources/${id}/${filename}"`);
 
     const result = await uploadBytes(fileRef, blob);
 
-    blob.close();
-
-    return await getDownloadURL(fileRef);
+    return getDownloadURL(fileRef);
   } catch (error) {
     throw error;
   }
