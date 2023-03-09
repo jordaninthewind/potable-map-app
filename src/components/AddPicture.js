@@ -1,20 +1,23 @@
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
-import { useDispatch } from "react-redux";
-import { Button, IconButton, Text } from "react-native-paper";
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Text } from "react-native-paper";
 import { Camera, CameraType } from "expo-camera";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
 import { uploadWaterSourcePhoto } from "../services/storageService";
 import { setModal } from "../features/modal/modalSlice";
 import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
+import { selectSelectedMarker } from "../features/markers/markersSlice";
+import { addPictureToMarker } from "../services/services";
 
 const AddPicture = () => {
   const dispatch = useDispatch();
+  const { id } = useSelector(selectSelectedMarker);
 
-  const [savedPicture, setSavedPicture] = useState(false);
+  const [image, setImage] = useState(false);
   const [devicePermission, setDevicePermission] = useState(true);
-  const [type, setType] = useState(CameraType.front);
+  const [type, setType] = useState(CameraType.back);
 
   let camera;
 
@@ -32,36 +35,32 @@ const AddPicture = () => {
 
   const onTakePicture = async () => {
     const photo = await camera.takePictureAsync();
-    setSavedPicture(photo);
+
+    setImage(photo);
   };
 
-  const toggleCameraType = () => {
-    setType(type === CameraType.back ? CameraType.front : CameraType.back);
-  };
+  const clearPicture = () => setImage(null);
 
-  const clearPicture = () => {
-    setSavedPicture(null);
-  };
-
-  const goBack = () => {
-    dispatch(setModal("editMarker"));
-  };
+  const goBack = () => dispatch(setModal("editMarker"));
 
   const savePicture = async () => {
-    await uploadWaterSourcePhoto({
-      uri: savedPicture.uri,
-      id: 3,
-      filename: "something",
+    const pictureUrl = await uploadWaterSourcePhoto({
+      image,
+      id,
+      filename: "pic.jpeg",
     });
+
+    dispatch(addPictureToMarker(pictureUrl));
   };
 
   return (
     <BottomSheetScrollView>
-      {!savedPicture ? (
+      {!image ? (
         <View>
           {devicePermission ? (
             <Camera
               style={styles.imageContainer}
+              focusDepth={0}
               ref={(r) => {
                 camera = r;
               }}
@@ -80,19 +79,6 @@ const AddPicture = () => {
                   backgroundColor: "#fff",
                 }}
               />
-              <IconButton
-                onPress={toggleCameraType}
-                icon="camera-switch"
-                iconColor="rgba(0,0,0,0.5)"
-                mode="contained"
-                size={30}
-                style={{
-                  bottom: 0,
-                  left: 0,
-                  margin: 20,
-                  position: "absolute",
-                }}
-              />
             </Camera>
           ) : (
             <View style={styles.permissionDeniedContainer}>
@@ -107,7 +93,7 @@ const AddPicture = () => {
         </View>
       ) : (
         <>
-          <Image style={styles.imageContainer} source={savedPicture} />
+          <Image style={styles.imageContainer} source={image} />
           <View style={styles.buttonContainer}>
             <Button onPress={clearPicture} mode="outlined">
               Retake
@@ -137,6 +123,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 500,
     justifyContent: "space-between",
+    width: 350,
   },
   permissionDeniedContainer: {
     alignItems: "center",
