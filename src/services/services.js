@@ -29,6 +29,7 @@ import {
 } from "../features/markers/markersSlice";
 import { clearModal } from "../features/modal/modalSlice";
 import { setUser } from "../features/user/userSlice";
+import { uploadWaterSourcePhoto } from "./storageService";
 
 // Auth Services
 export const signIn =
@@ -87,18 +88,22 @@ export const requestLocationPermission = () => async (getState, dispatch) => {
 };
 
 export const getCurrentPosition = () => async (dispatch) => {
+  dispatch(setLoading(true));
   try {
     const { coords } = await getLastKnownPositionAsync();
 
     dispatch(
       setLocation({
-        ...coords,
+        latitude: coords.latitude,
+        longitude: coords.longitude,
         latitudeDelta: 0.1,
         longitudeDelta: 0.1,
       })
     );
   } catch ({ message }) {
     dispatch(setError({ message }));
+  } finally {
+    dispatch(setLoading(false));
   }
 };
 
@@ -144,9 +149,10 @@ export const addMarkerRemote =
         createdAt: new Date(),
       };
 
-      const docRef = await addDoc(collection(db, MARKER_DATABASE), pinObject);
+      const { id } = await addDoc(collection(db, MARKER_DATABASE), pinObject);
 
-      return docRef.id;
+      dispatch(setError({ message: `Pin ${id} added!` }));
+      return id;
     } catch ({ message }) {
       dispatch(setError({ message }));
     } finally {
@@ -156,10 +162,14 @@ export const addMarkerRemote =
 
 export const deleteMarkerRemote = (marker) => async (dispatch) => {
   dispatch(setLoading(true));
+
   try {
     const docToDelete = doc(db, MARKER_DATABASE, marker.id);
     const deleted = await deleteDoc(docToDelete);
-    console.log("deleted", deleted);
+    await dispatch(getLocalMarkers());
+    dispatch(clearModal());
+    dispatch(getCurrentPosition());
+    dispatch(setError({ message: "Marker deleted successfully!" }));
   } catch ({ message }) {
     dispatch(setError({ message }));
   } finally {
@@ -197,6 +207,28 @@ export const addPictureToMarker = (marker, imageUrl) => async (dispatch) => {
   }
 };
 
+export const savePictureRemote =
+  ({ image, id }) =>
+  async (dispatch) => {
+    dispatch(setLoading(true));
+
+    try {
+      const pictureUrl = await uploadWaterSourcePhoto({
+        image,
+        id,
+      });
+
+      dispatch(addPictureToMarker(pictureUrl));
+
+      setImage(null);
+      dispatch(setModal("markerInfo"));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
 // Map Services
 export const resetMapState = () => async (dispatch) => {
   dispatch(clearModal());
@@ -208,6 +240,7 @@ export const resetMapState = () => async (dispatch) => {
 export const initApp = () => async (dispatch) => {
   try {
     await dispatch(requestLocationPermission());
+    await dispatch(getCurrentPosition());
     await dispatch(getLocalMarkers());
   } catch ({ message }) {
     dispatch(setError({ message }));

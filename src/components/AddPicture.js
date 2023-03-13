@@ -7,9 +7,12 @@ import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
 import { uploadWaterSourcePhoto } from "../services/storageService";
 import { setModal } from "../features/modal/modalSlice";
-import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
-import { selectSelectedMarker } from "../features/markers/markersSlice";
-import { addPictureToMarker } from "../services/services";
+import { ITEM_ROW_CONTAINER } from "../styles/styles";
+import {
+  selectSelectedMarker,
+  setLoading,
+} from "../features/markers/markersSlice";
+import { addPictureToMarker, savePictureRemote } from "../services/services";
 
 const AddPicture = () => {
   const dispatch = useDispatch();
@@ -43,15 +46,7 @@ const AddPicture = () => {
 
   const goBack = () => dispatch(setModal("editMarker"));
 
-  const savePicture = async () => {
-    const pictureUrl = await uploadWaterSourcePhoto({
-      image,
-      id,
-      filename: "pic.jpeg",
-    });
-
-    dispatch(addPictureToMarker(pictureUrl));
-  };
+  const savePicture = async () => dispatch(savePictureRemote({ image, id }));
 
   return (
     <BottomSheetScrollView>

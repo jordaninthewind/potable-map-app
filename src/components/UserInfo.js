@@ -3,7 +3,7 @@ import { Button, Text } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../features/user/userSlice";
 import { setModal } from "../features/modal/modalSlice";
-import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
+import { ITEM_ROW_CONTAINER } from "../styles/styles";
 
 const UserInfo = () => {
   const dispatch = useDispatch();

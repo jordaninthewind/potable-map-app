@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { Button, Checkbox, Text, TextInput } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { clearModal, setModal } from "../features/modal/modalSlice";
-import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
+import { ITEM_ROW_CONTAINER } from "../styles/styles";
 import { selectLoading, setLoading } from "../features/markers/markersSlice";
 import Logo from "./Logo";
 import { validateEmail } from "../features/error/errorHelpers";

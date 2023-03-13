@@ -6,7 +6,7 @@ import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
 import { setModal } from "../features/modal/modalSlice";
 import { selectSelectedMarker } from "../features/markers/markersSlice";
-import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
+import { ITEM_ROW_CONTAINER } from "../styles/styles";
 import { COLOR_WARNING } from "../constants";
 import { deleteMarkerRemote } from "../services/services";
 

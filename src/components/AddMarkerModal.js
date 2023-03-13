@@ -10,14 +10,15 @@ import {
   selectTempMarker,
 } from "../features/markers/markersSlice";
 import { clearModal } from "../features/modal/modalSlice";
-import { addMarkerRemote } from "../services/services";
-import { BASE_BUTTON, ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
-import { setError } from "../features/error/errorSlice";
+import { addMarkerRemote, getLocalMarkers } from "../services/services";
+import { BASE_BUTTON, ITEM_ROW_CONTAINER } from "../styles/styles";
+import { selectTheme } from "../features/app/appSlice";
 
 const AddMarkerModal = () => {
   const dispatch = useDispatch();
-  const tempLocation = useSelector(selectTempMarker);
+  const tempMarker = useSelector(selectTempMarker);
   const loading = useSelector(selectLoading);
+  const colorScheme = useSelector(selectTheme);
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -39,14 +40,14 @@ const AddMarkerModal = () => {
       notes,
       rating,
       imageUrl,
-      location: new GeoPoint(tempLocation.latitude, tempLocation.longitude),
+      location: new GeoPoint(tempMarker.latitude, tempMarker.longitude),
     };
   };
 
   const onSubmit = () => {
     dispatch(addMarkerRemote(structureMarker()));
+    dispatch(getLocalMarkers());
     dispatch(clearModal());
-    dispatch(setError("Marker added successfully!"));
   };
 
   return (
@@ -89,7 +90,12 @@ const AddMarkerModal = () => {
         />
       </>
       <View style={styles.buttonContainer}>
-        <Button mode="contained" onPress={onSubmit} loading={loading}>
+        <Button
+          mode="outlined"
+          disabled={!name && !description && !notes && !rating}
+          onPress={onSubmit}
+          loading={loading}
+        >
           Add Marker
         </Button>
       </View>

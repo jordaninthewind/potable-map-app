@@ -22,10 +22,10 @@ const MenuGroup = () => {
   const deviceHasPermissions = useSelector(selectDeviceLocationPermissions);
   const location = useSelector(selectLocation);
 
-  const updatePosition = async () => dispatch(getCurrentPosition());
+  const updatePosition = async () => await dispatch(getCurrentPosition());
 
   const addTempMarker = async () => {
-    await dispatch(getCurrentPosition());
+    awaitupdatePosition();
     dispatch(setTempMarker(location));
     dispatch(setModal("addMarker"));
   };

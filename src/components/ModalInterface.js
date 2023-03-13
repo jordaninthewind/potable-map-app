@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   dark: {
-    backgroundColor: "lightgrey",
+    backgroundColor: "rgb(50,50,50)",
   },
 });
 

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { clearModal, setModal } from "../features/modal/modalSlice";
 
-import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
+import { ITEM_ROW_CONTAINER } from "../styles/styles";
 import { selectLoading } from "../features/markers/markersSlice";
 import { signIn } from "../services/services";
 import Logo from "./Logo";

@@ -6,13 +6,14 @@ import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { selectSelectedMarker } from "../features/markers/markersSlice";
 import { setModal } from "../features/modal/modalSlice";
 import { shortenString } from "../helpers";
-import { ITEM_ROW_CONTAINER } from "../styles/buttonStyles";
 import { selectUser } from "../features/user/userSlice";
 import { PRIMARY_TEXT_SHADOW } from "../constants";
+import { selectTheme } from "../features/app/appSlice";
 
 const MarkerInfo = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
+  const colorScheme = useSelector(selectTheme);
   const { longitude, latitude, name, image, rating, notes } =
     useSelector(selectSelectedMarker);
 
@@ -26,7 +27,7 @@ const MarkerInfo = () => {
 
   return (
     <BottomSheetScrollView>
-      <View style={[styles.nameContainer, styles.columnElement]}>
+      <View style={[styles.nameContainer[colorScheme], styles.columnElement]}>
         <Text
           variant="titleLarge"
           style={{
@@ -37,22 +38,28 @@ const MarkerInfo = () => {
           {name}
         </Text>
       </View>
-      <View style={[styles.infoContainer, styles.columnElement]}>
+      <View style={[styles.infoContainer[colorScheme], styles.columnElement]}>
         <View>
-          <Text style={styles.detailText}>Water Quality: 7.5 / 10</Text>
-          <Text style={styles.detailText}>
+          <Text style={styles.detailText[colorScheme]}>
+            Water Quality: 7.5 / 10
+          </Text>
+          <Text style={styles.detailText[colorScheme]}>
             Longitude: {shortenString(longitude.toString(), 8)}
           </Text>
-          <Text style={styles.detailText}>
+          <Text style={styles.detailText[colorScheme]}>
             Latitude: {shortenString(latitude.toString(), 8)}
           </Text>
-          <Text style={styles.detailText}>
+          <Text style={styles.detailText[colorScheme]}>
             Taste: {rating > 5 ? "Good" : "Not Good"}
           </Text>
-          <Text style={styles.detailText}>Reference: N/A</Text>
-          <Text style={styles.detailText}>Distance from here: 500 ft</Text>
-          <Text style={styles.detailText}>Verified: 2/26/2023</Text>
-          <Text style={styles.detailText}>Notes: {notes}</Text>
+          <Text style={styles.detailText[colorScheme]}>Reference: N/A</Text>
+          <Text style={styles.detailText[colorScheme]}>
+            Distance from here: 500 ft
+          </Text>
+          <Text style={styles.detailText[colorScheme]}>
+            Verified: 2/26/2023
+          </Text>
+          <Text style={styles.detailText[colorScheme]}>Notes: {notes}</Text>
         </View>
         <View>
           <Image
@@ -62,7 +69,7 @@ const MarkerInfo = () => {
         </View>
       </View>
       <View style={styles.columnElement}>
-        <Button mode="outlined" onPress={editMarkerInfo}>
+        <Button mode="contained" onPress={editMarkerInfo}>
           {user ? "edit source" : "login to edit"}
         </Button>
       </View>
@@ -70,27 +77,56 @@ const MarkerInfo = () => {
   );
 };
 
+const infoContainerBase = {
+  alignItems: "center",
+  borderRadius: 30,
+  justifyContent: "center",
+  padding: 20,
+  flexDirection: "row",
+  justifyContent: "space-between",
+};
+
 const styles = StyleSheet.create({
   locationContainer: {
     backgroundColor: "rgba(0,0,0,0.1)",
   },
   nameContainer: {
-    alignItems: "center",
-    backgroundColor: "rgba(255,0,0,0.1)",
-    borderRadius: 30,
-    justifyContent: "center",
-    paddingVertical: 10,
+    dark: {
+      alignItems: "center",
+      backgroundColor: "rgba(0,0,0,0.2)",
+      borderRadius: 30,
+      justifyContent: "center",
+      paddingVertical: 10,
+    },
+    light: {
+      alignItems: "center",
+      backgroundColor: "rgba(255,0,0,0.1)",
+      borderRadius: 30,
+      justifyContent: "center",
+      paddingVertical: 10,
+    },
   },
   infoContainer: {
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.1)",
-    borderRadius: 30,
-    justifyContent: "center",
-    padding: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    dark: {
+      ...infoContainerBase,
+      backgroundColor: "rgba(255,255,255,0.15)",
+    },
+    light: {
+      ...infoContainerBase,
+      backgroundColor: "rgba(0,0,0,0.1)",
+    },
   },
-  detailText: { marginVertical: 5 },
+  infoContainerText: {},
+  detailText: {
+    dark: {
+      marginVertical: 5,
+      color: "rgba(255,255,255,.75)",
+    },
+    light: {
+      marginVertical: 5,
+      color: "black",
+    },
+  },
   columnElement: {
     marginVertical: 10,
   },
