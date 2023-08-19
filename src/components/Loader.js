@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { useSelector } from "react-redux";
 
-import { selectLoading } from "../features/markers/markersSlice";
+import { selectLoading } from "@features/markersSlice";
 
 const Loader = () => {
   const loading = useSelector(selectLoading);

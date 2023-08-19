@@ -3,13 +3,13 @@ import { StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
 import { BottomNavigation as PaperBottomNavigation } from "react-native-paper";
 
-import Settings from "./Settings";
-import PotableMap from "./PotableMap";
-import MenuGroup from "./MenuGroup";
-import ModalInterface from "./ModalInterface";
-import UserInfo from "./UserInfo";
+import Settings from "@components/Settings";
+import PotableMap from "@components/PotableMap";
+import MenuGroup from "@components/MenuGroup";
+import ModalInterface from "@components/ModalInterface";
+import UserInfo from "@components/UserInfo";
 
-import { selectTheme } from "../features/app/appSlice";
+import { selectTheme } from "@features/appSlice";
 
 const MapScreen = () => (
   <View style={{ flex: 1 }}>

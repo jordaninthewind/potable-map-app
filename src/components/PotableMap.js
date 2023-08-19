@@ -11,13 +11,13 @@ import {
   selectTempMarker,
   resetSelectedMarker,
   resetTempMarker,
-} from "../features/markers/markersSlice";
-import { getLocalMarkers } from "../services/services";
-import { clearModal, setModal } from "../features/modal/modalSlice";
-import { selectTheme } from "../features/app/appSlice";
+} from "@features/markersSlice";
+import { getLocalMarkers } from "@services/services";
+import { clearModal, setModal } from "@features/modalSlice";
+import { selectTheme } from "@features/appSlice";
 
-import { PotableMarker } from "./PotableMarker";
-import { centerMarkerInScreen } from "../helpers";
+import { PotableMarker } from "@components/PotableMarker";
+import { centerMarkerInScreen } from "@app/helpers";
 
 const PotableMap = () => {
   const mapRef = useRef(null);

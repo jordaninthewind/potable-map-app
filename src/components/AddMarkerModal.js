@@ -8,11 +8,11 @@ import {
   selectLoading,
   resetTempMarker,
   selectTempMarker,
-} from "../features/markers/markersSlice";
-import { clearModal } from "../features/modal/modalSlice";
-import { addMarkerRemote, getLocalMarkers } from "../services/services";
-import { BASE_BUTTON, ITEM_ROW_CONTAINER } from "../styles/styles";
-import { selectTheme } from "../features/app/appSlice";
+} from "@features/markersSlice";
+import { clearModal } from "@features/modalSlice";
+import { addMarkerRemote, getLocalMarkers } from "@services/services";
+import { BASE_BUTTON, ITEM_ROW_CONTAINER } from "@styles/styles";
+import { selectTheme } from "@features/appSlice";
 
 const AddMarkerModal = () => {
   const dispatch = useDispatch();

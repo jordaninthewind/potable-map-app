@@ -1,10 +1,11 @@
 import { StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser } from "../features/user/userSlice";
-import { setModal } from "../features/modal/modalSlice";
-import { ITEM_ROW_CONTAINER } from "../styles/styles";
+import { selectUser } from "@features/userSlice";
+import { setModal } from "@features/modalSlice";
+import { ITEM_ROW_CONTAINER } from "@styles/styles";
 
+// TODO: Split login and user info into two separate components
 const UserInfo = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);

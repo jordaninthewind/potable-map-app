@@ -2,6 +2,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 export const uploadWaterSourcePhoto = async ({ id, image }) => {
   try {
+    console.log("yup");
     const uri = image.uri;
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();

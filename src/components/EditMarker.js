@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, TextInput } from "react-native-paper";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
-import { setModal } from "../features/modal/modalSlice";
-import { selectSelectedMarker } from "../features/markers/markersSlice";
-import { ITEM_ROW_CONTAINER } from "../styles/styles";
-import { COLOR_WARNING } from "../constants";
-import { deleteMarkerRemote } from "../services/services";
+import { setModal } from "@features/modalSlice";
+import { selectSelectedMarker } from "@features/markersSlice";
+import { ITEM_ROW_CONTAINER } from "@styles/styles";
+import { COLOR_WARNING } from "@app/constants";
+import { deleteMarkerRemote } from "@services/services";
 
 const EditMarker = () => {
   const dispatch = useDispatch();
@@ -50,26 +50,26 @@ const EditMarker = () => {
       <TextInput
         mode="outlined"
         label="Name"
-        onChange={(e) => setName}
+        onChange={(e) => setName(e)}
         value={name}
       />
       <TextInput
         mode="outlined"
         label="Type"
-        onChange={(e) => setType}
+        onChange={(e) => setType(e)}
         value={type}
       />
       <TextInput
         multiline
         mode="outlined"
         label="Description"
-        onChange={(e) => setDescription}
+        onChange={(e) => setDescription(e)}
         value={description}
       />
       <TextInput
         mode="outlined"
         label="Rating"
-        onChange={(e) => setRating}
+        onChange={(e) => setRating(e)}
         value={rating}
       />
       <View style={[ITEM_ROW_CONTAINER, { marginTop: 10 }]}>

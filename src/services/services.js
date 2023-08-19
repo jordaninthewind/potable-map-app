@@ -17,19 +17,19 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
-import { db } from "../../firebaseConfig";
-import { MARKER_DATABASE } from "../constants";
-import { setError } from "../features/error/errorSlice";
+import { db } from "@app/firebaseConfig";
+import { MARKER_DATABASE } from "@app/constants";
+import { setError } from "@features/errorSlice";
 import {
   setLoading,
   setLocation,
   setMarkers,
   setSelectedMarker,
   setTempMarker,
-} from "../features/markers/markersSlice";
-import { clearModal } from "../features/modal/modalSlice";
-import { setUser } from "../features/user/userSlice";
-import { uploadWaterSourcePhoto } from "./storageService";
+} from "@features/markersSlice";
+import { clearModal } from "@features/modalSlice";
+import { setUser } from "@features/userSlice";
+import { uploadWaterSourcePhoto } from "@services/storageService";
 
 // Auth Services
 export const signIn =
@@ -138,9 +138,9 @@ export const getLocalMarkers = () => async (dispatch) => {
 export const addMarkerRemote =
   ({ name, description, imageUrl, location }) =>
   async (dispatch, getState) => {
-    dispatch(setLoading(true));
-
     try {
+      dispatch(setLoading(true));
+
       const pinObject = {
         name,
         description,
@@ -161,11 +161,10 @@ export const addMarkerRemote =
   };
 
 export const deleteMarkerRemote = (marker) => async (dispatch) => {
-  dispatch(setLoading(true));
-
   try {
-    const docToDelete = doc(db, MARKER_DATABASE, marker.id);
-    const deleted = await deleteDoc(docToDelete);
+    dispatch(setLoading(true));
+
+    await deleteDoc(doc(db, MARKER_DATABASE, marker.id));
     await dispatch(getLocalMarkers());
     dispatch(clearModal());
     dispatch(getCurrentPosition());
@@ -178,12 +177,10 @@ export const deleteMarkerRemote = (marker) => async (dispatch) => {
 };
 
 export const updateMarkerRemote = (marker) => async (dispatch) => {
-  dispatch(setLoading(true));
-
   try {
-    const docToUpdate = doc(db, MARKER_DATABASE, marker.id);
-    await updateDoc(docToUpdate, marker);
+    dispatch(setLoading(true));
 
+    await updateDoc(doc(db, MARKER_DATABASE, marker.id), marker);
     dispatch(setError({ message: `Updated marker ${marker.id}` }));
   } catch ({ message }) {
     dispatch(setError({ message }));
@@ -193,12 +190,10 @@ export const updateMarkerRemote = (marker) => async (dispatch) => {
 };
 
 export const addPictureToMarker = (marker, imageUrl) => async (dispatch) => {
-  dispatch(setLoading(true));
-
   try {
-    const docToUpdate = doc(db, MARKER_DATABASE, marker.id);
-    await updateDoc(docToUpdate, { imageUrl });
+    dispatch(setLoading(true));
 
+    await updateDoc(doc(db, MARKER_DATABASE, marker.id), { imageUrl });
     dispatch(setError({ message: `Updated marker ${marker.id}` }));
   } catch ({ message }) {
     dispatch(setError({ message }));

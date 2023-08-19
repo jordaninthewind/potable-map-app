@@ -2,15 +2,15 @@ import { Linking, StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Switch, Text } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import {
   selectDeviceLocationPermissions,
   selectTheme,
   setTheme,
-} from "../features/app/appSlice";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { signOut } from "../services/services";
-import { selectUserEmail } from "../features/user/userSlice";
+} from "@features/appSlice";
+import { signOut } from "@services/services";
+import { selectUserEmail } from "@features/userSlice";
 
 const Settings = () => {
   const dispatch = useDispatch();

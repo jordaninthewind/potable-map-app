@@ -2,13 +2,11 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Marker } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
-import { selectTheme } from "../features/app/appSlice";
 
-import {
-  setSelectedMarker,
-  setTempMarker,
-} from "../features/markers/markersSlice";
-import { setModal } from "../features/modal/modalSlice";
+import { selectTheme } from "@features/appSlice";
+
+import { setSelectedMarker, setTempMarker } from "@features/markersSlice";
+import { setModal } from "@features/modalSlice";
 
 export const PotableMarker = ({ marker, selectedId = null, type = null }) => {
   const dispatch = useDispatch();
