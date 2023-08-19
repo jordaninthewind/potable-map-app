@@ -1,18 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = { details: null };
 
 const userSlice = createSlice({
-  name: "user",
-  initialState,
-  reducers: {
-    setUser(state, action) {
-      state.details = action.payload;
+    name: 'user',
+    initialState,
+    reducers: {
+        setUser(state, action) {
+            state.details = action.payload;
+        },
+        clearUser(state) {
+            state.details = null;
+        },
     },
-    clearUser(state) {
-      state.details = null;
-    },
-  },
 });
 
 // Selectors
