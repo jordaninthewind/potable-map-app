@@ -19,16 +19,16 @@ import {
 
 import { MARKER_DATABASE } from '@app/constants';
 import { db } from '@app/firebaseConfig';
-import { setError } from '@features/errorSlice';
+import { setError } from '@state/errorSlice';
 import {
     setLoading,
     setLocation,
     setMarkers,
     setSelectedMarker,
     setTempMarker,
-} from '@features/markersSlice';
-import { clearModal } from '@features/modalSlice';
-import { setUser } from '@features/userSlice';
+} from '@state/markersSlice';
+import { clearModal } from '@state/modalSlice';
+import { setUser } from '@state/userSlice';
 import { uploadWaterSourcePhoto } from '@services/storageService';
 
 // Auth Services

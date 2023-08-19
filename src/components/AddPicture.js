@@ -5,8 +5,8 @@ import { Button, Text } from 'react-native-paper';
 import { Camera, CameraType } from 'expo-camera';
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 
-import { selectSelectedMarker, setLoading } from '@features/markersSlice';
-import { setModal } from '@features/modalSlice';
+import { selectSelectedMarker, setLoading } from '@state/markersSlice';
+import { setModal } from '@state/modalSlice';
 import { addPictureToMarker, savePictureRemote } from '@services/services';
 import { uploadWaterSourcePhoto } from '@services/storageService';
 import { ITEM_ROW_CONTAINER } from '@styles/styles';
@@ -24,7 +24,7 @@ const AddPicture = () => {
     useEffect(() => {
         const onStartCamera = async () => {
             const { status } = await Camera.requestCameraPermissionsAsync();
-
+            console.log(status);
             if (status !== 'granted') {
                 setDevicePermission(false);
             }

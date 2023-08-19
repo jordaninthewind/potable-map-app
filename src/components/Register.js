@@ -4,9 +4,9 @@ import { Button, Checkbox, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Logo from '@components/Logo';
-import { validateEmail } from '@features/errorHelpers';
-import { selectLoading, setLoading } from '@features/markersSlice';
-import { clearModal, setModal } from '@features/modalSlice';
+import { validateEmail } from '@state/errorHelpers';
+import { selectLoading, setLoading } from '@state/markersSlice';
+import { clearModal, setModal } from '@state/modalSlice';
 import { signUp } from '@services/services';
 import { ITEM_ROW_CONTAINER } from '@styles/styles';
 

@@ -5,8 +5,8 @@ import { Button, TextInput } from 'react-native-paper';
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 
 import { COLOR_WARNING } from '@app/constants';
-import { selectSelectedMarker } from '@features/markersSlice';
-import { setModal } from '@features/modalSlice';
+import { selectSelectedMarker } from '@state/markersSlice';
+import { setModal } from '@state/modalSlice';
 import { deleteMarkerRemote } from '@services/services';
 import { ITEM_ROW_CONTAINER } from '@styles/styles';
 

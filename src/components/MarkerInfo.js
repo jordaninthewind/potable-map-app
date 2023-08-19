@@ -5,10 +5,10 @@ import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 
 import { PRIMARY_TEXT_SHADOW } from '@app/constants';
 import { shortenString } from '@app/helpers';
-import { selectTheme } from '@features/appSlice';
-import { selectSelectedMarker } from '@features/markersSlice';
-import { setModal } from '@features/modalSlice';
-import { selectUser } from '@features/userSlice';
+import { selectTheme } from '@state/appSlice';
+import { selectSelectedMarker } from '@state/markersSlice';
+import { setModal } from '@state/modalSlice';
+import { selectUser } from '@state/userSlice';
 
 const MarkerInfo = () => {
     const dispatch = useDispatch();

@@ -4,8 +4,8 @@ import { Button, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Logo from '@components/Logo';
-import { selectLoading } from '@features/markersSlice';
-import { clearModal, setModal } from '@features/modalSlice';
+import { selectLoading } from '@state/markersSlice';
+import { clearModal, setModal } from '@state/modalSlice';
 import { signIn } from '@services/services';
 import { ITEM_ROW_CONTAINER } from '@styles/styles';
 
@@ -47,6 +47,7 @@ const Login = () => {
                     mode="outlined"
                     label="Password"
                     secureTextEntry={passwordVisible}
+                    keyboardType="password"
                     onChangeText={(val) => setPassword(val)}
                     right={
                         <TextInput.Icon

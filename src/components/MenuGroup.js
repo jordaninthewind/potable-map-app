@@ -2,13 +2,10 @@ import { StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { FAB } from 'react-native-paper';
 
-import {
-    selectTheme,
-    selectDeviceLocationPermissions,
-} from '@features/appSlice';
-import { selectLocation, setTempMarker } from '@features/markersSlice';
-import { setModal } from '@features/modalSlice';
-import { selectUser, selectUserEmail } from '@features/userSlice';
+import { selectTheme, selectDeviceLocationPermissions } from '@state/appSlice';
+import { selectLocation, setTempMarker } from '@state/markersSlice';
+import { setModal } from '@state/modalSlice';
+import { selectUser, selectUserEmail } from '@state/userSlice';
 import { getCurrentPosition } from '@services/services';
 
 const MenuGroup = () => {

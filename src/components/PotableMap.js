@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { centerMarkerInScreen } from '@app/helpers';
 import { PotableMarker } from '@components/PotableMarker';
-import { selectTheme } from '@features/appSlice';
+import { selectTheme } from '@state/appSlice';
 import {
     selectMarkers,
     setTempMarker,
@@ -14,8 +14,8 @@ import {
     selectTempMarker,
     resetSelectedMarker,
     resetTempMarker,
-} from '@features/markersSlice';
-import { clearModal, setModal } from '@features/modalSlice';
+} from '@state/markersSlice';
+import { clearModal, setModal } from '@state/modalSlice';
 import { getLocalMarkers } from '@services/services';
 
 const PotableMap = () => {

@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
-import { selectTheme } from '@features/appSlice';
+import { selectTheme } from '@state/appSlice';
 
 const PotableStatusBar = () => {
     const theme = useSelector(selectTheme);

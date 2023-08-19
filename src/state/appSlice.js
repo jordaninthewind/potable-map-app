@@ -24,4 +24,3 @@ export const selectDeviceLocationPermissions = (state) =>
     state.app.deviceLocationPermission;
 
 export default appSlice.reducer;
-f

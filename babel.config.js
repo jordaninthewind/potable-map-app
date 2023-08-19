@@ -12,7 +12,7 @@ module.exports = function (api) {
                         '@assets': './assets',
                         '@components': './src/components',
                         '@constants': './src/constants',
-                        '@features': './src/features',
+                        '@state': './src/state',
                         '@navigation': './src/navigation',
                         '@redux': './src/redux',
                         '@screens': './src/screens',

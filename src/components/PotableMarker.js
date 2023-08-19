@@ -3,9 +3,9 @@ import { StyleSheet, View } from 'react-native';
 import { Marker } from 'react-native-maps';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { selectTheme } from '@features/appSlice';
-import { setSelectedMarker, setTempMarker } from '@features/markersSlice';
-import { setModal } from '@features/modalSlice';
+import { selectTheme } from '@state/appSlice';
+import { setSelectedMarker, setTempMarker } from '@state/markersSlice';
+import { setModal } from '@state/modalSlice';
 
 export const PotableMarker = ({ marker, selectedId = null, type = null }) => {
     const dispatch = useDispatch();

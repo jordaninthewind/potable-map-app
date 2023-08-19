@@ -8,7 +8,7 @@ import PotableMap from '@components/PotableMap';
 import MenuGroup from '@components/MenuGroup';
 import ModalInterface from '@components/ModalInterface';
 import UserInfo from '@components/UserInfo';
-import { selectTheme } from '@features/appSlice';
+import { selectTheme } from '@state/appSlice';
 
 const MapScreen = () => (
     <View style={{ flex: 1 }}>

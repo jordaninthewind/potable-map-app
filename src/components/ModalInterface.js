@@ -9,8 +9,8 @@ import EditMarker from '@components/EditMarker';
 import Login from '@components/Login';
 import MarkerInfo from '@components/MarkerInfo';
 import Register from '@components/Register';
-import { selectTheme } from '@features/appSlice';
-import { clearModal, selectModal } from '@features/modalSlice';
+import { selectTheme } from '@state/appSlice';
+import { clearModal, selectModal } from '@state/modalSlice';
 import { resetMapState } from '@services/services';
 
 const ModalInterface = () => {

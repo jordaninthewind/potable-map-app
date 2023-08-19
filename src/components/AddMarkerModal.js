@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { GeoPoint } from 'firebase/firestore';
 
-import { selectTheme } from '@features/appSlice';
+import { selectTheme } from '@state/appSlice';
 import {
     selectLoading,
     resetTempMarker,
     selectTempMarker,
-} from '@features/markersSlice';
-import { clearModal } from '@features/modalSlice';
+} from '@state/markersSlice';
+import { clearModal } from '@state/modalSlice';
 import { addMarkerRemote, getLocalMarkers } from '@services/services';
 import { BASE_BUTTON, ITEM_ROW_CONTAINER } from '@styles/styles';
 

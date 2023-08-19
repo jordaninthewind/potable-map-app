@@ -8,8 +8,8 @@ import {
     selectDeviceLocationPermissions,
     selectTheme,
     setTheme,
-} from '@features/appSlice';
-import { selectUserEmail } from '@features/userSlice';
+} from '@state/appSlice';
+import { selectUserEmail } from '@state/userSlice';
 import { signOut } from '@services/services';
 
 const Settings = () => {

@@ -1,11 +1,11 @@
 import { combineReducers } from '@reduxjs/toolkit';
 
 // Reducers
-import appSlice from '@features/appSlice';
-import errorReducer from '@features/errorSlice';
-import markersReducer from '@features/markersSlice';
-import modalReducer from '@features/modalSlice';
-import userReducer from '@features/userSlice';
+import appSlice from '@state/appSlice';
+import errorReducer from '@state/errorSlice';
+import markersReducer from '@state/markersSlice';
+import modalReducer from '@state/modalSlice';
+import userReducer from '@state/userSlice';
 
 const rootReducer = combineReducers({
     // auth: authReducer,

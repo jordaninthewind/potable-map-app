@@ -2,8 +2,8 @@ import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
 
-import { setError } from '@features/errorSlice.js';
-import { setUser } from '@features/userSlice.js';
+import { setError } from '@state/errorSlice.js';
+import { setUser } from '@state/userSlice.js';
 import BottomNavigation from '@components/BottomNavigation.js';
 import Loader from '@components/Loader.js';
 import ModalInterface from '@components/ModalInterface.js';
