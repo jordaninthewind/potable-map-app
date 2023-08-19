@@ -4,7 +4,6 @@ import { Marker } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 
 import { selectTheme } from "@features/appSlice";
-
 import { setSelectedMarker, setTempMarker } from "@features/markersSlice";
 import { setModal } from "@features/modalSlice";
 

@@ -1,17 +1,17 @@
+import { useEffect, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
-import BottomSheet from "@gorhom/bottom-sheet";
 import { useDispatch, useSelector } from "react-redux";
+import BottomSheet from "@gorhom/bottom-sheet";
 
-import { clearModal, selectModal } from "@features/modalSlice";
 import AddMarkerModal from "@components/AddMarkerModal";
 import AddPicture from "@components/AddPicture";
+import EditMarker from "@components/EditMarker";
 import Login from "@components/Login";
 import MarkerInfo from "@components/MarkerInfo";
 import Register from "@components/Register";
-import { useEffect, useRef, useState } from "react";
-import EditMarker from "@components/EditMarker";
-import { resetMapState } from "@services/services";
 import { selectTheme } from "@features/appSlice";
+import { clearModal, selectModal } from "@features/modalSlice";
+import { resetMapState } from "@services/services";
 
 const ModalInterface = () => {
   const dispatch = useDispatch();

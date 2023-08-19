@@ -5,11 +5,11 @@ import { Button, Text } from "react-native-paper";
 import { Camera, CameraType } from "expo-camera";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
-import { uploadWaterSourcePhoto } from "@services/storageService";
-import { setModal } from "@features/modalSlice";
-import { ITEM_ROW_CONTAINER } from "@styles/styles";
 import { selectSelectedMarker, setLoading } from "@features/markersSlice";
+import { setModal } from "@features/modalSlice";
 import { addPictureToMarker, savePictureRemote } from "@services/services";
+import { uploadWaterSourcePhoto } from "@services/storageService";
+import { ITEM_ROW_CONTAINER } from "@styles/styles";
 
 const AddPicture = () => {
   const dispatch = useDispatch();

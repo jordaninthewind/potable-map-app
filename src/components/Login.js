@@ -3,12 +3,11 @@ import { StyleSheet, View } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 
-import { clearModal, setModal } from "@features/modalSlice";
-
-import { ITEM_ROW_CONTAINER } from "@styles/styles";
-import { selectLoading } from "@features/markersSlice";
-import { signIn } from "@services/services";
 import Logo from "@components/Logo";
+import { selectLoading } from "@features/markersSlice";
+import { clearModal, setModal } from "@features/modalSlice";
+import { signIn } from "@services/services";
+import { ITEM_ROW_CONTAINER } from "@styles/styles";
 
 const Login = () => {
   const dispatch = useDispatch();

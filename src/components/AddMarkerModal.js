@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, Text, TextInput } from "react-native-paper";
 import { GeoPoint } from "firebase/firestore";
 
+import { selectTheme } from "@features/appSlice";
 import {
   selectLoading,
   resetTempMarker,
@@ -12,7 +13,6 @@ import {
 import { clearModal } from "@features/modalSlice";
 import { addMarkerRemote, getLocalMarkers } from "@services/services";
 import { BASE_BUTTON, ITEM_ROW_CONTAINER } from "@styles/styles";
-import { selectTheme } from "@features/appSlice";
 
 const AddMarkerModal = () => {
   const dispatch = useDispatch();

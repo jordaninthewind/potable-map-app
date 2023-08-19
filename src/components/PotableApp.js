@@ -1,14 +1,15 @@
-import Loader from "@components/Loader.js";
-import ModalInterface from "@components/ModalInterface.js";
-import BottomNavigation from "@components/BottomNavigation.js";
-import NotificationOverlay from "@components/NotificationOverlay.js";
-import PotableStatusBar from "@components/PotableStatusBar.js";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { initApp } from "@services/services.js";
 import { getAuth } from "firebase/auth";
-import { setUser } from "@features/userSlice.js";
+
 import { setError } from "@features/errorSlice.js";
+import { setUser } from "@features/userSlice.js";
+import BottomNavigation from "@components/BottomNavigation.js";
+import Loader from "@components/Loader.js";
+import ModalInterface from "@components/ModalInterface.js";
+import NotificationOverlay from "@components/NotificationOverlay.js";
+import PotableStatusBar from "@components/PotableStatusBar.js";
+import { initApp } from "@services/services.js";
 
 const PotableApp = () => {
   const dispatch = useDispatch();

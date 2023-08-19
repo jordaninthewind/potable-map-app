@@ -3,6 +3,9 @@ import { StyleSheet, Vibration } from "react-native";
 import MapView from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 
+import { centerMarkerInScreen } from "@app/helpers";
+import { PotableMarker } from "@components/PotableMarker";
+import { selectTheme } from "@features/appSlice";
 import {
   selectMarkers,
   setTempMarker,
@@ -12,12 +15,8 @@ import {
   resetSelectedMarker,
   resetTempMarker,
 } from "@features/markersSlice";
-import { getLocalMarkers } from "@services/services";
 import { clearModal, setModal } from "@features/modalSlice";
-import { selectTheme } from "@features/appSlice";
-
-import { PotableMarker } from "@components/PotableMarker";
-import { centerMarkerInScreen } from "@app/helpers";
+import { getLocalMarkers } from "@services/services";
 
 const PotableMap = () => {
   const mapRef = useRef(null);

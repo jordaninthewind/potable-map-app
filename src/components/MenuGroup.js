@@ -2,14 +2,14 @@ import { StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { FAB } from "react-native-paper";
 
-import { getCurrentPosition } from "@services/services";
 import {
   selectTheme,
   selectDeviceLocationPermissions,
 } from "@features/appSlice";
-import { selectUser, selectUserEmail } from "@features/userSlice";
 import { selectLocation, setTempMarker } from "@features/markersSlice";
 import { setModal } from "@features/modalSlice";
+import { selectUser, selectUserEmail } from "@features/userSlice";
+import { getCurrentPosition } from "@services/services";
 
 const MenuGroup = () => {
   const dispatch = useDispatch();

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { DEFAULT_REGION } from "../constants";
+import { DEFAULT_REGION } from "@app/constants";
 
 const initialState = {
   entities: [{ id: 1, lat: 0, lng: 0 }],

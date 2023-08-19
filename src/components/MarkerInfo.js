@@ -3,12 +3,12 @@ import { Button, Text } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
+import { PRIMARY_TEXT_SHADOW } from "@app/constants";
+import { shortenString } from "@app/helpers";
+import { selectTheme } from "@features/appSlice";
 import { selectSelectedMarker } from "@features/markersSlice";
 import { setModal } from "@features/modalSlice";
-import { shortenString } from "@app/helpers";
 import { selectUser } from "@features/userSlice";
-import { PRIMARY_TEXT_SHADOW } from "@app/constants";
-import { selectTheme } from "@features/appSlice";
 
 const MarkerInfo = () => {
   const dispatch = useDispatch();

@@ -4,7 +4,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 
-import store from "../store";
+import store from "@app/store";
 
 const PotableAppProviders = ({ children }) => {
   return (

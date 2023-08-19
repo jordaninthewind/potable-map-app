@@ -1,6 +1,7 @@
 import { Snackbar } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
+
 import { clearError, selectError } from "@features/errorSlice";
 
 const NotificationOverlay = () => {

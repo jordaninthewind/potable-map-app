@@ -9,8 +9,8 @@ import {
   selectTheme,
   setTheme,
 } from "@features/appSlice";
-import { signOut } from "@services/services";
 import { selectUserEmail } from "@features/userSlice";
+import { signOut } from "@services/services";
 
 const Settings = () => {
   const dispatch = useDispatch();

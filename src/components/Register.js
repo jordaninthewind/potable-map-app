@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, Checkbox, Text, TextInput } from "react-native-paper";
+import { Button, Checkbox, TextInput } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import { clearModal, setModal } from "@features/modalSlice";
-import { ITEM_ROW_CONTAINER } from "@styles/styles";
-import { selectLoading, setLoading } from "@features/markersSlice";
+
 import Logo from "@components/Logo";
 import { validateEmail } from "@features/errorHelpers";
+import { selectLoading, setLoading } from "@features/markersSlice";
+import { clearModal, setModal } from "@features/modalSlice";
 import { signUp } from "@services/services";
+import { ITEM_ROW_CONTAINER } from "@styles/styles";
 
 const Register = () => {
   const dispatch = useDispatch();

@@ -17,8 +17,8 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
-import { db } from "@app/firebaseConfig";
 import { MARKER_DATABASE } from "@app/constants";
+import { db } from "@app/firebaseConfig";
 import { setError } from "@features/errorSlice";
 import {
   setLoading,
