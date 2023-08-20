@@ -1,18 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = { screen: null };
 
 const modalSlice = createSlice({
-  name: "modal",
-  initialState,
-  reducers: {
-    setModal(state, action) {
-      state.screen = action.payload;
+    name: 'modal',
+    initialState,
+    reducers: {
+        setModal(state, action) {
+            state.screen = action.payload;
+        },
+        clearModal(state) {
+            state.screen = null;
+        },
     },
-    clearModal(state) {
-      state.screen = null;
-    },
-  },
 });
 
 // Actions

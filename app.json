@@ -1,49 +1,49 @@
 {
-  "expo": {
-    "name": "potable",
-    "slug": "map-app",
-    "version": "1.0.7",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/raindrop.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#4999E1"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": ["**/*"],
-    "ios": {
-      "supportsTablet": true,
-      "infoPlist": {
-        "UIBackgroundModes": ["location", "fetch"]
-      },
-      "bundleIdentifier": "com.potable.water",
-      "buildNumber": "5"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "c7bdc156-09fe-4c9f-92e8-4c8f359efebe"
-      }
-    },
-    "plugins": [
-      [
-        "expo-camera",
-        {
-          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
-        }
-      ]
-    ]
-  }
+    "expo": {
+        "name": "potable",
+        "slug": "map-app",
+        "version": "1.0.7",
+        "orientation": "portrait",
+        "icon": "./assets/icon.png",
+        "userInterfaceStyle": "automatic",
+        "splash": {
+            "image": "./assets/raindrop.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#4999E1"
+        },
+        "updates": {
+            "fallbackToCacheTimeout": 0
+        },
+        "assetBundlePatterns": ["**/*"],
+        "ios": {
+            "supportsTablet": true,
+            "infoPlist": {
+                "UIBackgroundModes": ["location", "fetch"]
+            },
+            "bundleIdentifier": "com.potable.water",
+            "buildNumber": "5"
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/adaptive-icon.png",
+                "backgroundColor": "#FFFFFF"
+            }
+        },
+        "web": {
+            "favicon": "./assets/favicon.png"
+        },
+        "extra": {
+            "eas": {
+                "projectId": "c7bdc156-09fe-4c9f-92e8-4c8f359efebe"
+            }
+        },
+        "plugins": [
+            [
+                "expo-camera",
+                {
+                    "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+                }
+            ]
+        ]
+    }
 }

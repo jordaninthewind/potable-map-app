@@ -1,96 +1,99 @@
-import { useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { useSelector } from "react-redux";
-import { BottomNavigation as PaperBottomNavigation } from "react-native-paper";
+import { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { useSelector } from 'react-redux';
+import { BottomNavigation as PaperBottomNavigation } from 'react-native-paper';
 
-import Settings from "./Settings";
-import PotableMap from "./PotableMap";
-import MenuGroup from "./MenuGroup";
-import ModalInterface from "./ModalInterface";
-import UserInfo from "./UserInfo";
-
-import { selectTheme } from "../features/app/appSlice";
+import Settings from '@components/Settings';
+import PotableMap from '@components/PotableMap';
+import MenuGroup from '@components/MenuGroup';
+import ModalInterface from '@components/ModalInterface';
+import UserInfo from '@components/UserInfo';
+import { selectTheme } from '@state/appSlice';
 
 const MapScreen = () => (
-  <View style={{ flex: 1 }}>
-    <UserInfo />
-    <PotableMap />
-    <MenuGroup />
-    <ModalInterface />
-  </View>
+    <View style={{ flex: 1 }}>
+        <UserInfo />
+        <PotableMap />
+        <MenuGroup />
+        <ModalInterface />
+    </View>
 );
 
 const SettingsScreen = () => (
-  <View style={{ flex: 1 }}>
-    <Settings />
-  </View>
+    <View style={{ flex: 1 }}>
+        <Settings />
+    </View>
 );
 
 const BottomNavigation = () => {
-  const colorScheme = useSelector(selectTheme);
+    const colorScheme = useSelector(selectTheme);
 
-  const [index, setIndex] = useState(0);
-  const [routes] = useState([
-    {
-      key: "map",
-      title: "Map",
-      focusedIcon: "map",
-      unfocusedIcon: "map-outline",
-    },
-    {
-      key: "settings",
-      title: "Settings",
-      focusedIcon: "cog",
-      unfocusedIcon: "cog-outline",
-    },
-  ]);
+    const [index, setIndex] = useState(0);
+    const [routes] = useState([
+        {
+            key: 'map',
+            title: 'Map',
+            focusedIcon: 'map',
+            unfocusedIcon: 'map-outline',
+        },
+        {
+            key: 'settings',
+            title: 'Settings',
+            focusedIcon: 'cog',
+            unfocusedIcon: 'cog-outline',
+        },
+    ]);
 
-  const renderScene = PaperBottomNavigation.SceneMap({
-    map: MapScreen,
-    settings: SettingsScreen,
-  });
+    const renderScene = PaperBottomNavigation.SceneMap({
+        map: MapScreen,
+        settings: SettingsScreen,
+    });
 
-  return (
-    <View style={styles.container}>
-      <PaperBottomNavigation
-        style={styles.navContainer}
-        navigationState={{ index, routes }}
-        onIndexChange={setIndex}
-        renderScene={renderScene}
-        barStyle={styles[colorScheme].background}
-        inactiveColor={
-          colorScheme === "dark" ? "rgb(200,200,200)" : "rgb(100,100,100)"
-        }
-        activeColor={
-          colorScheme === "dark" ? "rgb(100,100,100)" : "rgb(75,75,75)"
-        }
-      />
-    </View>
-  );
+    return (
+        <View style={styles.container}>
+            <PaperBottomNavigation
+                style={styles.navContainer}
+                navigationState={{ index, routes }}
+                onIndexChange={setIndex}
+                renderScene={renderScene}
+                barStyle={styles[colorScheme].background}
+                inactiveColor={
+                    colorScheme === 'dark'
+                        ? 'rgb(200,200,200)'
+                        : 'rgb(100,100,100)'
+                }
+                activeColor={
+                    colorScheme === 'dark'
+                        ? 'rgb(100,100,100)'
+                        : 'rgb(75,75,75)'
+                }
+            />
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
-  container: { height: "100%" },
-  navContainer: {
-    borderTopColor: "grey",
-    borderTopWidth: 1,
-  },
-  light: {
-    background: {
-      backgroundColor: "white",
+    container: { height: '100%' },
+    navContainer: {
+        borderTopColor: 'grey',
+        borderTopWidth: 1,
     },
-    icon: {
-      color: "black",
+    light: {
+        background: {
+            backgroundColor: 'white',
+        },
+        icon: {
+            color: 'black',
+        },
     },
-  },
-  dark: {
-    background: {
-      backgroundColor: "black",
+    dark: {
+        background: {
+            backgroundColor: 'black',
+        },
+        icon: {
+            color: 'white',
+        },
     },
-    icon: {
-      color: "white",
-    },
-  },
 });
 
 export default BottomNavigation;

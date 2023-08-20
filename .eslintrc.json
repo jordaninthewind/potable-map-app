@@ -1,0 +1,33 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true,
+        // "react-native/react-native": true,
+        "node": true
+    },
+    "extends": "airbnb",
+    // "extends": "eslint:recommended",
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": ["react"],
+    "rules": {
+        "react-native/no-unused-styles": 2,
+        "react-native/split-platform-components": 2,
+        "react-native/no-inline-styles": 2,
+        "react-native/no-color-literals": 2,
+        "react-native/no-raw-text": 2,
+        "indent": ["error", 4],
+        "linebreak-style": ["error", "unix"],
+        "quotes": ["error", "double"],
+        "semi": ["error", "always"]
+    }
+}
