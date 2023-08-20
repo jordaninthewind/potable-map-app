@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +10,9 @@ import { signIn } from '@services/services';
 import { ITEM_ROW_CONTAINER } from '@styles/styles';
 
 const Login = () => {
+    const emailInput = useRef(null);
+    const passwordInput = useRef(null);
+
     const dispatch = useDispatch();
     const loading = useSelector(selectLoading);
 
@@ -28,12 +31,14 @@ const Login = () => {
             <Logo />
             <View style={styles.inputContainer}>
                 <TextInput
+                    ref={emailInput}
                     value={email}
                     mode="outlined"
                     label="Email Address"
                     keyboardType="email-address"
                     autoCapitalize="none"
                     autoFocus
+                    onSubmitEditing={() => passwordInput.current.focus()}
                     onChangeText={(val) => setEmail(val)}
                     right={
                         <TextInput.Icon
@@ -43,11 +48,12 @@ const Login = () => {
                     }
                 />
                 <TextInput
+                    ref={passwordInput}
                     value={password}
                     mode="outlined"
                     label="Password"
                     secureTextEntry={passwordVisible}
-                    keyboardType="password"
+                    keyboardType="visible-password"
                     onChangeText={(val) => setPassword(val)}
                     right={
                         <TextInput.Icon

@@ -3,17 +3,17 @@ import { Button, Text } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { setModal } from '@state/modalSlice';
-import { selectUser } from '@state/userSlice';
+import { selectAuthState } from '@state/userSlice';
 import { ITEM_ROW_CONTAINER } from '@styles/styles';
 
 // TODO: Split login and user info into two separate components
 const UserInfo = () => {
     const dispatch = useDispatch();
-    const user = useSelector(selectUser);
+    const isLoggedIn = useSelector(selectAuthState);
 
     return (
         <>
-            {!user && (
+            {!isLoggedIn && (
                 <View style={[styles.UserInfoContainer, ITEM_ROW_CONTAINER]}>
                     <Text>Not Logged In</Text>
                     <Button

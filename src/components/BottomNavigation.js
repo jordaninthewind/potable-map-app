@@ -56,7 +56,7 @@ const BottomNavigation = () => {
                 navigationState={{ index, routes }}
                 onIndexChange={setIndex}
                 renderScene={renderScene}
-                barStyle={styles[colorScheme].background}
+                barStyle={styles[colorScheme]?.background}
                 inactiveColor={
                     colorScheme === 'dark'
                         ? 'rgb(200,200,200)'

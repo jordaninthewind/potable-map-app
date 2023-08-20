@@ -1,15 +1,14 @@
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { getAuth } from 'firebase/auth';
 
-import { setError } from '@state/errorSlice.js';
-import { setUser } from '@state/userSlice.js';
 import BottomNavigation from '@components/BottomNavigation.js';
 import Loader from '@components/Loader.js';
 import ModalInterface from '@components/ModalInterface.js';
 import NotificationOverlay from '@components/NotificationOverlay.js';
 import PotableStatusBar from '@components/PotableStatusBar.js';
 import { initApp } from '@services/services.js';
+import { setUser } from '../state/userSlice';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const PotableApp = () => {
     const dispatch = useDispatch();
@@ -17,14 +16,13 @@ const PotableApp = () => {
     useEffect(() => {
         dispatch(initApp());
 
-        getAuth().onAuthStateChanged((user) => {
-            if (user) {
-                dispatch(setUser({ id: user.uid, email: user.email }));
-            } else {
-                dispatch(setUser(null));
-                dispatch(setError({ message: 'User logged out successfully' }));
-            }
-        });
+        // Listen for auth state changes
+        const unsubscribeFromAuthStatusChanged = onAuthStateChanged(
+            getAuth(),
+            (user) => dispatch(setUser(user ? user.email : null))
+        );
+
+        return unsubscribeFromAuthStatusChanged;
     }, []);
 
     return (

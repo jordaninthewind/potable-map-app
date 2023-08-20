@@ -1,6 +1,10 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = { theme: 'light', deviceLocationPermission: null };
+const initialState = {
+    theme: 'light',
+    deviceLocationPermission: null,
+};
 
 const appSlice = createSlice({
     name: 'app',

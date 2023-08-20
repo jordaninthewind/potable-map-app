@@ -5,13 +5,13 @@ import { FAB } from 'react-native-paper';
 import { selectTheme, selectDeviceLocationPermissions } from '@state/appSlice';
 import { selectLocation, setTempMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
-import { selectUser, selectUserEmail } from '@state/userSlice';
+import { selectAuthState } from '@state/userSlice';
 import { getCurrentPosition } from '@services/services';
 
 const MenuGroup = () => {
     const dispatch = useDispatch();
 
-    const isLoggedIn = useSelector(selectUserEmail);
+    const isLoggedIn = useSelector(selectAuthState);
     const colorScheme = useSelector(selectTheme);
     const deviceHasPermissions = useSelector(selectDeviceLocationPermissions);
     const location = useSelector(selectLocation);

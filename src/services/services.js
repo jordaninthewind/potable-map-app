@@ -17,8 +17,8 @@ import {
     updateDoc,
 } from 'firebase/firestore';
 
-import { MARKER_DATABASE } from '@app/constants';
-import { db } from '@app/firebaseConfig';
+import { MARKER_DATABASE } from '@app/constants.js';
+import { db } from '@app/firebaseConfig.js';
 import { setError } from '@state/errorSlice';
 import {
     setLoading,
@@ -30,49 +30,8 @@ import {
 import { clearModal } from '@state/modalSlice';
 import { setUser } from '@state/userSlice';
 import { uploadWaterSourcePhoto } from '@services/storageService';
-
-// Auth Services
-export const signIn =
-    ({ email, password }) =>
-    async (dispatch) => {
-        try {
-            const user = await signInWithEmailAndPassword(
-                getAuth(),
-                email,
-                password
-            );
-
-            dispatch(setUser({ id: user.uid, email: user.email }));
-            dispatch(setError({ message: `Logged in successfully!` }));
-            dispatch(clearModal());
-        } catch ({ message }) {
-            dispatch(setError({ message }));
-        }
-    };
-
-export const signOut = () => async (dispatch) => {
-    try {
-        await getAuth().signOut();
-
-        dispatch(setUser(null));
-        dispatch(setError({ message: `Logged out successfully!` }));
-    } catch ({ message }) {
-        dispatch(setError({ message }));
-    }
-};
-
-export const signUp =
-    ({ email, password }) =>
-    async (dispatch) => {
-        try {
-            const user = createUserWithEmailAndPassword({ email, password });
-
-            dispatch(setUser({ id: user.uid, email: user.email }));
-            dispatch(clearModal());
-        } catch ({ message }) {
-            dispatch(setError({ message }));
-        }
-    };
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setTheme } from '../state/appSlice';
 
 // Device / Location Services
 export const requestLocationPermission = () => async (getState, dispatch) => {
@@ -242,10 +201,60 @@ export const resetMapState = () => async (dispatch) => {
 // App Services
 export const initApp = () => async (dispatch) => {
     try {
+        // Get theme from local storage
+        const theme = await AsyncStorage.getItem('theme');
+        dispatch(setTheme(theme));
+
+        // Get device permissions and location
         await dispatch(requestLocationPermission());
         await dispatch(getCurrentPosition());
+
+        // Get markers from remote database and set them in local state
         await dispatch(getLocalMarkers());
     } catch ({ message }) {
         dispatch(setError({ message }));
     }
 };
+
+// Auth Services
+export const signIn =
+    ({ email, password }) =>
+    async (dispatch) => {
+        try {
+            const user = await signInWithEmailAndPassword(
+                getAuth(),
+                email,
+                password
+            );
+
+            dispatch(setUser(user));
+            dispatch(setError({ message: `Logged in successfully!` }));
+            dispatch(clearModal());
+        } catch ({ message }) {
+            dispatch(setError({ message }));
+        }
+    };
+
+export const signOut = () => async (dispatch) => {
+    try {
+        await getAuth().signOut();
+
+        dispatch(setUser(null));
+        dispatch(setError({ message: `Logged out successfully!` }));
+    } catch ({ message }) {
+        dispatch(setError({ message }));
+    }
+};
+
+export const signUp =
+    ({ email, password }) =>
+    async (dispatch) => {
+        try {
+            const user = createUserWithEmailAndPassword({ email, password });
+
+            dispatch(setUser(user));
+            dispatch(clearModal());
+        } catch ({ message }) {
+            dispatch(setError({ message }));
+        }
+    };
