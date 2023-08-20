@@ -11,11 +11,13 @@
             "resizeMode": "contain",
             "backgroundColor": "#4999E1"
         },
+        "jsEngine": "jsc",
         "updates": {
             "fallbackToCacheTimeout": 0
         },
         "assetBundlePatterns": ["**/*"],
         "ios": {
+            "googleServicesFile": "./GoogleService-Info.plist",
             "supportsTablet": true,
             "infoPlist": {
                 "UIBackgroundModes": ["location", "fetch"]
@@ -24,6 +26,7 @@
             "buildNumber": "5"
         },
         "android": {
+            "googleServicesFile": "./google-services.json",
             "adaptiveIcon": {
                 "foregroundImage": "./assets/adaptive-icon.png",
                 "backgroundColor": "#FFFFFF"
@@ -43,7 +46,8 @@
                 {
                     "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
                 }
-            ]
+            ],
+            "@react-native-google-signin/google-signin"
         ]
     }
 }

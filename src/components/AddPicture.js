@@ -24,7 +24,7 @@ const AddPicture = () => {
     useEffect(() => {
         const onStartCamera = async () => {
             const { status } = await Camera.requestCameraPermissionsAsync();
-            console.log(status);
+
             if (status !== 'granted') {
                 setDevicePermission(false);
             }

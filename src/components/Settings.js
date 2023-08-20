@@ -9,16 +9,18 @@ import {
     selectTheme,
     setTheme,
 } from '@state/appSlice';
-import { selectUserEmail } from '@state/userSlice';
+import { selectAuthState } from '@state/userSlice';
 import { signOut } from '@services/services';
 
 const Settings = () => {
     const dispatch = useDispatch();
+
     const { top } = useSafeAreaInsets();
     const colorTheme = useSelector(selectTheme);
     const isDarkMode = colorTheme === 'dark';
     const deviceHasPermissions = useSelector(selectDeviceLocationPermissions);
-    const isLoggedIn = useSelector(selectUserEmail);
+    const isLoggedIn = useSelector(selectAuthState);
+    console.log(isLoggedIn);
 
     const toggleColorScheme = async () => {
         const themeColor = isDarkMode ? 'light' : 'dark';
@@ -26,13 +28,9 @@ const Settings = () => {
         await dispatch(setTheme(themeColor));
     };
 
-    const logOut = () => {
-        dispatch(signOut());
-    };
+    const logOut = () => dispatch(signOut());
 
-    const enableLocation = () => {
-        Linking.openSettings();
-    };
+    const enableLocation = () => Linking.openSettings();
 
     return (
         <View

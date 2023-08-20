@@ -8,17 +8,17 @@ import { shortenString } from '@app/helpers';
 import { selectTheme } from '@state/appSlice';
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
-import { selectUser } from '@state/userSlice';
+import { selectAuthState } from '@state/userSlice';
 
 const MarkerInfo = () => {
     const dispatch = useDispatch();
-    const user = useSelector(selectUser);
+    const isLoggedIn = useSelector(selectAuthState);
     const colorScheme = useSelector(selectTheme);
     const { longitude, latitude, name, image, rating, notes } =
         useSelector(selectSelectedMarker);
 
     const editMarkerInfo = () => {
-        if (!user) {
+        if (!isLoggedIn) {
             dispatch(setModal('login'));
         } else {
             dispatch(setModal('editMarker'));
@@ -86,7 +86,7 @@ const MarkerInfo = () => {
             </View>
             <View style={styles.columnElement}>
                 <Button mode="contained" onPress={editMarkerInfo}>
-                    {user ? 'edit source' : 'login to edit'}
+                    {isLoggedIn ? 'edit source' : 'login to edit'}
                 </Button>
             </View>
         </BottomSheetScrollView>
