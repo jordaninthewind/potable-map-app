@@ -8,17 +8,17 @@ Climate change, industrial development, economic inequality all contribute to un
 
 ## Movement Goals
 
-- Document all public water sources in SF & NYC
+-   Document all public water sources in SF & NYC
 
 ## App Specific Goals
 
-- Distribute on App Store
-- Distribute on Play Store
+-   Distribute on App Store
+-   Distribute on Play Store
 
 ## Steps
 
-- ~~Let users add water sources that they use or find while traveling.~~
-- Connect public resources (water analytics) from local sources.
+-   ~~Let users add water sources that they use or find while traveling.~~
+-   Connect public resources (water analytics) from local sources.
 
 ## Technologies Used
 
@@ -47,3 +47,9 @@ https://docs.swmansion.com/react-native-reanimated/
 ##### React Native Gesture Handler
 
 https://docs.swmansion.com/react-native-gesture-handler/
+
+### Style Guide
+
+1. We have one modal and its content is variable in state.
+2. We use `useSelector` to access selectors in components.
+3. 
