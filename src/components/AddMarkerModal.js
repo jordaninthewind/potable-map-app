@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { GeoPoint } from 'firebase/firestore';
 
-import { selectTheme } from '@state/appSlice';
 import {
     selectLoading,
     resetTempMarker,
@@ -13,18 +12,17 @@ import {
 import { clearModal } from '@state/modalSlice';
 import { addMarkerRemote, getLocalMarkers } from '@services/services';
 import { BASE_BUTTON, ITEM_ROW_CONTAINER } from '@styles/styles';
+import { ELEMENT_GROUP_SPACING } from '../styles/styles';
 
 const AddMarkerModal = () => {
     const dispatch = useDispatch();
+
     const tempMarker = useSelector(selectTempMarker);
     const loading = useSelector(selectLoading);
-    const colorScheme = useSelector(selectTheme);
 
     const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
     const [notes, setNotes] = useState('');
     const [rating, setRating] = useState('');
-    const [imageUrl, setImageUrl] = useState('');
 
     useEffect(() => {
         return () => {
@@ -32,17 +30,14 @@ const AddMarkerModal = () => {
         };
     }, []);
 
-    const structureMarker = () => {
-        return {
-            name,
-            type: 'water fountain',
-            description,
-            notes,
-            rating,
-            imageUrl,
-            location: new GeoPoint(tempMarker.latitude, tempMarker.longitude),
-        };
-    };
+    const structureMarker = () => ({
+        name,
+        type: 'water fountain',
+        notes,
+        rating,
+        createdBy: useSelector(selectUser),
+        location: new GeoPoint(tempMarker.latitude, tempMarker.longitude),
+    });
 
     const onSubmit = () => {
         dispatch(addMarkerRemote(structureMarker()));
@@ -55,23 +50,13 @@ const AddMarkerModal = () => {
             <Text variant="headlineSmall" style={{ textAlign: 'center' }}>
                 Add a water source
             </Text>
-            <Text variant="bodySmall" style={{ textAlign: 'center' }}>
-                Drag and drop the marker to the most accurate location.
-            </Text>
-            <>
+            <View style={{ ...ELEMENT_GROUP_SPACING }}>
                 <TextInput
                     style={styles.input}
                     mode="outlined"
                     label="Location Name"
                     value={name}
                     onChangeText={(text) => setName(text)}
-                />
-                <TextInput
-                    style={styles.input}
-                    mode="outlined"
-                    label="Description"
-                    value={description}
-                    onChangeText={(event) => setDescription(event)}
                 />
                 <TextInput
                     style={styles.input}
@@ -88,11 +73,11 @@ const AddMarkerModal = () => {
                     value={rating}
                     onChangeText={(event) => setRating(event)}
                 />
-            </>
+            </View>
             <View style={styles.buttonContainer}>
                 <Button
                     mode="outlined"
-                    disabled={!name && !description && !notes && !rating}
+                    disabled={!name && !notes && !rating}
                     onPress={onSubmit}
                     loading={loading}
                 >

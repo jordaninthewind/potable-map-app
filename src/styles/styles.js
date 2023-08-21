@@ -15,3 +15,9 @@ export const ITEM_ROW_CONTAINER = {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
 };
+
+export const ELEMENT_GROUP_SPACING = {
+    marginVertical: 20,
+};
+
+export const BASE_RADIUS = 10;

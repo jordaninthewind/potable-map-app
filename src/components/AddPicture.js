@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Text } from 'react-native-paper';
+import { Button, IconButton, Text } from 'react-native-paper';
 import { Camera, CameraType } from 'expo-camera';
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 
-import { selectSelectedMarker, setLoading } from '@state/markersSlice';
+import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
-import { addPictureToMarker, savePictureRemote } from '@services/services';
-import { uploadWaterSourcePhoto } from '@services/storageService';
-import { ITEM_ROW_CONTAINER } from '@styles/styles';
+import { savePictureRemote } from '@services/services';
+import { BASE_RADIUS, ITEM_ROW_CONTAINER } from '@styles/styles';
 
 const AddPicture = () => {
     const dispatch = useDispatch();
@@ -17,7 +15,6 @@ const AddPicture = () => {
 
     const [image, setImage] = useState(false);
     const [devicePermission, setDevicePermission] = useState(true);
-    const [type, setType] = useState(CameraType.back);
 
     let camera;
 
@@ -43,33 +40,30 @@ const AddPicture = () => {
 
     const goBack = () => dispatch(setModal('editMarker'));
 
-    const savePicture = async () => dispatch(savePictureRemote({ image, id }));
+    const savePicture = async () => {
+        await dispatch(savePictureRemote({ image, id }));
+
+        setImage(null);
+        dispatch(setModal('editMarker'));
+    };
 
     return (
-        <BottomSheetScrollView>
+        <View style={styles.container}>
             {!image ? (
                 <View>
                     {devicePermission ? (
                         <Camera
-                            style={styles.imageContainer}
+                            style={styles.cameraContainer}
                             focusDepth={0}
                             ref={(r) => {
                                 camera = r;
                             }}
-                            type={type}
+                            type={CameraType.back}
                         >
-                            <TouchableOpacity
+                            <IconButton
                                 onPress={onTakePicture}
-                                style={{
-                                    position: 'absolute',
-                                    bottom: 0,
-                                    alignSelf: 'center',
-                                    marginBottom: 20,
-                                    width: 70,
-                                    height: 70,
-                                    borderRadius: 50,
-                                    backgroundColor: '#fff',
-                                }}
+                                icon="camera"
+                                style={styles.cameraButton}
                             />
                         </Camera>
                     ) : (
@@ -96,31 +90,59 @@ const AddPicture = () => {
                     </View>
                 </>
             )}
-        </BottomSheetScrollView>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
+    container: {
+        width: '100%',
+        alignItems: 'center',
+        height: '100%',
+        backgroundColor: 'transparent',
+        borderRadius: BASE_RADIUS,
+        justifyContent: 'center',
+        margin: 'auto',
+    },
     buttonContainer: {
         ...ITEM_ROW_CONTAINER,
         marginVertical: 20,
-        width: '100%',
+    },
+    cameraButton: {
+        position: 'absolute',
+        bottom: 0,
+        alignSelf: 'center',
+        marginBottom: 20,
+        width: 70,
+        height: 70,
+        borderRadius: 50,
+        backgroundColor: '#fff',
     },
     image: {
-        borderRadius: 10,
+        borderRadius: BASE_RADIUS,
     },
     imageContainer: {
+        width: '100%',
         alignItems: 'center',
         backgroundColor: 'white',
-        borderRadius: 10,
+        borderRadius: BASE_RADIUS,
         height: 500,
+        justifyContent: 'space-between',
+        width: 350,
+    },
+    cameraContainer: {
+        width: '100%',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        borderRadius: BASE_RADIUS,
+        height: '75%',
         justifyContent: 'space-between',
         width: 350,
     },
     permissionDeniedContainer: {
         alignItems: 'center',
         backgroundColor: 'white',
-        borderRadius: 10,
+        borderRadius: BASE_RADIUS,
         height: 450,
         justifyContent: 'center',
         width: 300,
