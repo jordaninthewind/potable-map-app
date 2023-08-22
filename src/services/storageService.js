@@ -1,8 +1,7 @@
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 
-export const uploadWaterSourcePhoto = async ({ id, image }) => {
+export const uploadWaterSourcePhoto = async ({ markerId, image }) => {
     try {
-        console.log('yup');
         const uri = image.uri;
         const blob = await new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
@@ -10,17 +9,16 @@ export const uploadWaterSourcePhoto = async ({ id, image }) => {
                 resolve(xhr.response);
             };
             xhr.onerror = function (e) {
-                console.log(e);
                 reject(new TypeError('Network request failed'));
             };
             xhr.responseType = 'blob';
             xhr.open('GET', uri, true);
             xhr.send(null);
         });
-        console.log('image', image);
-        const fileRef = ref(getStorage(), `/marker-images/${id}/${image}"`);
 
-        const result = await uploadBytes(fileRef, blob);
+        const fileRef = ref(getStorage(), markerId);
+
+        await uploadBytes(fileRef, blob);
 
         return getDownloadURL(fileRef);
     } catch (error) {

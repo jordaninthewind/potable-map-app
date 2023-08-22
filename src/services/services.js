@@ -27,21 +27,21 @@ import {
     setSelectedMarker,
     setTempMarker,
 } from '@state/markersSlice';
+import { setDeviceLocationPermission, setTheme } from '@state/appSlice';
 import { clearModal } from '@state/modalSlice';
 import { setUser } from '@state/userSlice';
 import { uploadWaterSourcePhoto } from '@services/storageService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { setTheme } from '../state/appSlice';
 
 // Device / Location Services
-export const requestLocationPermission = () => async (getState, dispatch) => {
+export const requestLocationPermission = () => async (dispatch) => {
     dispatch(setLoading(true));
 
     try {
         let { status } = await requestForegroundPermissionsAsync();
 
         const hasPermissions = status === 'granted';
-        console.log('state', getState());
+
         dispatch(setDeviceLocationPermission(hasPermissions));
     } catch ({ message }) {
         dispatch(setError({ message }));
@@ -100,7 +100,7 @@ export const getLocalMarkers = () => async (dispatch) => {
 };
 
 export const addMarkerRemote =
-    ({ name, description, imageUrl, location }) =>
+    ({ name, description, imageUrl = false, location }) =>
     async (dispatch, getState) => {
         try {
             dispatch(setLoading(true));
@@ -119,6 +119,7 @@ export const addMarkerRemote =
             );
 
             dispatch(setError({ message: `Pin ${id} added!` }));
+
             return id;
         } catch ({ message }) {
             dispatch(setError({ message }));
@@ -156,12 +157,14 @@ export const updateMarkerRemote = (marker) => async (dispatch) => {
     }
 };
 
-export const addPictureToMarker = (marker, imageUrl) => async (dispatch) => {
+export const addPictureToMarker = (markerId) => async (dispatch) => {
     try {
         dispatch(setLoading(true));
 
-        await updateDoc(doc(db, MARKER_DATABASE, marker.id), { imageUrl });
-        dispatch(setError({ message: `Updated marker ${marker.id}` }));
+        const docToModify = doc(db, MARKER_DATABASE, markerId);
+        await updateDoc(docToModify, { imageUrl: true });
+
+        dispatch(setError({ message: `Updated marker ${markerId}` }));
     } catch ({ message }) {
         dispatch(setError({ message }));
     } finally {
@@ -170,20 +173,17 @@ export const addPictureToMarker = (marker, imageUrl) => async (dispatch) => {
 };
 
 export const savePictureRemote =
-    ({ image, id }) =>
+    ({ image, markerId }) =>
     async (dispatch) => {
         dispatch(setLoading(true));
 
         try {
-            const pictureUrl = await uploadWaterSourcePhoto({
+            await uploadWaterSourcePhoto({
                 image,
-                id,
+                markerId,
             });
 
-            dispatch(addPictureToMarker(pictureUrl));
-
-            setImage(null);
-            dispatch(setModal('markerInfo'));
+            await dispatch(addPictureToMarker(markerId));
         } catch (error) {
             console.log(error);
         } finally {

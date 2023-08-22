@@ -9,12 +9,14 @@ import { selectTheme } from '@state/appSlice';
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
 import { selectAuthState } from '@state/userSlice';
+import { formatImageUrl } from '@utils/markerUtils';
 
 const MarkerInfo = () => {
     const dispatch = useDispatch();
+
     const isLoggedIn = useSelector(selectAuthState);
     const colorScheme = useSelector(selectTheme);
-    const { longitude, latitude, name, image, rating, notes } =
+    const { id, longitude, latitude, name, imageUrl, rating, notes } =
         useSelector(selectSelectedMarker);
 
     const editMarkerInfo = () => {
@@ -78,9 +80,11 @@ const MarkerInfo = () => {
                 <View>
                     <Image
                         source={
-                            image ? image : require('../../assets/raindrop.png')
+                            imageUrl
+                                ? { url: formatImageUrl(id) }
+                                : require('../../assets/raindrop.png')
                         }
-                        style={{ height: 200, width: 100, borderRadius: 25 }}
+                        style={styles.image}
                     />
                 </View>
             </View>
@@ -146,6 +150,7 @@ const styles = StyleSheet.create({
     columnElement: {
         marginVertical: 10,
     },
+    image: { height: 200, width: 100, borderRadius: 25 },
 });
 
 export default MarkerInfo;
