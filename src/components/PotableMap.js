@@ -31,29 +31,29 @@ const PotableMap = () => {
 
     useEffect(() => {
         if (selectedMarker) {
-            const selectedlocation = {
-                latitude: centerMarkerInScreen(selectedMarker.latitude),
-                longitude: selectedMarker.longitude,
-                latitudeDelta: 0.001,
-                longitudeDelta: 0.001,
-            };
-
-            mapRef.current.animateToRegion(selectedlocation, 750);
+            mapRef.current.animateToRegion(
+                {
+                    latitude: centerMarkerInScreen(selectedMarker.latitude),
+                    longitude: selectedMarker.longitude,
+                    latitudeDelta: 0.001,
+                    longitudeDelta: 0.001,
+                },
+                750
+            );
         } else if (tempMarker) {
-            const tempLocation = {
-                latitude: centerMarkerInScreen(tempMarker.latitude),
-                longitude: tempMarker.longitude,
-                latitudeDelta: 0.001,
-                longitudeDelta: 0.001,
-            };
-
-            mapRef.current.animateToRegion(tempLocation, 1000);
+            mapRef.current.animateToRegion(
+                {
+                    latitude: centerMarkerInScreen(tempMarker.latitude),
+                    longitude: tempMarker.longitude,
+                    latitudeDelta: 0.001,
+                    longitudeDelta: 0.001,
+                },
+                1000
+            );
         } else {
             mapRef.current.animateToRegion(location, 750);
         }
-    }, [selectedMarker, tempMarker]);
-
-    useEffect(() => {}, [tempMarker]);
+    }, [selectedMarker, tempMarker, location]);
 
     const openAddMarkerScreen = ({ nativeEvent }) => {
         Vibration.vibrate();
@@ -68,9 +68,7 @@ const PotableMap = () => {
     }, []);
 
     // const updateMarkerLocation = ({ nativeEvent, marker }) => {
-    //   console.log("updateMarkerLocation", nativeEvent);
-
-    //   updateMarkerLocation;
+    //     console.log('updateMarkerLocation', nativeEvent);
     // };
 
     const onMove = () => {
