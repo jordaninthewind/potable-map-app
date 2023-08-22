@@ -2,7 +2,7 @@
     "expo": {
         "name": "potable",
         "slug": "map-app",
-        "version": "1.0.7",
+        "version": "1.0.8",
         "orientation": "portrait",
         "icon": "./assets/icon.png",
         "userInterfaceStyle": "automatic",
@@ -23,7 +23,7 @@
                 "UIBackgroundModes": ["location", "fetch"]
             },
             "bundleIdentifier": "com.potable.water",
-            "buildNumber": "5"
+            "buildNumber": "8"
         },
         "android": {
             "googleServicesFile": "./google-services.json",
