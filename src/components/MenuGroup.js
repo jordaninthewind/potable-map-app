@@ -11,9 +11,9 @@ import { getCurrentPosition } from '@services/services';
 const MenuGroup = () => {
     const dispatch = useDispatch();
 
-    const isLoggedIn = useSelector(selectAuthState);
     const colorScheme = useSelector(selectTheme);
     const deviceHasPermissions = useSelector(selectDeviceLocationPermissions);
+    const isLoggedIn = useSelector(selectAuthState);
     const location = useSelector(selectLocation);
 
     const updatePosition = async () => await dispatch(getCurrentPosition());
@@ -34,7 +34,7 @@ const MenuGroup = () => {
             <FAB
                 icon={'crosshairs-gps'}
                 onPress={updatePosition}
-                disabled={!!deviceHasPermissions}
+                disabled={!deviceHasPermissions}
                 style={styles[colorScheme].fabStyle}
             />
         </View>

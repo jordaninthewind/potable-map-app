@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
@@ -8,11 +8,11 @@ import { COLOR_WARNING } from '@app/constants';
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
 import { deleteMarkerRemote } from '@services/services';
-import { ITEM_ROW_CONTAINER } from '@styles/styles';
-import { ELEMENT_GROUP_SPACING } from '../styles/styles';
+import { ELEMENT_GROUP_SPACING, ITEM_ROW_CONTAINER } from '@styles/styles';
 
 const EditMarker = () => {
     const dispatch = useDispatch();
+
     const marker = useSelector(selectSelectedMarker);
 
     const [name, setName] = useState(marker?.name);
@@ -69,6 +69,17 @@ const EditMarker = () => {
                     value={rating || ''}
                 />
             </View>
+            {marker.imageUrl && (
+                <View>
+                    <Text
+                        variant="headlineSmall"
+                        style={{ textAlign: 'center' }}
+                    >
+                        Pictures
+                    </Text>
+                    <Image source={{ uri: marker.imageUrl }} />
+                </View>
+            )}
             <View style={styles.buttonRow}>
                 <Button mode="outlined" onPress={openCameraView}>
                     Add a Picture

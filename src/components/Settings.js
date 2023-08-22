@@ -20,7 +20,6 @@ const Settings = () => {
     const isDarkMode = colorTheme === 'dark';
     const deviceHasPermissions = useSelector(selectDeviceLocationPermissions);
     const isLoggedIn = useSelector(selectAuthState);
-    console.log(isLoggedIn);
 
     const toggleColorScheme = async () => {
         const themeColor = isDarkMode ? 'light' : 'dark';
@@ -30,7 +29,7 @@ const Settings = () => {
 
     const logOut = () => dispatch(signOut());
 
-    const enableLocation = () => Linking.openSettings();
+    const openDeviceSettings = () => Linking.openSettings();
 
     return (
         <View
@@ -75,7 +74,7 @@ const Settings = () => {
                         </Button>
                     </View>
                 )}
-                {deviceHasPermissions && (
+                {!deviceHasPermissions && (
                     <View style={styles.option}>
                         <Text
                             variant="headlineSmall"
@@ -83,10 +82,7 @@ const Settings = () => {
                         >
                             Enable location services
                         </Text>
-                        <Button
-                            onChange={openDeviceSettings}
-                            onPress={enableLocation}
-                        >
+                        <Button onPress={openDeviceSettings}>
                             Enable in Settings
                         </Button>
                     </View>

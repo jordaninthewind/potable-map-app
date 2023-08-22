@@ -41,10 +41,10 @@ const AddPicture = () => {
     const goBack = () => dispatch(setModal('editMarker'));
 
     const savePicture = async () => {
-        await dispatch(savePictureRemote({ image, id }));
+        await dispatch(savePictureRemote({ image, markerId: id }));
 
-        setImage(null);
-        dispatch(setModal('editMarker'));
+        clearPicture();
+        goBack();
     };
 
     return (

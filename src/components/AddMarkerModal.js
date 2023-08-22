@@ -11,16 +11,22 @@ import {
 } from '@state/markersSlice';
 import { clearModal } from '@state/modalSlice';
 import { addMarkerRemote, getLocalMarkers } from '@services/services';
-import { BASE_BUTTON, ITEM_ROW_CONTAINER } from '@styles/styles';
-import { ELEMENT_GROUP_SPACING } from '../styles/styles';
+import {
+    BASE_BUTTON,
+    ELEMENT_GROUP_SPACING,
+    ITEM_ROW_CONTAINER,
+} from '@styles/styles';
+import { selectUserEmail } from '@state/userSlice';
 
 const AddMarkerModal = () => {
     const dispatch = useDispatch();
 
     const tempMarker = useSelector(selectTempMarker);
     const loading = useSelector(selectLoading);
+    const userEmail = useSelector(selectUserEmail);
 
     const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
     const [notes, setNotes] = useState('');
     const [rating, setRating] = useState('');
 
@@ -33,10 +39,11 @@ const AddMarkerModal = () => {
     const structureMarker = () => ({
         name,
         type: 'water fountain',
+        description,
         notes,
         rating,
-        createdBy: useSelector(selectUser),
-        location: new GeoPoint(tempMarker.latitude, tempMarker.longitude),
+        createdBy: userEmail,
+        location: new GeoPoint(tempMarker?.latitude, tempMarker?.longitude),
     });
 
     const onSubmit = () => {
@@ -57,6 +64,14 @@ const AddMarkerModal = () => {
                     label="Location Name"
                     value={name}
                     onChangeText={(text) => setName(text)}
+                />
+                <TextInput
+                    style={styles.input}
+                    mode="outlined"
+                    multiline
+                    label="Description"
+                    value={description}
+                    onChangeText={(event) => setDescription(event)}
                 />
                 <TextInput
                     style={styles.input}
