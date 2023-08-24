@@ -2,14 +2,14 @@
     "expo": {
         "name": "potable",
         "slug": "map-app",
-        "version": "1.0.8",
+        "version": "1.0.9",
         "orientation": "portrait",
         "icon": "./assets/icon.png",
         "userInterfaceStyle": "automatic",
         "splash": {
-            "image": "./assets/raindrop.png",
+            "image": "./assets/splash.png",
             "resizeMode": "contain",
-            "backgroundColor": "#4999E1"
+            "backgroundColor": "#FEFEFE"
         },
         "jsEngine": "jsc",
         "updates": {
@@ -22,12 +22,12 @@
                 "UIBackgroundModes": ["location", "fetch"]
             },
             "bundleIdentifier": "com.potable.water",
-            "buildNumber": "8"
+            "buildNumber": "9"
         },
         "android": {
             "adaptiveIcon": {
-                "foregroundImage": "./assets/adaptive-icon.png",
-                "backgroundColor": "#FFFFFF"
+                "foregroundImage": "./assets/icon.png",
+                "backgroundColor": "#D3D3D3"
             }
         },
         "web": {
