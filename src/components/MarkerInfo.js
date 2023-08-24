@@ -1,4 +1,5 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { Image, StyleSheet, Pressable, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
@@ -19,12 +20,18 @@ const MarkerInfo = () => {
     const { id, longitude, latitude, name, imageUrl, rating, notes } =
         useSelector(selectSelectedMarker);
 
+    const [image, setImage] = useState(formatImageUrl({ id, size: 'small' }));
+
     const editMarkerInfo = () => {
         if (!isLoggedIn) {
             dispatch(setModal('login'));
         } else {
             dispatch(setModal('editMarker'));
         }
+    };
+
+    const viewImage = () => {
+        dispatch(setModal('viewImage'));
     };
 
     return (
@@ -77,16 +84,20 @@ const MarkerInfo = () => {
                         Notes: {notes}
                     </Text>
                 </View>
-                <View>
+                {image ? (
+                    <Pressable onPress={viewImage}>
+                        <Image
+                            source={{ url: image }}
+                            onError={() => setImage(null)}
+                            style={styles.image}
+                        />
+                    </Pressable>
+                ) : (
                     <Image
-                        source={
-                            imageUrl
-                                ? { url: formatImageUrl(id) }
-                                : require('../../assets/raindrop.png')
-                        }
+                        source={require('../../assets/raindrop.png')}
                         style={styles.image}
                     />
-                </View>
+                )}
             </View>
             <View style={styles.columnElement}>
                 <Button mode="contained" onPress={editMarkerInfo}>

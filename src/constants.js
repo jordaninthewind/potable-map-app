@@ -19,5 +19,8 @@ export const COLOR_WARNING = '#FFA500';
 export const IMAGE_URL_BASE =
     'https://firebasestorage.googleapis.com/v0/b/potable-aa1b9.appspot.com/o/';
 
-export const IMAGE_URL_QUERY =
+export const IMAGE_URL_QUERY_SMALL =
     '_800x600?alt=media&token=734f6e77-d30b-42b3-8a74-7a8fd4daf6da';
+
+export const IMAGE_URL_QUERY_LARGE =
+    '_1920x1080?alt=media&token=734f6e77-d30b-42b3-8a74-7a8fd4daf6da';

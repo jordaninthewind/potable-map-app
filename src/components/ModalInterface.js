@@ -9,6 +9,7 @@ import EditMarker from '@components/EditMarker';
 import Login from '@components/Login';
 import MarkerInfo from '@components/MarkerInfo';
 import Register from '@components/Register';
+import ViewImage from '@components/ViewImage';
 import { selectTheme } from '@state/appSlice';
 import { clearModal, selectModal } from '@state/modalSlice';
 import { resetMapState } from '@services/services';
@@ -51,25 +52,31 @@ const ModalInterface = () => {
                 return {
                     component: <MarkerInfo />,
                     index: 1,
-                    snapPoints: ['10%', '65%'],
+                    snapPoints: ['10%', '60%'],
                 };
             case 'addMarker':
                 return {
                     component: <AddMarkerModal />,
                     index: 1,
-                    snapPoints: ['5%', '70%'],
+                    snapPoints: ['5%', '50%'],
                 };
             case 'addPicture':
                 return {
                     component: <AddPicture />,
                     index: 1,
-                    snapPoints: ['5%', '85%'],
+                    snapPoints: ['5%', '70%'],
+                };
+            case 'viewImage':
+                return {
+                    component: <ViewImage />,
+                    index: 1,
+                    snapPoints: ['5%', '80%'],
                 };
             case 'editMarker':
                 return {
                     component: <EditMarker />,
                     index: 1,
-                    snapPoints: ['5%', '70%'],
+                    snapPoints: ['5%', '50%'],
                 };
             default:
                 return { component: null, snapPoints: ['10%'] };
@@ -84,12 +91,8 @@ const ModalInterface = () => {
                     ref={bottomSheetRef}
                     style={styles.container}
                     backgroundStyle={styles[colorScheme]}
-                    // keyboardBehavior="extend"
                     keyboardBlurBehavior="restore"
-                    // android_keyboardInputMode="adjustPan"
                     snapPoints={component.snapPoints}
-                    // handleHeight={20}
-                    // enablePanDownToClose
                     index={component.index}
                     onChange={handleSheetChange}
                 >

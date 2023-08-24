@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, Pressable, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
@@ -9,6 +9,7 @@ import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
 import { deleteMarkerRemote } from '@services/services';
 import { ELEMENT_GROUP_SPACING, ITEM_ROW_CONTAINER } from '@styles/styles';
+import { formatImageUrl } from '@utils/markerUtils';
 
 const EditMarker = () => {
     const dispatch = useDispatch();
@@ -19,16 +20,27 @@ const EditMarker = () => {
     const [type, setType] = useState(marker?.type);
     const [rating, setRating] = useState(marker?.rating);
 
-    const updateMarker = () => {
+    const updateMarker = async (value) => {
         const updatedMarker = {
-            ...marker,
-            name,
-            type,
-            rating,
+            ...value,
         };
 
-        dispatch(updateMarkerRemote(updatedMarker));
+        await dispatch(
+            updateMarkerRemote({ markerId: marker.id, updatedMarker })
+        );
     };
+
+    useEffect(() => {
+        mapRef.current.animateToRegion(
+            {
+                latitude: selectedMarker.latitude - 0.045,
+                longitude: selectedMarker.longitude,
+                // latitudeDelta: 0.01,
+                // longitudeDelta: 0.01,
+            },
+            750
+        );
+    })
 
     useEffect(() => {
         () => dispatch(updateMarker());
@@ -42,48 +54,66 @@ const EditMarker = () => {
         dispatch(setModal('addPicture'));
     };
 
-    const deleteMarker = () => dispatch(deleteMarkerRemote(marker));
+    const deleteMarker = () => dispatch(deleteMarkerRemote(marker.id));
 
     return (
         <BottomSheetScrollView>
             <Text variant="headlineSmall" style={{ textAlign: 'center' }}>
                 Edit Marker
             </Text>
-            <View style={{ ...ELEMENT_GROUP_SPACING }}>
-                <TextInput
-                    mode="outlined"
-                    label="Name"
-                    onChange={(e) => setName(e)}
-                    value={name || ''}
-                />
-                <TextInput
-                    mode="outlined"
-                    label="Type"
-                    onChange={(e) => setType(e)}
-                    value={type || ''}
-                />
-                <TextInput
-                    mode="outlined"
-                    label="Rating"
-                    onChange={(e) => setRating(e)}
-                    value={rating || ''}
-                />
-            </View>
-            {marker.imageUrl && (
-                <View>
-                    <Text
-                        variant="headlineSmall"
-                        style={{ textAlign: 'center' }}
-                    >
-                        Pictures
-                    </Text>
-                    <Image source={{ uri: marker.imageUrl }} />
+            <View
+                style={[ITEM_ROW_CONTAINER, { flexDirection: 'row-reverse' }]}
+            >
+                {marker.imageUrl && (
+                    <View style={styles.imageRow}>
+                        <View style={styles.imageContainer}>
+                            <Pressable onPress={openCameraView}>
+                                <Image
+                                    style={styles.image}
+                                    source={{
+                                        uri: formatImageUrl({
+                                            id: marker.id,
+                                            size: 'small',
+                                        }),
+                                    }}
+                                />
+                            </Pressable>
+                        </View>
+                    </View>
+                )}
+                <View
+                    style={{
+                        ...ELEMENT_GROUP_SPACING,
+                        flex: 1,
+                        marginRight: 20,
+                    }}
+                >
+                    <TextInput
+                        mode="outlined"
+                        label="Name"
+                        onChange={(e) => setName(e)}
+                        value={name || ''}
+                    />
+                    <TextInput
+                        mode="outlined"
+                        label="Type"
+                        onChange={(e) => setType(e)}
+                        value={type || ''}
+                    />
+                    <TextInput
+                        mode="outlined"
+                        label="Rating"
+                        onChange={(e) => setRating(e)}
+                        value={rating || ''}
+                    />
                 </View>
-            )}
+            </View>
             <View style={styles.buttonRow}>
-                <Button mode="outlined" onPress={openCameraView}>
-                    Add a Picture
-                </Button>
+                {!marker.imageUrl && (
+                    <Button mode="outlined" onPress={openCameraView}>
+                        Add an image
+                    </Button>
+                )}
                 <Button
                     mode="contained"
                     buttonColor={COLOR_WARNING}
@@ -106,6 +136,12 @@ const styles = StyleSheet.create({
         ...ITEM_ROW_CONTAINER,
         justifyContent: 'space-evenly',
         marginTop: 20,
+    },
+    image: { height: 200, width: 100, borderRadius: 25 },
+    imageContainer: {
+        ...ITEM_ROW_CONTAINER,
+        justifyContent: 'space-evenly',
+        marginTop: 10,
     },
 });
 
