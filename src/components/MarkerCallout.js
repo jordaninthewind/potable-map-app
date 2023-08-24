@@ -2,14 +2,12 @@ import { StyleSheet, View } from 'react-native';
 import { Callout } from 'react-native-maps';
 import { useDispatch } from 'react-redux';
 
-import { setSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
 
-const MarkerCallout = ({ marker }) => {
+const MarkerCallout = () => {
     const dispatch = useDispatch();
     const openMarkerInfo = () => {
-        dispatch(setSelectedMarker(marker));
-        dispatch(setModal('markerInfo', marker));
+        dispatch(setModal('markerInfo'));
     };
 
     return (

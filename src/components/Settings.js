@@ -39,11 +39,6 @@ const Settings = () => {
                 { paddingTop: top },
             ]}
         >
-            <View style={styles.header}>
-                <Text variant="headlineLarge" style={styles[colorTheme].text}>
-                    Settings
-                </Text>
-            </View>
             <View style={styles.optionContainer}>
                 <View style={styles.option}>
                     <Text

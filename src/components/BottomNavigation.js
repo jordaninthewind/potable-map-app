@@ -53,20 +53,10 @@ const BottomNavigation = () => {
         <View style={styles.container}>
             <PaperBottomNavigation
                 style={styles.navContainer}
+                shifting={true}
                 navigationState={{ index, routes }}
                 onIndexChange={setIndex}
                 renderScene={renderScene}
-                barStyle={styles[colorScheme]?.background}
-                inactiveColor={
-                    colorScheme === 'dark'
-                        ? 'rgb(200,200,200)'
-                        : 'rgb(100,100,100)'
-                }
-                activeColor={
-                    colorScheme === 'dark'
-                        ? 'rgb(100,100,100)'
-                        : 'rgb(75,75,75)'
-                }
             />
         </View>
     );

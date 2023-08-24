@@ -128,11 +128,11 @@ export const addMarkerRemote =
         }
     };
 
-export const deleteMarkerRemote = (marker) => async (dispatch) => {
+export const deleteMarkerRemote = (markerId) => async (dispatch) => {
     try {
         dispatch(setLoading(true));
 
-        await deleteDoc(doc(db, MARKER_DATABASE, marker.id));
+        await deleteDoc(doc(db, MARKER_DATABASE, markerId));
         await dispatch(getLocalMarkers());
         dispatch(clearModal());
         dispatch(getCurrentPosition());
@@ -144,18 +144,20 @@ export const deleteMarkerRemote = (marker) => async (dispatch) => {
     }
 };
 
-export const updateMarkerRemote = (marker) => async (dispatch) => {
-    try {
-        dispatch(setLoading(true));
+export const updateMarkerRemote =
+    ({ markerId, updatedMarker }) =>
+    async (dispatch) => {
+        try {
+            dispatch(setLoading(true));
 
-        await updateDoc(doc(db, MARKER_DATABASE, marker.id), marker);
-        dispatch(setError({ message: `Updated marker ${marker.id}` }));
-    } catch ({ message }) {
-        dispatch(setError({ message }));
-    } finally {
-        dispatch(setLoading(false));
-    }
-};
+            await updateDoc(doc(db, MARKER_DATABASE, markerId), updatedMarker);
+            dispatch(setError({ message: `Updated marker ${markerId}` }));
+        } catch ({ message }) {
+            dispatch(setError({ message }));
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
 
 export const addPictureToMarker = (markerId) => async (dispatch) => {
     try {
