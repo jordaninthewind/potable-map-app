@@ -1,8 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Image, StyleSheet, Pressable, View } from 'react-native';
+import {
+    Image,
+    StyleSheet,
+    Pressable,
+    View,
+    KeyboardAvoidingView,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Text, TextInput } from 'react-native-paper';
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { Button, Text } from 'react-native-paper';
+import KeyboardAvoidingTextInput from '@components/common/KeyboardAvoidingTextInput';
 
 import { COLOR_WARNING } from '@app/constants';
 import { selectSelectedMarker } from '@state/markersSlice';
@@ -10,6 +16,7 @@ import { setModal } from '@state/modalSlice';
 import { deleteMarkerRemote } from '@services/services';
 import { ELEMENT_GROUP_SPACING, ITEM_ROW_CONTAINER } from '@styles/styles';
 import { formatImageUrl } from '@utils/markerUtils';
+import HeadlineText from './common/HeadlineText';
 
 const EditMarker = () => {
     const dispatch = useDispatch();
@@ -31,18 +38,6 @@ const EditMarker = () => {
     };
 
     useEffect(() => {
-        mapRef.current.animateToRegion(
-            {
-                latitude: selectedMarker.latitude - 0.045,
-                longitude: selectedMarker.longitude,
-                // latitudeDelta: 0.01,
-                // longitudeDelta: 0.01,
-            },
-            750
-        );
-    })
-
-    useEffect(() => {
         () => dispatch(updateMarker());
     }, [name, type, rating]);
 
@@ -57,10 +52,8 @@ const EditMarker = () => {
     const deleteMarker = () => dispatch(deleteMarkerRemote(marker.id));
 
     return (
-        <BottomSheetScrollView>
-            <Text variant="headlineSmall" style={{ textAlign: 'center' }}>
-                Edit Marker
-            </Text>
+        <KeyboardAvoidingView>
+            <HeadlineText copy={'Edit Marker'} />
             <View
                 style={[ITEM_ROW_CONTAINER, { flexDirection: 'row-reverse' }]}
             >
@@ -88,22 +81,22 @@ const EditMarker = () => {
                         marginRight: 20,
                     }}
                 >
-                    <TextInput
-                        mode="outlined"
-                        label="Name"
+                    <KeyboardAvoidingTextInput
+                        style={styles.input}
                         onChange={(e) => setName(e)}
+                        placeholder="Location Name"
                         value={name || ''}
                     />
-                    <TextInput
-                        mode="outlined"
-                        label="Type"
+                    <KeyboardAvoidingTextInput
+                        style={styles.input}
                         onChange={(e) => setType(e)}
+                        placeholder="Type"
                         value={type || ''}
                     />
-                    <TextInput
-                        mode="outlined"
-                        label="Rating"
+                    <KeyboardAvoidingTextInput
+                        style={styles.input}
                         onChange={(e) => setRating(e)}
+                        placeholder="Rating"
                         value={rating || ''}
                     />
                 </View>
@@ -127,7 +120,7 @@ const EditMarker = () => {
                     Cancel
                 </Button>
             </View>
-        </BottomSheetScrollView>
+        </KeyboardAvoidingView>
     );
 };
 
@@ -142,6 +135,9 @@ const styles = StyleSheet.create({
         ...ITEM_ROW_CONTAINER,
         justifyContent: 'space-evenly',
         marginTop: 10,
+    },
+    input: {
+        marginTop: 5,
     },
 });
 

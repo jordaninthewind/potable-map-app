@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Text, TextInput } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import { GeoPoint } from 'firebase/firestore';
 
+import KeyboardAvoidingTextInput from '@components/common/KeyboardAvoidingTextInput';
+import HeadlineText from '@components/common/HeadlineText';
 import {
     selectLoading,
     resetTempMarker,
@@ -54,37 +56,35 @@ const AddMarkerModal = () => {
 
     return (
         <View>
-            <Text variant="headlineSmall" style={{ textAlign: 'center' }}>
-                Add a water source
-            </Text>
+            <HeadlineText copy={'Add Marker'} />
             <View style={{ ...ELEMENT_GROUP_SPACING }}>
-                <TextInput
+                <KeyboardAvoidingTextInput
                     style={styles.input}
-                    mode="outlined"
-                    label="Location Name"
+                    placeholder="Location Name"
                     value={name}
                     onChangeText={(text) => setName(text)}
                 />
-                <TextInput
+                <KeyboardAvoidingTextInput
                     style={styles.input}
-                    mode="outlined"
-                    multiline
-                    label="Description"
+                    placeholder="Location Name"
+                    value={name}
+                    onChangeText={(text) => setName(text)}
+                />
+                <KeyboardAvoidingTextInput
+                    style={styles.input}
+                    placeholder="Description"
                     value={description}
                     onChangeText={(event) => setDescription(event)}
                 />
-                <TextInput
+                <KeyboardAvoidingTextInput
                     style={styles.input}
-                    mode="outlined"
-                    multiline
-                    label="Notes"
+                    placeholder="Notes"
                     value={notes}
                     onChangeText={(event) => setNotes(event)}
                 />
-                <TextInput
+                <KeyboardAvoidingTextInput
                     style={styles.input}
-                    mode="outlined"
-                    label="Rating"
+                    placeholder="Rating"
                     value={rating}
                     onChangeText={(event) => setRating(event)}
                 />
@@ -92,7 +92,7 @@ const AddMarkerModal = () => {
             <View style={styles.buttonContainer}>
                 <Button
                     mode="outlined"
-                    disabled={!name && !notes && !rating}
+                    disabled={!name || !notes || !rating}
                     onPress={onSubmit}
                     loading={loading}
                 >

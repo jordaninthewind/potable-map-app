@@ -55,9 +55,7 @@ const AddPicture = () => {
                         <Camera
                             style={styles.cameraContainer}
                             focusDepth={0}
-                            ref={(r) => {
-                                camera = r;
-                            }}
+                            ref={(ref) => (camera = ref)}
                             type={CameraType.back}
                         >
                             <IconButton
@@ -135,7 +133,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
         borderRadius: BASE_RADIUS,
-        height: '75%',
+        height: '100%',
+        maxHeight: 500,
         justifyContent: 'space-between',
         width: 350,
     },

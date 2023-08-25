@@ -4,13 +4,13 @@ import { Button, Text } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 
-import { PRIMARY_TEXT_SHADOW } from '@app/constants';
 import { shortenString } from '@app/helpers';
 import { selectTheme } from '@state/appSlice';
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
 import { selectAuthState } from '@state/userSlice';
 import { formatImageUrl } from '@utils/markerUtils';
+import HeadlineText from './common/HeadlineText';
 
 const MarkerInfo = () => {
     const dispatch = useDispatch();
@@ -36,22 +36,7 @@ const MarkerInfo = () => {
 
     return (
         <BottomSheetScrollView>
-            <View
-                style={[
-                    styles.nameContainer[colorScheme],
-                    styles.columnElement,
-                ]}
-            >
-                <Text
-                    variant="titleLarge"
-                    style={{
-                        ...PRIMARY_TEXT_SHADOW,
-                        color: 'white',
-                    }}
-                >
-                    {name}
-                </Text>
-            </View>
+            <HeadlineText copy={'Marker Info'} />
             <View
                 style={[
                     styles.infoContainer[colorScheme],

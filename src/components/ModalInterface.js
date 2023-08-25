@@ -52,19 +52,19 @@ const ModalInterface = () => {
                 return {
                     component: <MarkerInfo />,
                     index: 1,
-                    snapPoints: ['10%', '60%'],
+                    snapPoints: ['10%', '50%'],
                 };
             case 'addMarker':
                 return {
                     component: <AddMarkerModal />,
                     index: 1,
-                    snapPoints: ['5%', '50%'],
+                    snapPoints: ['5%', '65%'],
                 };
             case 'addPicture':
                 return {
                     component: <AddPicture />,
                     index: 1,
-                    snapPoints: ['5%', '70%'],
+                    snapPoints: ['5%', '75%'],
                 };
             case 'viewImage':
                 return {
@@ -108,10 +108,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     light: {
-        backgroundColor: 'white',
+        backgroundColor: '#FEFEFE',
     },
     dark: {
-        backgroundColor: 'rgb(50,50,50)',
+        backgroundColor: '#3d3d3d',
     },
 });
 
