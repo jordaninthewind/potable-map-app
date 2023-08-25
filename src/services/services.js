@@ -51,7 +51,6 @@ export const requestLocationPermission = () => async (dispatch) => {
 };
 
 export const getCurrentPosition = () => async (dispatch) => {
-    dispatch(setLoading(true));
     try {
         const { coords } = await getLastKnownPositionAsync();
 
@@ -65,8 +64,6 @@ export const getCurrentPosition = () => async (dispatch) => {
         );
     } catch ({ message }) {
         dispatch(setError({ message }));
-    } finally {
-        dispatch(setLoading(false));
     }
 };
 
