@@ -13,8 +13,6 @@ export const PRIMARY_TEXT_SHADOW = {
     textShadowRadius: 2,
 };
 
-export const COLOR_WARNING = '#FFA500';
-
 // Firebase Image Storage Constants
 export const IMAGE_URL_BASE =
     'https://firebasestorage.googleapis.com/v0/b/potable-aa1b9.appspot.com/o/';

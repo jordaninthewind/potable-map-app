@@ -21,3 +21,9 @@ export const ELEMENT_GROUP_SPACING = {
 };
 
 export const BASE_RADIUS = 10;
+
+export const COLOR_WARNING = '#FFA500';
+
+export const SPACING_SMALL = 8;
+export const SPACING_DEFAULT = 16;
+export const SPACING_LARGE = 24;
