@@ -1,22 +1,29 @@
 import { useState } from 'react';
-import { Image, StyleSheet, Pressable, View } from 'react-native';
+import {
+    Image,
+    StyleSheet,
+    Pressable,
+    View,
+    useColorScheme,
+} from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { BottomSheetView } from '@gorhom/bottom-sheet';
 
 import { shortenString } from '@app/helpers';
-import { selectTheme } from '@state/appSlice';
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
 import { selectAuthState } from '@state/userSlice';
 import { formatImageUrl } from '@utils/markerUtils';
-import HeadlineText from './common/HeadlineText';
+import HeadlineText from '@components/common/HeadlineText';
+import InfoTileLayout from './common/InfoTileLayout';
+import { SPACING_DEFAULT } from '@styles/styles';
 
 const MarkerInfo = () => {
     const dispatch = useDispatch();
 
     const isLoggedIn = useSelector(selectAuthState);
-    const colorScheme = useSelector(selectTheme);
+    const colorScheme = useColorScheme();
     const { id, longitude, latitude, name, imageUrl, rating, notes } =
         useSelector(selectSelectedMarker);
 
@@ -35,76 +42,82 @@ const MarkerInfo = () => {
     };
 
     return (
-        <BottomSheetScrollView>
-            <HeadlineText copy={'Marker Info'} />
-            <View
-                style={[
-                    styles.infoContainer[colorScheme],
-                    styles.columnElement,
-                ]}
-            >
-                <View>
-                    <Text style={styles.detailText[colorScheme]}>
-                        Water Quality: 7.5 / 10
-                    </Text>
-                    <Text style={styles.detailText[colorScheme]}>
-                        Longitude: {shortenString(longitude.toString(), 8)}
-                    </Text>
-                    <Text style={styles.detailText[colorScheme]}>
-                        Latitude: {shortenString(latitude.toString(), 8)}
-                    </Text>
-                    <Text style={styles.detailText[colorScheme]}>
-                        Taste: {rating > 5 ? 'Good' : 'Not Good'}
-                    </Text>
-                    <Text style={styles.detailText[colorScheme]}>
-                        Reference: N/A
-                    </Text>
-                    <Text style={styles.detailText[colorScheme]}>
-                        Distance from here: 500 ft
-                    </Text>
-                    <Text style={styles.detailText[colorScheme]}>
-                        Verified: 2/26/2023
-                    </Text>
-                    <Text style={styles.detailText[colorScheme]}>
-                        Notes: {notes}
-                    </Text>
+        <BottomSheetView style={styles.container}>
+            <HeadlineText copy={name} />
+            <InfoTileLayout>
+                <View style={styles.locationContainer}>
+                    <View style={styles.infoRow}>
+                        {image ? (
+                            <Pressable onPress={viewImage}>
+                                <Image
+                                    source={{ url: image }}
+                                    onError={() => setImage(null)}
+                                    style={styles.image}
+                                />
+                            </Pressable>
+                        ) : (
+                            <Image
+                                source={require('../../assets/raindrop.png')}
+                                style={styles.image}
+                            />
+                        )}
+                        <View>
+                            <Text style={styles.detailText[colorScheme]}>
+                                Water Quality: 7.5 / 10
+                            </Text>
+                            <Text style={styles.detailText[colorScheme]}>
+                                Longitude:{' '}
+                                {shortenString(longitude.toString(), 8)}
+                            </Text>
+                            <Text style={styles.detailText[colorScheme]}>
+                                Latitude:{' '}
+                                {shortenString(latitude.toString(), 8)}
+                            </Text>
+                            <Text style={styles.detailText[colorScheme]}>
+                                Taste: {rating > 5 ? 'Good' : 'Not Good'}
+                            </Text>
+                            <Text style={styles.detailText[colorScheme]}>
+                                Reference: N/A
+                            </Text>
+                            <Text style={styles.detailText[colorScheme]}>
+                                Distance from here: 500 ft
+                            </Text>
+                            <Text style={styles.detailText[colorScheme]}>
+                                Verified: 2/26/2023
+                            </Text>
+                            <Text style={styles.detailText[colorScheme]}>
+                                Notes: {notes}
+                            </Text>
+                        </View>
+                    </View>
+                    <Button
+                        style={styles.button}
+                        mode="contained"
+                        onPress={editMarkerInfo}
+                    >
+                        {isLoggedIn ? 'edit source' : 'login to edit'}
+                    </Button>
                 </View>
-                {image ? (
-                    <Pressable onPress={viewImage}>
-                        <Image
-                            source={{ url: image }}
-                            onError={() => setImage(null)}
-                            style={styles.image}
-                        />
-                    </Pressable>
-                ) : (
-                    <Image
-                        source={require('../../assets/raindrop.png')}
-                        style={styles.image}
-                    />
-                )}
-            </View>
-            <View style={styles.columnElement}>
-                <Button mode="contained" onPress={editMarkerInfo}>
-                    {isLoggedIn ? 'edit source' : 'login to edit'}
-                </Button>
-            </View>
-        </BottomSheetScrollView>
+            </InfoTileLayout>
+        </BottomSheetView>
     );
 };
 
-const infoContainerBase = {
-    alignItems: 'center',
-    borderRadius: 30,
-    justifyContent: 'center',
-    padding: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-};
-
 const styles = StyleSheet.create({
+    button: {
+        marginTop: SPACING_DEFAULT,
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+    },
+    container: {
+        height: '100%',
+        padding: 0,
+    },
     locationContainer: {
-        backgroundColor: 'rgba(0,0,0,0.1)',
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
     },
     nameContainer: {
         dark: {
@@ -122,21 +135,16 @@ const styles = StyleSheet.create({
             paddingVertical: 10,
         },
     },
-    infoContainer: {
-        dark: {
-            ...infoContainerBase,
-            backgroundColor: 'rgba(255,255,255,0.15)',
-        },
-        light: {
-            ...infoContainerBase,
-            backgroundColor: 'rgba(0,0,0,0.1)',
-        },
+    infoRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
-    infoContainerText: {},
     detailText: {
         dark: {
+            FontFace: 'Roboto',
+            fontSize: 16,
             marginVertical: 5,
-            color: 'rgba(255,255,255,.75)',
+            color: 'white',
         },
         light: {
             marginVertical: 5,
@@ -146,7 +154,11 @@ const styles = StyleSheet.create({
     columnElement: {
         marginVertical: 10,
     },
-    image: { height: 200, width: 100, borderRadius: 25 },
+    image: {
+        height: 225,
+        width: 125,
+        borderRadius: 25,
+    },
 });
 
 export default MarkerInfo;

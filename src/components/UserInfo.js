@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, useColorScheme } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -10,12 +10,20 @@ import { ITEM_ROW_CONTAINER } from '@styles/styles';
 const UserInfo = () => {
     const dispatch = useDispatch();
     const isLoggedIn = useSelector(selectAuthState);
+    const colorScheme = useColorScheme();
 
     return (
         <>
             {!isLoggedIn && (
-                <View style={[styles.UserInfoContainer, ITEM_ROW_CONTAINER]}>
-                    <Text>Not Logged In</Text>
+                <View
+                    style={[
+                        styles.userInfoContainer[colorScheme],
+                        ITEM_ROW_CONTAINER,
+                    ]}
+                >
+                    <Text style={styles.userInfoText[colorScheme]}>
+                        Not Logged In
+                    </Text>
                     <Button
                         compact
                         variant="text"
@@ -29,22 +37,36 @@ const UserInfo = () => {
     );
 };
 
+const infoContainerBase = {
+    borderTopLeftRadius: 15,
+    bottom: 0,
+    paddingHorizontal: 15,
+    position: 'absolute',
+    right: 0,
+};
+
 const styles = StyleSheet.create({
-    UserInfoContainer: {
-        backgroundColor: 'white',
-        borderTopLeftRadius: 15,
-        bottom: 0,
-        paddingHorizontal: 15,
-        position: 'absolute',
-        right: 0,
+    userInfoContainer: {
+        light: {
+            ...infoContainerBase,
+            backgroundColor: 'white',
+        },
+        dark: {
+            ...infoContainerBase,
+            backgroundColor: 'black',
+        },
     },
-    UserInfoText: {
-        color: 'black',
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 5,
-        opacity: 0.65,
-        textAlign: 'center',
+    userInfoText: {
+        light: {
+            color: 'black',
+            fontSize: 16,
+            textAlign: 'center',
+        },
+        dark: {
+            color: 'white',
+            fontSize: 16,
+            textAlign: 'center',
+        },
     },
 });
 

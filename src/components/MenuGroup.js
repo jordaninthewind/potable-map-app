@@ -1,20 +1,23 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, useColorScheme } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { FAB } from 'react-native-paper';
 
-import { selectTheme, selectDeviceLocationPermissions } from '@state/appSlice';
+import { selectDeviceLocationPermissions } from '@state/appSlice';
 import { selectLocation, setTempMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
 import { selectAuthState } from '@state/userSlice';
 import { getCurrentPosition } from '@services/services';
+import { SPACING_DEFAULT } from '@styles/styles';
 
 const MenuGroup = () => {
     const dispatch = useDispatch();
 
-    const colorScheme = useSelector(selectTheme);
+    const colorScheme = useColorScheme();
     const deviceHasPermissions = useSelector(selectDeviceLocationPermissions);
     const isLoggedIn = useSelector(selectAuthState);
     const location = useSelector(selectLocation);
+
+    const iconColor = colorScheme === 'dark' ? '#fff' : '#000';
 
     const updatePosition = async () => await dispatch(getCurrentPosition());
 
@@ -25,24 +28,30 @@ const MenuGroup = () => {
 
     return (
         <View style={styles.container}>
-            <FAB
-                icon="plus"
-                disabled={!isLoggedIn}
-                onPress={addTempMarker}
-                style={styles[colorScheme].fabStyle}
-            />
+            {isLoggedIn && (
+                <FAB
+                    icon="plus"
+                    onPress={addTempMarker}
+                    style={styles[colorScheme].fabStyle}
+                    color={iconColor}
+                />
+            )}
             <FAB
                 icon={'crosshairs-gps'}
                 onPress={updatePosition}
                 disabled={!deviceHasPermissions}
                 style={styles[colorScheme].fabStyle}
+                color={iconColor}
             />
         </View>
     );
 };
 
 const fabStyle = {
+    borderRadius: 50,
     margin: 10,
+    opacity: 0.75,
+    padding: 10,
 };
 
 const styles = StyleSheet.create({
@@ -51,7 +60,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         marginLeft: 10,
-        marginBottom: 20,
+        marginBottom: SPACING_DEFAULT,
     },
     light: {
         fabStyle: {
@@ -63,7 +72,7 @@ const styles = StyleSheet.create({
     dark: {
         fabStyle: {
             ...fabStyle,
-            backgroundColor: 'lightgrey',
+            backgroundColor: '#000',
             color: '#fff',
         },
     },

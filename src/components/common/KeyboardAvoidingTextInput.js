@@ -1,18 +1,19 @@
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 import React, { forwardRef } from 'react';
-import { StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
-import { selectTheme } from '../../state/appSlice';
+import { StyleSheet, useColorScheme } from 'react-native';
+import { SPACING_DEFAULT } from '@styles/styles';
 
 const KeyboardAvoidingTextInput = forwardRef(
     ({ value, style, ...props }, ref) => {
-        const isDarkMode = useSelector(selectTheme) === 'dark';
+        const colorScheme = useColorScheme();
 
         return (
             <BottomSheetTextInput
                 ref={ref}
-                style={[isDarkMode ? styles.dark : styles.input, style]}
-                placeholderTextColor={isDarkMode ? 'lightgrey' : 'grey'}
+                style={[styles.input[colorScheme], style]}
+                placeholderTextColor={
+                    colorScheme === 'dark' ? 'lightgrey' : 'grey'
+                }
                 value={value}
                 {...props}
             />
@@ -20,27 +21,27 @@ const KeyboardAvoidingTextInput = forwardRef(
     }
 );
 
+const baseInput = {
+    borderRadius: 5,
+    borderWidth: 1,
+    height: 60,
+    fontSize: 18,
+    padding: SPACING_DEFAULT,
+};
+
 const styles = StyleSheet.create({
     input: {
-        backgroundColor: 'transparent',
-        padding: 15,
-        borderColor: 'lightgrey',
-        borderRadius: 5,
-        borderWidth: 1,
-        height: 60,
-        alignItems: 'center',
-        alignContent: 'center',
-    },
-    dark: {
-        backgroundColor: 'transparent',
-        padding: 15,
-        borderColor: 'lightgrey',
-        borderRadius: 5,
-        borderWidth: 1,
-        height: 60,
-        alignItems: 'center',
-        alignContent: 'center',
-        color: '#fff',
+        light: {
+            ...baseInput,
+            backgroundColor: 'rgba(255,255,255,0.75)',
+            borderColor: 'lightgrey',
+        },
+        dark: {
+            ...baseInput,
+            backgroundColor: 'rgba(0,0,0,0.4)',
+            borderColor: 'lightgrey',
+            color: '#fff',
+        },
     },
 });
 

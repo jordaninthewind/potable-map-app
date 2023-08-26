@@ -1,12 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import { useSelector } from 'react-redux';
-import { selectTheme } from '@state/appSlice';
+import { useColorScheme } from 'react-native';
 
 const PotableStatusBar = () => {
-    const theme = useSelector(selectTheme);
-    const textStyle = theme === 'dark' ? 'light' : 'dark';
+    const colorScheme = useColorScheme();
 
-    return <StatusBar style={textStyle} />;
+    return <StatusBar style={colorScheme} />;
 };
 
 export default PotableStatusBar;

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, useColorScheme } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import BottomSheet from '@gorhom/bottom-sheet';
 
@@ -10,15 +10,15 @@ import Login from '@components/Login';
 import MarkerInfo from '@components/MarkerInfo';
 import Register from '@components/Register';
 import ViewImage from '@components/ViewImage';
-import { selectTheme } from '@state/appSlice';
-import { clearModal, selectModal } from '@state/modalSlice';
 import { resetMapState } from '@services/services';
+import { clearModal, selectModal } from '@state/modalSlice';
+import { SPACING_DEFAULT } from '@styles/styles';
 
 const ModalInterface = () => {
     const dispatch = useDispatch();
     const bottomSheetRef = useRef(null);
     const modal = useSelector(selectModal);
-    const colorScheme = useSelector(selectTheme);
+    const colorScheme = useColorScheme();
     const [component, setComponent] = useState(null);
 
     useEffect(() => {
@@ -40,19 +40,19 @@ const ModalInterface = () => {
                 return {
                     component: <Login />,
                     index: 1,
-                    snapPoints: ['5%', '80%'],
+                    snapPoints: ['5%', '50%'],
                 };
             case 'register':
                 return {
                     component: <Register />,
                     index: 1,
-                    snapPoints: ['5%', '85%'],
+                    snapPoints: ['5%', '60%'],
                 };
             case 'markerInfo':
                 return {
                     component: <MarkerInfo />,
                     index: 1,
-                    snapPoints: ['10%', '50%'],
+                    snapPoints: ['5%', '55%'],
                 };
             case 'addMarker':
                 return {
@@ -64,22 +64,22 @@ const ModalInterface = () => {
                 return {
                     component: <AddPicture />,
                     index: 1,
-                    snapPoints: ['5%', '75%'],
+                    snapPoints: ['5%', '85%'],
                 };
             case 'viewImage':
                 return {
                     component: <ViewImage />,
                     index: 1,
-                    snapPoints: ['5%', '80%'],
+                    snapPoints: ['5%', '85%'],
                 };
             case 'editMarker':
                 return {
                     component: <EditMarker />,
                     index: 1,
-                    snapPoints: ['5%', '50%'],
+                    snapPoints: ['5%', '55%'],
                 };
             default:
-                return { component: null, snapPoints: ['10%'] };
+                return { component: null, snapPoints: ['5%'] };
         }
     };
 
@@ -105,13 +105,15 @@ const ModalInterface = () => {
 
 const styles = StyleSheet.create({
     container: {
-        paddingHorizontal: 20,
+        paddingHorizontal: SPACING_DEFAULT,
     },
     light: {
         backgroundColor: '#FEFEFE',
+        opacity: 0.75,
     },
     dark: {
         backgroundColor: '#3d3d3d',
+        opacity: 0.75,
     },
 });
 

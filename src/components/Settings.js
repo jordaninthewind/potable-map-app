@@ -1,31 +1,20 @@
-import { Linking, StyleSheet, View } from 'react-native';
+import { Linking, StyleSheet, View, useColorScheme } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Switch, Text } from 'react-native-paper';
+import { Button, Text } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {
-    selectDeviceLocationPermissions,
-    selectTheme,
-    setTheme,
-} from '@state/appSlice';
+import { selectDeviceLocationPermissions } from '@state/appSlice';
 import { selectAuthState } from '@state/userSlice';
 import { signOut } from '@services/services';
+import { SPACING_DEFAULT } from '@styles/styles';
 
 const Settings = () => {
     const dispatch = useDispatch();
 
     const { top } = useSafeAreaInsets();
-    const colorTheme = useSelector(selectTheme);
-    const isDarkMode = colorTheme === 'dark';
+    const colorScheme = useColorScheme();
     const deviceHasPermissions = useSelector(selectDeviceLocationPermissions);
     const isLoggedIn = useSelector(selectAuthState);
-
-    const toggleColorScheme = async () => {
-        const themeColor = isDarkMode ? 'light' : 'dark';
-        await AsyncStorage.setItem('theme', themeColor);
-        await dispatch(setTheme(themeColor));
-    };
 
     const logOut = () => dispatch(signOut());
 
@@ -35,30 +24,21 @@ const Settings = () => {
         <View
             style={[
                 styles.container,
-                styles[colorTheme].background,
+                styles.background[colorScheme],
                 { paddingTop: top },
             ]}
         >
             <View style={styles.optionContainer}>
                 <View style={styles.option}>
-                    <Text
-                        variant="headlineSmall"
-                        style={styles[colorTheme].text}
-                    >
-                        Enable {isDarkMode ? 'light' : 'dark'} mode
-                    </Text>
-                    <Switch
-                        value={colorTheme === 'dark'}
-                        onChange={toggleColorScheme}
-                    />
+                    {/* More settings should go here */}
                 </View>
                 {isLoggedIn && (
                     <View style={styles.option}>
                         <Text
                             variant="headlineSmall"
-                            style={styles[colorTheme].text}
+                            style={styles.text[colorScheme]}
                         >
-                            Log out current user
+                            Log out
                         </Text>
                         <Button
                             disabled={!isLoggedIn}
@@ -73,11 +53,11 @@ const Settings = () => {
                     <View style={styles.option}>
                         <Text
                             variant="headlineSmall"
-                            style={styles[colorTheme].text}
+                            style={styles.text[colorScheme]}
                         >
-                            Enable location services
+                            Location
                         </Text>
-                        <Button onPress={openDeviceSettings}>
+                        <Button mode={'contained'} onPress={openDeviceSettings}>
                             Enable in Settings
                         </Button>
                     </View>
@@ -90,12 +70,12 @@ const Settings = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: 20,
+        paddingHorizontal: SPACING_DEFAULT,
     },
     header: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: 20,
+        marginBottom: SPACING_DEFAULT,
     },
     optionContainer: {
         flex: 1,
@@ -105,21 +85,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 20,
+        marginBottom: SPACING_DEFAULT,
     },
-    dark: {
-        background: {
+    background: {
+        dark: {
             backgroundColor: 'rgb(50,50,50)',
         },
-        text: {
-            color: 'rgb(250,250,250)',
-        },
-    },
-    light: {
-        background: {
+        light: {
             backgroundColor: 'rgb(250,250,250)',
         },
-        text: {
+    },
+    text: {
+        dark: {
+            color: 'rgb(250,250,250)',
+        },
+        light: {
             color: 'rgb(50,50,50)',
         },
     },

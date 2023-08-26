@@ -1,15 +1,14 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, useColorScheme } from 'react-native';
 import { Marker } from 'react-native-maps';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { selectTheme } from '@state/appSlice';
 import { setSelectedMarker, setTempMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
 
 export const PotableMarker = ({ marker, selectedId = null, type = null }) => {
     const dispatch = useDispatch();
-    const colorScheme = useSelector(selectTheme);
+    const colorScheme = useColorScheme();
     const { latitude, longitude } = marker;
 
     const openMarkerInfo = () => {
@@ -36,7 +35,7 @@ export const PotableMarker = ({ marker, selectedId = null, type = null }) => {
         >
             <View
                 style={[
-                    styles[colorScheme].marker,
+                    styles[colorScheme]?.marker,
                     selectedId === marker.id && styles[colorScheme].selected,
                     type === 'temp' && styles[colorScheme].temp,
                 ]}
@@ -45,7 +44,7 @@ export const PotableMarker = ({ marker, selectedId = null, type = null }) => {
     );
 };
 
-const baseMarker = {
+const defaultMarkerBase = {
     borderRadius: 100,
     backgroundColor: 'transparent',
     borderWidth: 10,
@@ -53,37 +52,40 @@ const baseMarker = {
     width: 10,
 };
 
+const focusedMarkerBase = {
+    borderRadius: 100,
+    borderWidth: 10,
+    height: 100,
+    width: 100,
+};
+
 const styles = StyleSheet.create({
     dark: {
         marker: {
-            ...baseMarker,
+            ...defaultMarkerBase,
             borderColor: 'cyan',
         },
         temp: {
+            ...focusedMarkerBase,
             borderColor: 'rgba(255,255,255,.5)',
-            borderWidth: 25,
-            height: 120,
-            width: 120,
         },
         selected: {
+            ...focusedMarkerBase,
             borderColor: 'white',
-            height: 75,
-            width: 75,
         },
     },
     light: {
         marker: {
-            ...baseMarker,
+            ...defaultMarkerBase,
             borderColor: 'cyan',
         },
         temp: {
-            borderColor: 'white',
-            borderWidth: 25,
-            padding: 50,
+            ...focusedMarkerBase,
+            borderColor: 'rgba(0,0,0,.5)',
         },
         selected: {
+            ...focusedMarkerBase,
             borderColor: 'white',
-            padding: 30,
         },
     },
 });

@@ -7,7 +7,7 @@ import ModalInterface from '@components/ModalInterface.js';
 import NotificationOverlay from '@components/NotificationOverlay.js';
 import PotableStatusBar from '@components/PotableStatusBar.js';
 import { initApp } from '@services/services.js';
-import { setUser } from '../state/userSlice';
+import { setUser } from '@state/userSlice';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const PotableApp = () => {

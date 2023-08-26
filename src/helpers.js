@@ -46,4 +46,10 @@ export const getDistanceFromLatLonInKm = (startLocation, endLocation) => {
     return distance;
 };
 
-export const centerMarkerInScreen = (latitude) => (latitude -= 0.0005);
+export const centerMarkerInScreen = ({ latitude, zoom }) => {
+    if (zoom) {
+        return (latitude -= 0.0005);
+    }
+
+    return (latitude -= 0.045);
+};

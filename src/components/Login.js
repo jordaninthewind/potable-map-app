@@ -1,13 +1,14 @@
 import { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, TextInput } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Logo from '@components/Logo';
 import { selectLoading } from '@state/markersSlice';
 import { clearModal, setModal } from '@state/modalSlice';
 import { signIn } from '@services/services';
 import { ITEM_ROW_CONTAINER } from '@styles/styles';
+import HeadlineText from './common/HeadlineText';
+import KeyboardAvoidingTextInput from '@components/common/KeyboardAvoidingTextInput';
 
 const Login = () => {
     const emailInput = useRef(null);
@@ -28,39 +29,27 @@ const Login = () => {
 
     return (
         <View>
-            <Logo />
+            <HeadlineText copy={'Potable'} />
             <View style={styles.inputContainer}>
-                <TextInput
+                <KeyboardAvoidingTextInput
                     ref={emailInput}
                     value={email}
-                    mode="outlined"
-                    label="Email Address"
+                    placeholder="Email Address"
                     keyboardType="email-address"
                     autoCapitalize="none"
-                    autoFocus
                     onSubmitEditing={() => passwordInput.current.focus()}
                     onChangeText={(val) => setEmail(val)}
-                    right={
-                        <TextInput.Icon
-                            icon={!email ? 'pencil' : 'close'}
-                            onPress={() => setEmail('')}
-                        />
-                    }
+                    style={styles.input}
                 />
-                <TextInput
+                <KeyboardAvoidingTextInput
                     ref={passwordInput}
                     value={password}
                     mode="outlined"
-                    label="Password"
+                    placeholder="Password"
                     secureTextEntry={passwordVisible}
                     keyboardType="visible-password"
                     onChangeText={(val) => setPassword(val)}
-                    right={
-                        <TextInput.Icon
-                            icon="eye"
-                            onPress={() => setPasswordVisible(!passwordVisible)}
-                        />
-                    }
+                    style={styles.input}
                 />
             </View>
             <View style={styles.itemRowContainer}>
@@ -83,6 +72,9 @@ const Login = () => {
 };
 
 const styles = StyleSheet.create({
+    input: {
+        marginBottom: 10,
+    },
     inputContainer: {
         marginBottom: 10,
     },

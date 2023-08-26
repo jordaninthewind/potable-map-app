@@ -1,17 +1,21 @@
-import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { useRef, useState } from 'react';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import { Button, Checkbox, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Logo from '@components/Logo';
 import { validateEmail } from '@state/errorHelpers';
 import { selectLoading, setLoading } from '@state/markersSlice';
 import { clearModal, setModal } from '@state/modalSlice';
 import { signUp } from '@services/services';
 import { ITEM_ROW_CONTAINER } from '@styles/styles';
+import KeyboardAvoidingTextInput from './common/KeyboardAvoidingTextInput';
+import HeadlineText from './common/HeadlineText';
+import { SPACING_SMALL } from '@styles/styles';
 
 const Register = () => {
     const dispatch = useDispatch();
+
+    const emailInput = useRef(null);
 
     const [passwordVisible, setPasswordVisible] = useState(true);
     const [email, setEmail] = useState('');
@@ -29,54 +33,33 @@ const Register = () => {
 
     return (
         <View>
-            <Logo />
+            <HeadlineText copy={'Sign Up'} />
             <View>
-                <TextInput
-                    label="E-mail Address"
-                    mode="outlined"
+                <KeyboardAvoidingTextInput
+                    style={styles.input}
+                    ref={emailInput}
+                    placeholder="E-mail Address"
                     onChangeText={(e) => setEmail(e)}
                     value={email}
                     autoCapitalize="none"
                     autoCompleteType="email"
-                    textContentType="emailAddress"
-                    keyboardType="email-address"
-                    onBlur={() =>
-                        setEmailValid(validateEmail(email && email.trim()))
-                    }
                     error={email.length === 0}
-                    right={
-                        <TextInput.Icon
-                            icon={email && 'close'}
-                            onPress={() => setEmail('')}
-                        />
-                    }
                 />
-                <TextInput
-                    label="Password"
-                    mode="outlined"
+                <KeyboardAvoidingTextInput
+                    style={styles.input}
                     value={password}
+                    placeholder="Password"
+                    mode="outlined"
                     onChangeText={(e) => setPassword(e)}
                     secureTextEntry={passwordVisible}
-                    right={
-                        <TextInput.Icon
-                            icon="eye"
-                            onPress={() => setPasswordVisible(!passwordVisible)}
-                        />
-                    }
                 />
-                <TextInput
-                    mode="outlined"
-                    label="Verify Password"
-                    type="password"
-                    value={verifyPassword}
+                <KeyboardAvoidingTextInput
+                    style={styles.input}
+                    placeholder="Verify Password"
                     onChangeText={(e) => setVerifyPassword(e)}
+                    value={verifyPassword}
+                    type="password"
                     secureTextEntry={passwordVisible}
-                    right={
-                        <TextInput.Icon
-                            icon="eye"
-                            onPress={() => setPasswordVisible(!passwordVisible)}
-                        />
-                    }
                 />
             </View>
 
@@ -86,7 +69,7 @@ const Register = () => {
                     setAgreed(!agreed);
                 }}
             />
-            <View style={styles.itemRowContainer}>
+            <View style={styles.buttonContainer}>
                 <Button mode="outlined" onPress={cancelSignUp}>
                     Cancel
                 </Button>
@@ -94,7 +77,11 @@ const Register = () => {
                     Register
                 </Button>
             </View>
-            <Button mode="text" onPress={returnToLogin}>
+            <Button
+                style={styles.buttonContainer}
+                mode="text"
+                onPress={returnToLogin}
+            >
                 Go back to login
             </Button>
         </View>
@@ -102,6 +89,13 @@ const Register = () => {
 };
 
 const styles = StyleSheet.create({
+    input: {
+        marginBottom: 10,
+    },
+    buttonContainer: {
+        ...ITEM_ROW_CONTAINER,
+        marginVertical: SPACING_SMALL,
+    },
     inputContainer: {
         justifyContent: 'center',
         height: 125,

@@ -4,9 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
-import { BASE_RADIUS, ITEM_ROW_CONTAINER } from '@styles/styles';
+import {
+    BASE_RADIUS,
+    ITEM_ROW_CONTAINER,
+    SPACING_DEFAULT,
+} from '@styles/styles';
 import { formatImageUrl } from '@utils/markerUtils';
-import { setLoading } from '../state/markersSlice';
+import { setLoading } from '@state/markersSlice';
 
 const ViewImage = () => {
     const dispatch = useDispatch();
@@ -44,7 +48,7 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         ...ITEM_ROW_CONTAINER,
-        marginVertical: 20,
+        marginVertical: SPACING_DEFAULT,
     },
     imageContainer: {
         alignItems: 'center',

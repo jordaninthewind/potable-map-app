@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from 'react-native-paper';
+import { Button, Text } from 'react-native-paper';
 import { GeoPoint } from 'firebase/firestore';
 
 import KeyboardAvoidingTextInput from '@components/common/KeyboardAvoidingTextInput';
@@ -17,6 +17,7 @@ import {
     BASE_BUTTON,
     ELEMENT_GROUP_SPACING,
     ITEM_ROW_CONTAINER,
+    SPACING_DEFAULT,
 } from '@styles/styles';
 import { selectUserEmail } from '@state/userSlice';
 
@@ -56,14 +57,10 @@ const AddMarkerModal = () => {
 
     return (
         <View>
-            <HeadlineText copy={'Add Marker'} />
+            <HeadlineText copy="Add a water source">
+                <Text>Long press on the marker to drag</Text>
+            </HeadlineText>
             <View style={{ ...ELEMENT_GROUP_SPACING }}>
-                <KeyboardAvoidingTextInput
-                    style={styles.input}
-                    placeholder="Location Name"
-                    value={name}
-                    onChangeText={(text) => setName(text)}
-                />
                 <KeyboardAvoidingTextInput
                     style={styles.input}
                     placeholder="Location Name"
@@ -91,8 +88,8 @@ const AddMarkerModal = () => {
             </View>
             <View style={styles.buttonContainer}>
                 <Button
-                    mode="outlined"
-                    disabled={!name || !notes || !rating}
+                    mode="contained"
+                    disabled={!name}
                     onPress={onSubmit}
                     loading={loading}
                 >
@@ -106,7 +103,7 @@ const AddMarkerModal = () => {
 const styles = StyleSheet.create({
     buttonContainer: {
         ...ITEM_ROW_CONTAINER,
-        marginTop: 20,
+        marginTop: SPACING_DEFAULT,
     },
     buttonStyle: {
         ...BASE_BUTTON,

@@ -18,7 +18,9 @@ import {
 } from 'firebase/firestore';
 
 import { MARKER_DATABASE } from '@app/constants.js';
-import { db } from '@app/firebaseConfig.js';
+import { app, db } from '@app/firebaseConfig.js';
+import { uploadWaterSourcePhoto } from '@services/storageService';
+import { setDeviceLocationPermission } from '@state/appSlice';
 import { setError } from '@state/errorSlice';
 import {
     setLoading,
@@ -27,11 +29,8 @@ import {
     setSelectedMarker,
     setTempMarker,
 } from '@state/markersSlice';
-import { setDeviceLocationPermission, setTheme } from '@state/appSlice';
 import { clearModal } from '@state/modalSlice';
-import { setUser } from '@state/userSlice';
-import { uploadWaterSourcePhoto } from '@services/storageService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setUser, clearUser } from '@state/userSlice';
 
 // Device / Location Services
 export const requestLocationPermission = () => async (dispatch) => {
@@ -200,10 +199,6 @@ export const resetMapState = () => async (dispatch) => {
 // App Services
 export const initApp = () => async (dispatch) => {
     try {
-        // Get theme from local storage
-        const theme = await AsyncStorage.getItem('theme');
-        dispatch(setTheme(theme));
-
         // Get device permissions and location
         await dispatch(requestLocationPermission());
         await dispatch(getCurrentPosition());
@@ -236,9 +231,9 @@ export const signIn =
 
 export const signOut = () => async (dispatch) => {
     try {
-        await getAuth().signOut();
+        await getAuth(app).signOut();
 
-        dispatch(setUser(null));
+        dispatch(clearUser());
         dispatch(setError({ message: `Logged out successfully!` }));
     } catch ({ message }) {
         dispatch(setError({ message }));

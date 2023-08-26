@@ -7,20 +7,21 @@ import {
     KeyboardAvoidingView,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Text } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import KeyboardAvoidingTextInput from '@components/common/KeyboardAvoidingTextInput';
 
 import { COLOR_WARNING } from '@app/constants';
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
 import { deleteMarkerRemote } from '@services/services';
-import { ELEMENT_GROUP_SPACING, ITEM_ROW_CONTAINER } from '@styles/styles';
+import { ITEM_ROW_CONTAINER, SPACING_SMALL } from '@styles/styles';
 import { formatImageUrl } from '@utils/markerUtils';
 import HeadlineText from './common/HeadlineText';
+import InfoTileLayout from './common/InfoTileLayout';
 
 const EditMarker = () => {
     const dispatch = useDispatch();
-
+    const isAdmin = false;
     const marker = useSelector(selectSelectedMarker);
 
     const [name, setName] = useState(marker?.name);
@@ -54,13 +55,16 @@ const EditMarker = () => {
     return (
         <KeyboardAvoidingView>
             <HeadlineText copy={'Edit Marker'} />
-            <View
-                style={[ITEM_ROW_CONTAINER, { flexDirection: 'row-reverse' }]}
-            >
-                {marker.imageUrl && (
-                    <View style={styles.imageRow}>
-                        <View style={styles.imageContainer}>
-                            <Pressable onPress={openCameraView}>
+            <InfoTileLayout>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        // justifyContent: 'space-evenly',
+                    }}
+                >
+                    <View style={styles.imageContainer}>
+                        <Pressable onPress={openCameraView}>
+                            {marker.imageUrl ? (
                                 <Image
                                     style={styles.image}
                                     source={{
@@ -70,56 +74,50 @@ const EditMarker = () => {
                                         }),
                                     }}
                                 />
-                            </Pressable>
-                        </View>
+                            ) : (
+                                <Image
+                                    source={require('../../assets/raindrop.png')}
+                                    style={styles.image}
+                                />
+                            )}
+                        </Pressable>
                     </View>
-                )}
-                <View
-                    style={{
-                        ...ELEMENT_GROUP_SPACING,
-                        flex: 1,
-                        marginRight: 20,
-                    }}
-                >
-                    <KeyboardAvoidingTextInput
-                        style={styles.input}
-                        onChange={(e) => setName(e)}
-                        placeholder="Location Name"
-                        value={name || ''}
-                    />
-                    <KeyboardAvoidingTextInput
-                        style={styles.input}
-                        onChange={(e) => setType(e)}
-                        placeholder="Type"
-                        value={type || ''}
-                    />
-                    <KeyboardAvoidingTextInput
-                        style={styles.input}
-                        onChange={(e) => setRating(e)}
-                        placeholder="Rating"
-                        value={rating || ''}
-                    />
+                    <View style={styles.inputContainer}>
+                        <KeyboardAvoidingTextInput
+                            style={styles.input}
+                            onChange={(e) => setName(e)}
+                            placeholder="Location Name"
+                            value={name || ''}
+                        />
+                        <KeyboardAvoidingTextInput
+                            style={styles.input}
+                            onChange={(e) => setType(e)}
+                            placeholder="Type"
+                            value={type || ''}
+                        />
+                        <KeyboardAvoidingTextInput
+                            style={styles.input}
+                            onChange={(e) => setRating(e)}
+                            placeholder="Rating"
+                            value={rating || ''}
+                        />
+                    </View>
                 </View>
-            </View>
-            <View style={styles.buttonRow}>
-                {!marker.imageUrl && (
-                    <Button mode="outlined" onPress={openCameraView}>
-                        Add an image
+                <View style={styles.buttonRow}>
+                    {isAdmin && (
+                        <Button
+                            mode="contained"
+                            buttonColor={COLOR_WARNING}
+                            onPress={deleteMarker}
+                        >
+                            Delete Marker
+                        </Button>
+                    )}
+                    <Button mode="contained" onPress={goBack}>
+                        Cancel
                     </Button>
-                )}
-                <Button
-                    mode="contained"
-                    buttonColor={COLOR_WARNING}
-                    onPress={deleteMarker}
-                >
-                    Delete Marker
-                </Button>
-            </View>
-            <View style={[ITEM_ROW_CONTAINER, { marginTop: 10 }]}>
-                <Button mode="text" onPress={goBack}>
-                    Cancel
-                </Button>
-            </View>
+                </View>
+            </InfoTileLayout>
         </KeyboardAvoidingView>
     );
 };
@@ -127,17 +125,32 @@ const EditMarker = () => {
 const styles = StyleSheet.create({
     buttonRow: {
         ...ITEM_ROW_CONTAINER,
-        justifyContent: 'space-evenly',
-        marginTop: 20,
+        flexDirection: 'row',
+        // justifyContent: 'space-evenly',
+        marginTop: SPACING_SMALL,
     },
-    image: { height: 200, width: 100, borderRadius: 25 },
+    image: {
+        height: 225,
+        width: 125,
+        borderRadius: 25,
+    },
+    imageButton: {
+        position: 'absolute',
+        backgroundColor: 'transparent',
+        borderRadius: 25,
+        height: 200,
+        width: 100,
+    },
     imageContainer: {
         ...ITEM_ROW_CONTAINER,
-        justifyContent: 'space-evenly',
-        marginTop: 10,
     },
     input: {
-        marginTop: 5,
+        marginTop: SPACING_SMALL,
+        marginLeft: SPACING_SMALL,
+    },
+    inputContainer: {
+        flex: 1,
+        flexDirection: 'column',
     },
 });
 

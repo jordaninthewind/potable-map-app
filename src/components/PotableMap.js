@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { StyleSheet, Vibration } from 'react-native';
+import { StyleSheet, Vibration, useColorScheme } from 'react-native';
 import MapView from 'react-native-maps';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { centerMarkerInScreen } from '@app/helpers';
 import { PotableMarker } from '@components/PotableMarker';
-import { selectTheme } from '@state/appSlice';
 import {
     selectMarkers,
     setTempMarker,
@@ -22,7 +21,7 @@ const PotableMap = () => {
     const mapRef = useRef(null);
 
     const dispatch = useDispatch();
-    const darkMode = useSelector(selectTheme);
+    const colorScheme = useColorScheme();
 
     const markers = useSelector(selectMarkers);
     const location = useSelector(selectLocation);
@@ -33,7 +32,10 @@ const PotableMap = () => {
         if (selectedMarker) {
             mapRef.current.animateToRegion(
                 {
-                    latitude: centerMarkerInScreen(selectedMarker.latitude),
+                    latitude: centerMarkerInScreen({
+                        latitude: selectedMarker.latitude,
+                        zoom: true,
+                    }),
                     longitude: selectedMarker.longitude,
                     latitudeDelta: 0.001,
                     longitudeDelta: 0.001,
@@ -43,10 +45,13 @@ const PotableMap = () => {
         } else if (tempMarker) {
             mapRef.current.animateToRegion(
                 {
-                    latitude: centerMarkerInScreen(tempMarker.latitude),
+                    latitude: centerMarkerInScreen({
+                        latitude: tempMarker.latitude,
+                        zoom: false,
+                    }),
                     longitude: tempMarker.longitude,
-                    latitudeDelta: 0.001,
-                    longitudeDelta: 0.001,
+                    // latitudeDelta: 0.001,
+                    // longitudeDelta: 0.001,
                 },
                 1000
             );
@@ -92,7 +97,7 @@ const PotableMap = () => {
             ref={mapRef}
             onLongPress={openAddMarkerScreen}
             onRegionChangeComplete={onMove}
-            userInterfaceStyle={darkMode}
+            userInterfaceStyle={colorScheme}
             region={location}
             showsPointsOfInterest={false}
             showsUserLocation={true}

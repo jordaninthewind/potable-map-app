@@ -4,10 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, IconButton, Text } from 'react-native-paper';
 import { Camera, CameraType } from 'expo-camera';
 
+import { savePictureRemote } from '@services/services';
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
-import { savePictureRemote } from '@services/services';
-import { BASE_RADIUS, ITEM_ROW_CONTAINER } from '@styles/styles';
+import {
+    BASE_RADIUS,
+    ITEM_ROW_CONTAINER,
+    SPACING_DEFAULT,
+} from '@styles/styles';
 
 const AddPicture = () => {
     const dispatch = useDispatch();
@@ -104,13 +108,13 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         ...ITEM_ROW_CONTAINER,
-        marginVertical: 20,
+        marginVertical: SPACING_DEFAULT,
     },
     cameraButton: {
         position: 'absolute',
         bottom: 0,
         alignSelf: 'center',
-        marginBottom: 20,
+        marginBottom: SPACING_DEFAULT,
         width: 70,
         height: 70,
         borderRadius: 50,

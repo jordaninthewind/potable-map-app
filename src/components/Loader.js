@@ -14,7 +14,7 @@ const Loader = () => {
                     <ActivityIndicator
                         animating={true}
                         size={'large'}
-                        color="#f00"
+                        color="cyan"
                     />
                 </View>
             )}

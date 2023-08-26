@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { StyleSheet, View, useColorScheme } from 'react-native';
 import { BottomNavigation as PaperBottomNavigation } from 'react-native-paper';
 
 import Settings from '@components/Settings';
@@ -8,7 +7,6 @@ import PotableMap from '@components/PotableMap';
 import MenuGroup from '@components/MenuGroup';
 import ModalInterface from '@components/ModalInterface';
 import UserInfo from '@components/UserInfo';
-import { selectTheme } from '@state/appSlice';
 
 const MapScreen = () => (
     <View style={{ flex: 1 }}>
@@ -26,7 +24,7 @@ const SettingsScreen = () => (
 );
 
 const BottomNavigation = () => {
-    const colorScheme = useSelector(selectTheme);
+    const colorScheme = useColorScheme();
 
     const [index, setIndex] = useState(0);
     const [routes] = useState([
@@ -52,7 +50,7 @@ const BottomNavigation = () => {
     return (
         <View style={styles.container}>
             <PaperBottomNavigation
-                style={styles.navContainer}
+                style={styles.navContainer[colorScheme]}
                 shifting={true}
                 navigationState={{ index, routes }}
                 onIndexChange={setIndex}
@@ -65,23 +63,13 @@ const BottomNavigation = () => {
 const styles = StyleSheet.create({
     container: { height: '100%' },
     navContainer: {
-        borderTopColor: 'grey',
-        borderTopWidth: 1,
-    },
-    light: {
-        background: {
+        light: {
+            borderTopColor: 'grey',
+            borderTopWidth: 1,
             backgroundColor: 'white',
-        },
-        icon: {
-            color: 'black',
-        },
-    },
-    dark: {
-        background: {
-            backgroundColor: 'black',
-        },
-        icon: {
-            color: 'white',
+            dark: {
+                backgroundColor: 'black',
+            },
         },
     },
 });
