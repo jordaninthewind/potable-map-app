@@ -1,35 +1,26 @@
-import { useState } from 'react';
-import {
-    Image,
-    StyleSheet,
-    Pressable,
-    View,
-    useColorScheme,
-} from 'react-native';
+import { StyleSheet, Pressable, View, useColorScheme } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { BottomSheetView } from '@gorhom/bottom-sheet';
 
 import { shortenString } from '@app/helpers';
+import HeadlineText from '@components/common/HeadlineText';
+import InfoTile from '@components/common/InfoTile';
+import MarkerImage from '@components/common/MarkerImage';
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
 import { selectAuthState } from '@state/userSlice';
-import { formatImageUrl } from '@utils/markerUtils';
-import HeadlineText from '@components/common/HeadlineText';
-import InfoTileLayout from './common/InfoTileLayout';
-import { SPACING_DEFAULT } from '@styles/styles';
+import { DARK_FONT, LIGHT_FONT, SPACING_DEFAULT } from '@styles/styles';
 
 const MarkerInfo = () => {
     const dispatch = useDispatch();
 
-    const loggedIn = useSelector(selectAuthState);
     const colorScheme = useColorScheme();
+    const loggedIn = useSelector(selectAuthState);
 
     const marker = useSelector(selectSelectedMarker);
 
-    const [image, setImage] = useState(formatImageUrl({ id: marker.id }));
-
-    const editMarkerInfo = () => {
+    const editMarker = () => {
         if (!loggedIn) {
             dispatch(setModal('login'));
         } else {
@@ -37,62 +28,87 @@ const MarkerInfo = () => {
         }
     };
 
-    const viewImage = () => {
-        dispatch(setModal('viewImage'));
-    };
+    const viewImage = () => dispatch(setModal('viewImage'));
 
     return (
         <BottomSheetView style={styles.container}>
-            <HeadlineText copy={name} />
-            <InfoTileLayout>
-                <View style={styles.locationContainer}>
-                    <View style={styles.infoRow}>
-                        {image ? (
-                            <Pressable onPress={viewImage}>
-                                <Image
-                                    source={{ url: image }}
-                                    onError={() => setImage(null)}
-                                    style={styles.image}
-                                />
-                            </Pressable>
-                        ) : (
-                            <Image
-                                source={require('../../assets/raindrop.png')}
-                                style={styles.image}
-                            />
-                        )}
-                        <View>
-                            <Text style={styles.detailText[colorScheme]}>
+            <HeadlineText copy={shortenString(marker.name, 30)} />
+            <InfoTile>
+                <View style={styles.infoRow}>
+                    <Pressable onPress={viewImage}>
+                        <MarkerImage id={marker.id} style={styles.image} />
+                    </Pressable>
+                    <View
+                        style={
+                            (styles.columnElement,
+                            { marginLeft: SPACING_DEFAULT })
+                        }
+                    >
+                        <View style={styles.columnElement}>
+                            <Text
+                                style={[
+                                    styles.detailText,
+                                    styles.detailText[colorScheme],
+                                ]}
+                            >
                                 Water Quality: 7.5 / 10
                             </Text>
-                            <Text style={styles.detailText[colorScheme]}>
+                            <Text
+                                style={[
+                                    styles.detailText,
+                                    styles.detailText[colorScheme],
+                                ]}
+                            >
                                 Taste: 'Good'
                             </Text>
-                            <Text style={styles.detailText[colorScheme]}>
+                            <Text
+                                style={[
+                                    styles.detailText,
+                                    styles.detailText[colorScheme],
+                                ]}
+                            >
                                 Reference: N/A
                             </Text>
-                            <Text style={styles.detailText[colorScheme]}>
+                            <Text
+                                style={[
+                                    styles.detailText,
+                                    styles.detailText[colorScheme],
+                                ]}
+                            >
                                 Distance from here: 500 ft
                             </Text>
-                            <Text style={styles.detailText[colorScheme]}>
+                            <Text
+                                style={[
+                                    styles.detailText,
+                                    styles.detailText[colorScheme],
+                                ]}
+                            >
                                 Verified: 2/26/2023
                             </Text>
-                            <Text style={styles.detailText[colorScheme]}>
+                            <Text
+                                style={[
+                                    styles.detailText,
+                                    styles.detailText[colorScheme],
+                                ]}
+                            >
                                 Notes: N/A
                             </Text>
                         </View>
-                    </View>
-                    {loggedIn && (
-                        <View style={{ marginTop: SPACING_DEFAULT }}>
-                            <Button onPress={editMarkerInfo}>
+                        {loggedIn && (
+                            <Button mode="outlined" onPress={editMarker}>
                                 edit source
                             </Button>
-                        </View>
-                    )}
+                        )}
+                    </View>
                 </View>
-            </InfoTileLayout>
+            </InfoTile>
         </BottomSheetView>
     );
+};
+
+const detailTextBase = {
+    fontSize: 16,
+    marginVertical: 5,
 };
 
 const styles = StyleSheet.create({
@@ -111,40 +127,22 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-evenly',
     },
-    nameContainer: {
-        dark: {
-            alignItems: 'center',
-            backgroundColor: 'rgba(0,0,0,0.2)',
-            borderRadius: 30,
-            justifyContent: 'center',
-            paddingVertical: 10,
-        },
-        light: {
-            alignItems: 'center',
-            backgroundColor: 'rgba(255,0,0,0.1)',
-            borderRadius: 30,
-            justifyContent: 'center',
-            paddingVertical: 10,
-        },
-    },
     infoRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
     detailText: {
         dark: {
-            FontFace: 'Roboto',
-            fontSize: 16,
-            marginVertical: 5,
-            color: 'white',
+            ...detailTextBase,
+            color: LIGHT_FONT,
         },
         light: {
-            marginVertical: 5,
-            color: 'black',
+            ...detailTextBase,
+            color: DARK_FONT,
         },
     },
     columnElement: {
-        marginVertical: 10,
+        flex: 1,
     },
     image: {
         height: 225,

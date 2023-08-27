@@ -1,7 +1,8 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 
+import MarkerImage from '@components/common/MarkerImage';
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
 import {
@@ -9,8 +10,6 @@ import {
     ITEM_ROW_CONTAINER,
     SPACING_DEFAULT,
 } from '@styles/styles';
-import { formatImageUrl } from '@utils/markerUtils';
-import { setLoading } from '@state/markersSlice';
 
 const ViewImage = () => {
     const dispatch = useDispatch();
@@ -21,12 +20,7 @@ const ViewImage = () => {
 
     return (
         <View style={styles.container}>
-            <Image
-                style={styles.imageContainer}
-                source={{ url: formatImageUrl({ id, size: 'small' }) }}
-                onLoadStart={() => dispatch(setLoading(true))}
-                onLoadEnd={() => dispatch(setLoading(false))}
-            />
+            <MarkerImage id={id} style={styles.imageContainer} />
             <View style={styles.buttonContainer}>
                 <Button onPress={goBack} mode="contained">
                     Go back

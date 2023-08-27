@@ -1,6 +1,7 @@
-import React from 'react';
 import { StyleSheet, View, useColorScheme } from 'react-native';
 import { Text } from 'react-native-paper';
+
+import { DARK_FONT, LIGHT_FONT } from '@styles/styles';
 
 const HeadlineText = ({ copy, style, children }) => {
     const colorScheme = useColorScheme();
@@ -17,8 +18,12 @@ const HeadlineText = ({ copy, style, children }) => {
 
 const styles = StyleSheet.create({
     container: { justifyContent: 'center', marginBottom: 10 },
-    light: { color: '#000' },
-    dark: { color: '#fff' },
+    light: {
+        color: DARK_FONT,
+    },
+    dark: {
+        color: LIGHT_FONT,
+    },
 });
 
 export default HeadlineText;

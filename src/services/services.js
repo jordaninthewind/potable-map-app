@@ -155,26 +155,7 @@ export const updateMarkerRemote =
         }
     };
 
-export const addPictureToMarker =
-    ({ markerId }) =>
-    async (dispatch, getState) => {
-        try {
-            dispatch(setLoading(true));
-
-            const markerName = getState().markers.selectedMarker.name;
-
-            const docToModify = doc(db, MARKER_DATABASE, markerId);
-            await updateDoc(docToModify, { imageUrl: true });
-
-            dispatch(setError({ message: `Updated ${markerName}` }));
-        } catch ({ message }) {
-            dispatch(setError({ message }));
-        } finally {
-            dispatch(setLoading(false));
-        }
-    };
-
-export const savePictureRemote =
+export const saveImageRemote =
     ({ image, markerId }) =>
     async (dispatch) => {
         dispatch(setLoading(true));
@@ -187,7 +168,7 @@ export const savePictureRemote =
                 })
             );
 
-            await dispatch(addPictureToMarker({ markerId }));
+            dispatch(setError({ message: `Updated marker!` }));
         } catch (error) {
             console.log(error);
         } finally {

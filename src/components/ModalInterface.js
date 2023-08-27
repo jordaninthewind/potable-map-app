@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import BottomSheet from '@gorhom/bottom-sheet';
 
 import AddMarkerModal from '@components/AddMarkerModal';
-import AddPicture from '@components/AddPicture';
+import AddImage from '@components/AddImage';
 import EditMarker from '@components/EditMarker';
 import Login from '@components/Login';
 import MarkerInfo from '@components/MarkerInfo';
@@ -60,9 +60,9 @@ const ModalInterface = () => {
                     index: 1,
                     snapPoints: ['5%', '65%'],
                 };
-            case 'addPicture':
+            case 'AddImage':
                 return {
-                    component: <AddPicture />,
+                    component: <AddImage />,
                     index: 1,
                     snapPoints: ['5%', '85%'],
                 };

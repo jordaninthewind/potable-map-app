@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import {
-    Image,
     StyleSheet,
     Pressable,
     View,
@@ -8,16 +7,16 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'react-native-paper';
-import KeyboardAvoidingTextInput from '@components/common/KeyboardAvoidingTextInput';
 
 import { COLOR_WARNING } from '@app/constants';
+import HeadlineText from '@components/common/HeadlineText';
+import InfoTile from '@components/common/InfoTile';
+import KeyboardAvoidingTextInput from '@components/common/KeyboardAvoidingTextInput';
+import MarkerImage from '@components/common/MarkerImage';
+import { deleteMarkerRemote } from '@services/services';
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
-import { deleteMarkerRemote } from '@services/services';
-import { ITEM_ROW_CONTAINER, SPACING_SMALL } from '@styles/styles';
-import { formatImageUrl } from '@utils/markerUtils';
-import HeadlineText from './common/HeadlineText';
-import InfoTileLayout from './common/InfoTileLayout';
+import { BASE_RADIUS, ITEM_ROW_CONTAINER, SPACING_SMALL } from '@styles/styles';
 
 const EditMarker = () => {
     const dispatch = useDispatch();
@@ -47,7 +46,7 @@ const EditMarker = () => {
     };
 
     const openCameraView = () => {
-        dispatch(setModal('addPicture'));
+        dispatch(setModal('AddImage'));
     };
 
     const deleteMarker = () => dispatch(deleteMarkerRemote(marker.id));
@@ -55,7 +54,7 @@ const EditMarker = () => {
     return (
         <KeyboardAvoidingView>
             <HeadlineText copy={'Edit Marker'} />
-            <InfoTileLayout>
+            <InfoTile>
                 <View
                     style={{
                         flexDirection: 'row',
@@ -64,22 +63,11 @@ const EditMarker = () => {
                 >
                     <View style={styles.imageContainer}>
                         <Pressable onPress={openCameraView}>
-                            {marker.imageUrl ? (
-                                <Image
-                                    style={styles.image}
-                                    source={{
-                                        uri: formatImageUrl({
-                                            id: marker.id,
-                                            size: 'small',
-                                        }),
-                                    }}
-                                />
-                            ) : (
-                                <Image
-                                    source={require('../../assets/raindrop.png')}
-                                    style={styles.image}
-                                />
-                            )}
+                            <MarkerImage
+                                style={styles.image}
+                                id={marker.id}
+                                editable
+                            />
                         </Pressable>
                     </View>
                     <View style={styles.inputContainer}>
@@ -117,7 +105,7 @@ const EditMarker = () => {
                         Cancel
                     </Button>
                 </View>
-            </InfoTileLayout>
+            </InfoTile>
         </KeyboardAvoidingView>
     );
 };
@@ -126,27 +114,26 @@ const styles = StyleSheet.create({
     buttonRow: {
         ...ITEM_ROW_CONTAINER,
         flexDirection: 'row',
-        // justifyContent: 'space-evenly',
         marginTop: SPACING_SMALL,
     },
     image: {
+        borderRadius: BASE_RADIUS,
         height: 225,
         width: 125,
-        borderRadius: 25,
     },
     imageButton: {
-        position: 'absolute',
         backgroundColor: 'transparent',
-        borderRadius: 25,
+        borderRadius: BASE_RADIUS,
         height: 200,
+        position: 'absolute',
         width: 100,
     },
     imageContainer: {
         ...ITEM_ROW_CONTAINER,
     },
     input: {
-        marginTop: SPACING_SMALL,
         marginLeft: SPACING_SMALL,
+        marginTop: SPACING_SMALL,
     },
     inputContainer: {
         flex: 1,

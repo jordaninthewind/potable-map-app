@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, useColorScheme } from 'react-native';
 
-import { SPACING_DEFAULT } from '@styles/styles';
+import { SPACING_LARGE } from '@styles/styles';
 
-const InfoTileLayout = ({ style, children }) => {
+const InfoTile = ({ style, children }) => {
     const colorScheme = useColorScheme();
 
     return (
@@ -22,7 +22,7 @@ const InfoTileLayout = ({ style, children }) => {
 const infoContainerBase = {
     borderRadius: 30,
     justifyContent: 'center',
-    padding: SPACING_DEFAULT,
+    padding: SPACING_LARGE,
     flexDirection: 'column',
     justifyContent: 'space-between',
 };
@@ -43,4 +43,4 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
 });
-export default InfoTileLayout;
+export default InfoTile;

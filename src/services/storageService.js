@@ -70,3 +70,15 @@ export const uploadWaterSourcePhoto =
             }
         );
     };
+
+export const downloadImageUrl = async ({ id }) => {
+    try {
+        const storageRef = ref(getStorage(), 'images/' + id + '_800x600');
+
+        const imageUrl = await getDownloadURL(storageRef);
+
+        return imageUrl;
+    } catch (error) {
+        return false;
+    }
+};

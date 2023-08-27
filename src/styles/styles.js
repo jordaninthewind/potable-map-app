@@ -27,3 +27,6 @@ export const COLOR_WARNING = '#FFA500';
 export const SPACING_SMALL = 8;
 export const SPACING_DEFAULT = 16;
 export const SPACING_LARGE = 24;
+
+export const LIGHT_FONT = 'white';
+export const DARK_FONT = 'black';
