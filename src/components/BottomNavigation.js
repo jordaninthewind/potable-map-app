@@ -50,7 +50,7 @@ const BottomNavigation = () => {
     return (
         <View style={styles.container}>
             <PaperBottomNavigation
-                style={styles.navContainer[colorScheme]}
+                barStyle={styles.navContainer[colorScheme]}
                 shifting={true}
                 navigationState={{ index, routes }}
                 onIndexChange={setIndex}
@@ -64,12 +64,10 @@ const styles = StyleSheet.create({
     container: { height: '100%' },
     navContainer: {
         light: {
-            borderTopColor: 'grey',
-            borderTopWidth: 1,
             backgroundColor: 'white',
-            dark: {
-                backgroundColor: 'black',
-            },
+        },
+        dark: {
+            backgroundColor: 'black',
         },
     },
 });
