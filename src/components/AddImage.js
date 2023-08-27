@@ -5,7 +5,7 @@ import { Button, IconButton, ProgressBar } from 'react-native-paper';
 import { Camera, CameraType } from 'expo-camera';
 
 import HeadlineText from '@components/common/HeadlineText';
-import { savePictureRemote } from '@services/services';
+import { saveImageRemote } from '@services/services';
 import { selectUploadProgress } from '@state/appSlice';
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
@@ -15,13 +15,15 @@ import {
     SPACING_DEFAULT,
 } from '@styles/styles';
 
-const AddPicture = () => {
+const AddImage = () => {
     const dispatch = useDispatch();
+
     const { id } = useSelector(selectSelectedMarker);
     const progress = useSelector(selectUploadProgress);
-    const [status, requestPermission] = Camera.useCameraPermissions();
-    const devicePermission = status && status.status === 'granted';
     const [image, setImage] = useState(false);
+
+    const [status, requestPermission] = Camera.useCameraPermissions();
+    const devicePermission = status?.status === 'granted';
 
     useEffect(() => {
         if (!devicePermission) {
@@ -41,14 +43,11 @@ const AddPicture = () => {
 
     const goBack = () => dispatch(setModal('editMarker'));
 
-    const goToSettings = () => {
-        Linking.openSettings();
-    };
+    const goToSettings = () => Linking.openSettings();
 
     const savePicture = async () => {
-        await dispatch(savePictureRemote({ image, markerId: id }));
+        await dispatch(saveImageRemote({ image, markerId: id }));
 
-        // clearPicture();
         goBack();
     };
 
@@ -170,4 +169,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AddPicture;
+export default AddImage;
