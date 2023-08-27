@@ -15,7 +15,7 @@ export const PRIMARY_TEXT_SHADOW = {
 
 // Firebase Image Storage Constants
 export const IMAGE_URL_BASE =
-    'https://firebasestorage.googleapis.com/v0/b/potable-aa1b9.appspot.com/o/';
+    'https://firebasestorage.googleapis.com/v0/b/potable-aa1b9.appspot.com/o/images/';
 
 export const IMAGE_URL_QUERY_SMALL =
     '_800x600?alt=media&token=734f6e77-d30b-42b3-8a74-7a8fd4daf6da';

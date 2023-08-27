@@ -11,7 +11,11 @@ import store from '@app/store';
 
 const theme = {
     ...DefaultTheme,
-    // colors: yourGeneratedLightOrDarkScheme.colors, // Copy it from the color codes scheme and then use it here
+    colors: {
+        ...DefaultTheme.colors,
+        primary: '#1E88E5',
+        accent: '#1E88E5',
+    },
 };
 
 const PotableAppProviders = ({ children }) => {

@@ -22,15 +22,15 @@ import { SPACING_DEFAULT } from '@styles/styles';
 const MarkerInfo = () => {
     const dispatch = useDispatch();
 
-    const isLoggedIn = useSelector(selectAuthState);
+    const loggedIn = useSelector(selectAuthState);
     const colorScheme = useColorScheme();
-    const { id, longitude, latitude, name, imageUrl, rating, notes } =
-        useSelector(selectSelectedMarker);
 
-    const [image, setImage] = useState(formatImageUrl({ id, size: 'small' }));
+    const marker = useSelector(selectSelectedMarker);
+
+    const [image, setImage] = useState(formatImageUrl({ id: marker.id }));
 
     const editMarkerInfo = () => {
-        if (!isLoggedIn) {
+        if (!loggedIn) {
             dispatch(setModal('login'));
         } else {
             dispatch(setModal('editMarker'));
@@ -66,15 +66,7 @@ const MarkerInfo = () => {
                                 Water Quality: 7.5 / 10
                             </Text>
                             <Text style={styles.detailText[colorScheme]}>
-                                Longitude:{' '}
-                                {shortenString(longitude.toString(), 8)}
-                            </Text>
-                            <Text style={styles.detailText[colorScheme]}>
-                                Latitude:{' '}
-                                {shortenString(latitude.toString(), 8)}
-                            </Text>
-                            <Text style={styles.detailText[colorScheme]}>
-                                Taste: {rating > 5 ? 'Good' : 'Not Good'}
+                                Taste: 'Good'
                             </Text>
                             <Text style={styles.detailText[colorScheme]}>
                                 Reference: N/A
@@ -86,17 +78,17 @@ const MarkerInfo = () => {
                                 Verified: 2/26/2023
                             </Text>
                             <Text style={styles.detailText[colorScheme]}>
-                                Notes: {notes}
+                                Notes: N/A
                             </Text>
                         </View>
                     </View>
-                    <Button
-                        style={styles.button}
-                        mode="contained"
-                        onPress={editMarkerInfo}
-                    >
-                        {isLoggedIn ? 'edit source' : 'login to edit'}
-                    </Button>
+                    {loggedIn && (
+                        <View style={{ marginTop: SPACING_DEFAULT }}>
+                            <Button onPress={editMarkerInfo}>
+                                edit source
+                            </Button>
+                        </View>
+                    )}
                 </View>
             </InfoTileLayout>
         </BottomSheetView>

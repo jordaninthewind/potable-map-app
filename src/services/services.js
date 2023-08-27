@@ -155,20 +155,24 @@ export const updateMarkerRemote =
         }
     };
 
-export const addPictureToMarker = (markerId) => async (dispatch) => {
-    try {
-        dispatch(setLoading(true));
+export const addPictureToMarker =
+    ({ markerId }) =>
+    async (dispatch, getState) => {
+        try {
+            dispatch(setLoading(true));
 
-        const docToModify = doc(db, MARKER_DATABASE, markerId);
-        await updateDoc(docToModify, { imageUrl: true });
+            const markerName = getState().markers.selectedMarker.name;
 
-        dispatch(setError({ message: `Updated marker ${markerId}` }));
-    } catch ({ message }) {
-        dispatch(setError({ message }));
-    } finally {
-        dispatch(setLoading(false));
-    }
-};
+            const docToModify = doc(db, MARKER_DATABASE, markerId);
+            await updateDoc(docToModify, { imageUrl: true });
+
+            dispatch(setError({ message: `Updated ${markerName}` }));
+        } catch ({ message }) {
+            dispatch(setError({ message }));
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
 
 export const savePictureRemote =
     ({ image, markerId }) =>
@@ -176,12 +180,14 @@ export const savePictureRemote =
         dispatch(setLoading(true));
 
         try {
-            await uploadWaterSourcePhoto({
-                image,
-                markerId,
-            });
+            await dispatch(
+                uploadWaterSourcePhoto({
+                    image,
+                    markerId,
+                })
+            );
 
-            await dispatch(addPictureToMarker(markerId));
+            await dispatch(addPictureToMarker({ markerId }));
         } catch (error) {
             console.log(error);
         } finally {

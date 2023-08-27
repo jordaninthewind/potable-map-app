@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, Linking, StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, IconButton, Text } from 'react-native-paper';
+import { Button, IconButton, ProgressBar } from 'react-native-paper';
 import { Camera, CameraType } from 'expo-camera';
 
+import HeadlineText from '@components/common/HeadlineText';
 import { savePictureRemote } from '@services/services';
+import { selectUploadProgress } from '@state/appSlice';
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
 import {
@@ -16,23 +18,18 @@ import {
 const AddPicture = () => {
     const dispatch = useDispatch();
     const { id } = useSelector(selectSelectedMarker);
-
+    const progress = useSelector(selectUploadProgress);
+    const [status, requestPermission] = Camera.useCameraPermissions();
+    const devicePermission = status && status.status === 'granted';
     const [image, setImage] = useState(false);
-    const [devicePermission, setDevicePermission] = useState(true);
-
-    let camera;
 
     useEffect(() => {
-        const onStartCamera = async () => {
-            const { status } = await Camera.requestCameraPermissionsAsync();
+        if (!devicePermission) {
+            requestPermission();
+        }
+    }, [status]);
 
-            if (status !== 'granted') {
-                setDevicePermission(false);
-            }
-        };
-
-        onStartCamera();
-    }, []);
+    let camera;
 
     const onTakePicture = async () => {
         const photo = await camera.takePictureAsync();
@@ -44,10 +41,14 @@ const AddPicture = () => {
 
     const goBack = () => dispatch(setModal('editMarker'));
 
+    const goToSettings = () => {
+        Linking.openSettings();
+    };
+
     const savePicture = async () => {
         await dispatch(savePictureRemote({ image, markerId: id }));
 
-        clearPicture();
+        // clearPicture();
         goBack();
     };
 
@@ -70,7 +71,14 @@ const AddPicture = () => {
                         </Camera>
                     ) : (
                         <View style={styles.permissionDeniedContainer}>
-                            <Text>Camera permission denied</Text>
+                            <HeadlineText
+                                style={{ textAlign: 'center' }}
+                                copy="Enable camera permissions to add an image"
+                            >
+                                <Button mode="contained" onPress={goToSettings}>
+                                    Go to phone settings
+                                </Button>
+                            </HeadlineText>
                         </View>
                     )}
                     <View style={styles.buttonContainer}>
@@ -81,7 +89,13 @@ const AddPicture = () => {
                 </View>
             ) : (
                 <>
-                    <Image style={styles.imageContainer} source={image} />
+                    <View style={styles.imageContainer}>
+                        <Image style={styles.imageContainer} source={image} />
+                        <ProgressBar
+                            style={styles.progressBar}
+                            progress={progress}
+                        />
+                    </View>
                     <View style={styles.buttonContainer}>
                         <Button onPress={clearPicture} mode="outlined">
                             Retake
@@ -125,12 +139,9 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         width: '100%',
-        alignItems: 'center',
-        backgroundColor: 'white',
-        borderRadius: BASE_RADIUS,
         height: 500,
         justifyContent: 'space-between',
-        width: 350,
+        position: 'relative',
     },
     cameraContainer: {
         width: '100%',
@@ -138,17 +149,24 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: BASE_RADIUS,
         height: '100%',
-        maxHeight: 500,
         justifyContent: 'space-between',
+        maxHeight: 500,
         width: 350,
     },
     permissionDeniedContainer: {
         alignItems: 'center',
         backgroundColor: 'white',
         borderRadius: BASE_RADIUS,
+        padding: SPACING_DEFAULT,
         height: 450,
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
         width: 300,
+    },
+    progressBar: {
+        bottom: 0,
+        height: 5,
+        position: 'absolute',
+        width: '100%',
     },
 });
 
