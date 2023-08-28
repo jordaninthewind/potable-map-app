@@ -1,28 +1,31 @@
 import React from 'react';
 import { StyleSheet, View, useColorScheme } from 'react-native';
+import { BlurView } from 'expo-blur';
 
-import { SPACING_LARGE } from '@styles/styles';
+import { SPACING_SMALL } from '@styles/styles';
 
 const InfoTile = ({ style, children }) => {
     const colorScheme = useColorScheme();
 
     return (
-        <View
-            style={[
-                styles.infoContainer[colorScheme],
-                styles.columnElement,
-                style,
-            ]}
-        >
-            {children}
-        </View>
+        <BlurView intensity={10}>
+            <View
+                style={[
+                    styles.infoContainer[colorScheme],
+                    styles.columnElement,
+                    style,
+                ]}
+            >
+                {children}
+            </View>
+        </BlurView>
     );
 };
 
 const infoContainerBase = {
     borderRadius: 30,
+    padding: SPACING_SMALL,
     justifyContent: 'center',
-    padding: SPACING_LARGE,
     flexDirection: 'column',
     justifyContent: 'space-between',
 };
