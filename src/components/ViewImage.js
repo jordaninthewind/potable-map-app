@@ -6,7 +6,7 @@ import MarkerImage from '@components/common/MarkerImage';
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
 import {
-    BASE_RADIUS,
+    RADIUS_DEFAULT,
     ITEM_ROW_CONTAINER,
     SPACING_DEFAULT,
 } from '@styles/styles';
@@ -20,7 +20,7 @@ const ViewImage = () => {
 
     return (
         <View style={styles.container}>
-            <MarkerImage id={id} style={styles.imageContainer} />
+            <MarkerImage id={id} size="large" />
             <View style={styles.buttonContainer}>
                 <Button onPress={goBack} mode="contained">
                     Go back
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         backgroundColor: 'transparent',
-        borderRadius: BASE_RADIUS,
+        borderRadius: RADIUS_DEFAULT,
         height: '100%',
         justifyContent: 'center',
         margin: 'auto',
@@ -47,10 +47,9 @@ const styles = StyleSheet.create({
     imageContainer: {
         alignItems: 'center',
         backgroundColor: 'white',
-        borderRadius: BASE_RADIUS,
-        height: 500,
+        borderRadius: RADIUS_DEFAULT,
+
         justifyContent: 'space-between',
-        width: 350,
     },
 });
 

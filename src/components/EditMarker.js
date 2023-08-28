@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { createRef, useEffect, useState } from 'react';
 import {
     StyleSheet,
     Pressable,
@@ -16,10 +16,19 @@ import MarkerImage from '@components/common/MarkerImage';
 import { deleteMarkerRemote } from '@services/services';
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
-import { BASE_RADIUS, ITEM_ROW_CONTAINER, SPACING_SMALL } from '@styles/styles';
+import {
+    RADIUS_DEFAULT,
+    ITEM_ROW_CONTAINER,
+    SPACING_SMALL,
+} from '@styles/styles';
 
 const EditMarker = () => {
     const dispatch = useDispatch();
+
+    const nameRef = createRef(null);
+    const typeRef = createRef(null);
+    const ratingRef = createRef(null);
+
     const isAdmin = false;
     const marker = useSelector(selectSelectedMarker);
 
@@ -63,27 +72,26 @@ const EditMarker = () => {
                 >
                     <View style={styles.imageContainer}>
                         <Pressable onPress={openCameraView}>
-                            <MarkerImage
-                                style={styles.image}
-                                id={marker.id}
-                                editable
-                            />
+                            <MarkerImage id={marker.id} editable />
                         </Pressable>
                     </View>
                     <View style={styles.inputContainer}>
                         <KeyboardAvoidingTextInput
+                            ref={nameRef}
                             style={styles.input}
                             onChange={(e) => setName(e)}
                             placeholder="Location Name"
                             value={name || ''}
                         />
                         <KeyboardAvoidingTextInput
+                            ref={typeRef}
                             style={styles.input}
                             onChange={(e) => setType(e)}
                             placeholder="Type"
                             value={type || ''}
                         />
                         <KeyboardAvoidingTextInput
+                            ref={ratingRef}
                             style={styles.input}
                             onChange={(e) => setRating(e)}
                             placeholder="Rating"
@@ -91,21 +99,21 @@ const EditMarker = () => {
                         />
                     </View>
                 </View>
-                <View style={styles.buttonRow}>
-                    {isAdmin && (
-                        <Button
-                            mode="contained"
-                            buttonColor={COLOR_WARNING}
-                            onPress={deleteMarker}
-                        >
-                            Delete Marker
-                        </Button>
-                    )}
-                    <Button mode="contained" onPress={goBack}>
-                        Cancel
-                    </Button>
-                </View>
             </InfoTile>
+            <View style={styles.buttonRow}>
+                {isAdmin && (
+                    <Button
+                        mode="contained"
+                        buttonColor={COLOR_WARNING}
+                        onPress={deleteMarker}
+                    >
+                        Delete Marker
+                    </Button>
+                )}
+                <Button mode="contained" onPress={goBack}>
+                    Cancel
+                </Button>
+            </View>
         </KeyboardAvoidingView>
     );
 };
@@ -117,13 +125,13 @@ const styles = StyleSheet.create({
         marginTop: SPACING_SMALL,
     },
     image: {
-        borderRadius: BASE_RADIUS,
+        borderRadius: RADIUS_DEFAULT,
         height: 225,
         width: 125,
     },
     imageButton: {
         backgroundColor: 'transparent',
-        borderRadius: BASE_RADIUS,
+        borderRadius: RADIUS_DEFAULT,
         height: 200,
         position: 'absolute',
         width: 100,

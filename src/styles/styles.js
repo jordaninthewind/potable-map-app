@@ -20,7 +20,8 @@ export const ELEMENT_GROUP_SPACING = {
     marginVertical: 20,
 };
 
-export const BASE_RADIUS = 10;
+export const RADIUS_DEFAULT = 10;
+export const RADIUS_LARGE = 25;
 
 export const COLOR_WARNING = '#FFA500';
 

@@ -10,7 +10,7 @@ import { selectUploadProgress } from '@state/appSlice';
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
 import {
-    BASE_RADIUS,
+    RADIUS_DEFAULT,
     ITEM_ROW_CONTAINER,
     SPACING_DEFAULT,
 } from '@styles/styles';
@@ -59,6 +59,7 @@ const AddImage = () => {
                         <Camera
                             style={styles.cameraContainer}
                             focusDepth={0}
+                            quality={0.5}
                             ref={(ref) => (camera = ref)}
                             type={CameraType.back}
                         >
@@ -111,51 +112,49 @@ const AddImage = () => {
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
         alignItems: 'center',
-        height: '100%',
+        borderRadius: RADIUS_DEFAULT,
         backgroundColor: 'transparent',
-        borderRadius: BASE_RADIUS,
+        height: '100%',
         justifyContent: 'center',
         margin: 'auto',
+        width: '100%',
     },
     buttonContainer: {
         ...ITEM_ROW_CONTAINER,
         marginVertical: SPACING_DEFAULT,
     },
     cameraButton: {
-        position: 'absolute',
-        bottom: 0,
         alignSelf: 'center',
-        marginBottom: SPACING_DEFAULT,
-        width: 70,
-        height: 70,
-        borderRadius: 50,
         backgroundColor: '#fff',
+        borderRadius: 50,
+        bottom: 0,
+        height: 70,
+        marginBottom: SPACING_DEFAULT,
+        position: 'absolute',
+        width: 70,
     },
     image: {
-        borderRadius: BASE_RADIUS,
+        borderRadius: RADIUS_DEFAULT,
     },
     imageContainer: {
-        width: '100%',
         height: 500,
         justifyContent: 'space-between',
         position: 'relative',
+        width: '100%',
     },
     cameraContainer: {
-        width: '100%',
         alignItems: 'center',
         backgroundColor: 'white',
-        borderRadius: BASE_RADIUS,
-        height: '100%',
+        borderRadius: RADIUS_DEFAULT,
+        height: '85%',
         justifyContent: 'space-between',
-        maxHeight: 500,
         width: 350,
     },
     permissionDeniedContainer: {
         alignItems: 'center',
         backgroundColor: 'white',
-        borderRadius: BASE_RADIUS,
+        borderRadius: RADIUS_DEFAULT,
         padding: SPACING_DEFAULT,
         height: 450,
         justifyContent: 'space-evenly',

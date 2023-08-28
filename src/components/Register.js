@@ -1,10 +1,9 @@
 import { useRef, useState } from 'react';
-import { Keyboard, StyleSheet, View } from 'react-native';
-import { Button, Checkbox, TextInput } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Button, Checkbox } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { validateEmail } from '@state/errorHelpers';
-import { selectLoading, setLoading } from '@state/markersSlice';
+import { selectLoading } from '@state/markersSlice';
 import { clearModal, setModal } from '@state/modalSlice';
 import { signUp } from '@services/services';
 import { ITEM_ROW_CONTAINER } from '@styles/styles';
@@ -19,7 +18,6 @@ const Register = () => {
 
     const [passwordVisible, setPasswordVisible] = useState(true);
     const [email, setEmail] = useState('');
-    const [emailValid, setEmailValid] = useState(false);
     const [password, setPassword] = useState('');
     const [verifyPassword, setVerifyPassword] = useState('');
     const [agreed, setAgreed] = useState(false);
@@ -33,7 +31,7 @@ const Register = () => {
 
     return (
         <View>
-            <HeadlineText copy={'Sign Up'} />
+            <HeadlineText copy={'💧 Register an account'} />
             <View>
                 <KeyboardAvoidingTextInput
                     style={styles.input}

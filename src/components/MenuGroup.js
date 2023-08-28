@@ -8,6 +8,7 @@ import { setModal } from '@state/modalSlice';
 import { selectAuthState } from '@state/userSlice';
 import { getCurrentPosition } from '@services/services';
 import { SPACING_DEFAULT } from '@styles/styles';
+import { selectModal } from '../state/modalSlice';
 
 const MenuGroup = () => {
     const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const MenuGroup = () => {
     const deviceHasPermissions = useSelector(selectDeviceLocationPermissions);
     const isLoggedIn = useSelector(selectAuthState);
     const location = useSelector(selectLocation);
+    const modal = useSelector(selectModal);
 
     const iconColor = colorScheme === 'dark' ? '#fff' : '#000';
 
@@ -27,23 +29,27 @@ const MenuGroup = () => {
     };
 
     return (
-        <View style={styles.container}>
-            {isLoggedIn && (
-                <FAB
-                    icon="plus"
-                    onPress={addTempMarker}
-                    style={styles[colorScheme].fabStyle}
-                    color={iconColor}
-                />
+        <>
+            {!modal && (
+                <View style={styles.container}>
+                    {isLoggedIn && (
+                        <FAB
+                            icon="plus"
+                            onPress={addTempMarker}
+                            style={styles[colorScheme].fabStyle}
+                            color={iconColor}
+                        />
+                    )}
+                    <FAB
+                        icon={'crosshairs-gps'}
+                        onPress={updatePosition}
+                        disabled={!deviceHasPermissions}
+                        style={styles[colorScheme].fabStyle}
+                        color={iconColor}
+                    />
+                </View>
             )}
-            <FAB
-                icon={'crosshairs-gps'}
-                onPress={updatePosition}
-                disabled={!deviceHasPermissions}
-                style={styles[colorScheme].fabStyle}
-                color={iconColor}
-            />
-        </View>
+        </>
     );
 };
 

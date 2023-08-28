@@ -1,9 +1,9 @@
 export const shortenString = (value, length) => {
-    if (value.length > length) {
-        return value.substring(0, length) + '...';
+    if (value.length < length) {
+        return value;
     }
 
-    return value;
+    return value.substring(0, length) + '...';
 };
 
 export const getDistance = (startLocation, endLocation) => {

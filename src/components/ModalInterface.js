@@ -58,13 +58,13 @@ const ModalInterface = () => {
                 return {
                     component: <AddMarkerModal />,
                     index: 1,
-                    snapPoints: ['5%', '65%'],
+                    snapPoints: ['5%', '15%', '65%'],
                 };
             case 'AddImage':
                 return {
                     component: <AddImage />,
                     index: 1,
-                    snapPoints: ['5%', '85%'],
+                    snapPoints: ['5%', '90%'],
                 };
             case 'viewImage':
                 return {
