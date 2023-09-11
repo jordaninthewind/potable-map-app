@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Text } from 'react-native-paper';
 import { GeoPoint } from 'firebase/firestore';
 
-import KeyboardAvoidingTextInput from '@components/common/KeyboardAvoidingTextInput';
 import HeadlineText from '@components/common/HeadlineText';
+import InfoTile from '@components/common/InfoTile';
+import KeyboardAvoidingTextInput from '@components/common/KeyboardAvoidingTextInput';
 import {
     selectLoading,
     resetTempMarker,
@@ -21,15 +22,16 @@ import {
 } from '@styles/styles';
 import { selectUserEmail } from '@state/userSlice';
 
-const AddMarkerModal = () => {
+const AddMarkerInfoModal = () => {
     const dispatch = useDispatch();
 
-    const tempMarker = useSelector(selectTempMarker);
     const loading = useSelector(selectLoading);
+    const tempMarker = useSelector(selectTempMarker);
     const userEmail = useSelector(selectUserEmail);
+    const location = new GeoPoint(tempMarker?.latitude, tempMarker?.longitude);
 
-    const [name, setName] = useState('');
     const [description, setDescription] = useState('');
+    const [name, setName] = useState('');
     const [notes, setNotes] = useState('');
     const [rating, setRating] = useState('');
 
@@ -40,13 +42,13 @@ const AddMarkerModal = () => {
     }, []);
 
     const structureMarker = () => ({
-        name,
-        type: 'water fountain',
+        createdBy: userEmail,
         description,
+        location,
+        name,
         notes,
         rating,
-        createdBy: userEmail,
-        location: new GeoPoint(tempMarker?.latitude, tempMarker?.longitude),
+        type: 'water fountain',
     });
 
     const onSubmit = () => {
@@ -57,35 +59,36 @@ const AddMarkerModal = () => {
 
     return (
         <View>
-            <HeadlineText copy="Add a water source">
+            <InfoTile>
+                <HeadlineText>Add a water source</HeadlineText>
                 <Text>Long press on the marker to drag</Text>
-            </HeadlineText>
-            <View style={{ ...ELEMENT_GROUP_SPACING }}>
-                <KeyboardAvoidingTextInput
-                    style={styles.input}
-                    placeholder="Location Name"
-                    value={name}
-                    onChangeText={(text) => setName(text)}
-                />
-                <KeyboardAvoidingTextInput
-                    style={styles.input}
-                    placeholder="Description"
-                    value={description}
-                    onChangeText={(event) => setDescription(event)}
-                />
-                <KeyboardAvoidingTextInput
-                    style={styles.input}
-                    placeholder="Notes"
-                    value={notes}
-                    onChangeText={(event) => setNotes(event)}
-                />
-                <KeyboardAvoidingTextInput
-                    style={styles.input}
-                    placeholder="Rating"
-                    value={rating}
-                    onChangeText={(event) => setRating(event)}
-                />
-            </View>
+                <View style={{ ...ELEMENT_GROUP_SPACING }}>
+                    <KeyboardAvoidingTextInput
+                        style={styles.input}
+                        placeholder="Location Name"
+                        value={name}
+                        onChangeText={(text) => setName(text)}
+                    />
+                    <KeyboardAvoidingTextInput
+                        style={styles.input}
+                        placeholder="Description"
+                        value={description}
+                        onChangeText={(event) => setDescription(event)}
+                    />
+                    <KeyboardAvoidingTextInput
+                        style={styles.input}
+                        placeholder="Notes"
+                        value={notes}
+                        onChangeText={(event) => setNotes(event)}
+                    />
+                    <KeyboardAvoidingTextInput
+                        style={styles.input}
+                        placeholder="Rating"
+                        value={rating}
+                        onChangeText={(event) => setRating(event)}
+                    />
+                </View>
+            </InfoTile>
             <View style={styles.buttonContainer}>
                 <Button
                     mode="contained"
@@ -113,4 +116,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AddMarkerModal;
+export default AddMarkerInfoModal;
