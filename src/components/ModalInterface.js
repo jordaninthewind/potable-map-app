@@ -3,7 +3,8 @@ import { StyleSheet, useColorScheme } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import BottomSheet from '@gorhom/bottom-sheet';
 
-import AddMarkerModal from '@components/AddMarkerModal';
+import AddMarkerInfoModal from '@components/AddMarkerInfoModal';
+import AddMarkerLocationModal from '@components/AddMarkerLocationModal';
 import AddImage from '@components/AddImage';
 import EditMarker from '@components/EditMarker';
 import Login from '@components/Login';
@@ -52,13 +53,25 @@ const ModalInterface = () => {
                 return {
                     component: <MarkerInfo />,
                     index: 1,
-                    snapPoints: ['5%', '55%'],
+                    snapPoints: ['5%', '50%'],
                 };
             case 'addMarker':
                 return {
-                    component: <AddMarkerModal />,
+                    component: <AddMarkerLocationModal />,
                     index: 1,
-                    snapPoints: ['5%', '15%', '65%'],
+                    snapPoints: ['5%', '25%'],
+                };
+            case 'addMarkerInfo':
+                return {
+                    component: <AddMarkerInfoModal />,
+                    index: 1,
+                    snapPoints: ['5%', '65%'],
+                };
+            case 'addNewMarkerImage':
+                return {
+                    component: <AddImage origin="new" />,
+                    index: 1,
+                    snapPoints: ['5%', '90%'],
                 };
             case 'AddImage':
                 return {
@@ -78,6 +91,7 @@ const ModalInterface = () => {
                     index: 1,
                     snapPoints: ['5%', '55%'],
                 };
+
             default:
                 return { component: null, snapPoints: ['5%'] };
         }
