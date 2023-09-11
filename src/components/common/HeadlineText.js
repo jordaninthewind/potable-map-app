@@ -3,16 +3,13 @@ import { Text } from 'react-native-paper';
 
 import { DARK_FONT, LIGHT_FONT } from '@styles/styles';
 
-const HeadlineText = ({ copy, style, children }) => {
+const HeadlineText = ({ style, children }) => {
     const colorScheme = useColorScheme();
 
     return (
-        <View style={styles.container}>
-            <Text variant="headlineSmall" style={[styles[colorScheme], style]}>
-                {copy}
-            </Text>
+        <Text variant="headlineSmall" style={[styles[colorScheme], style]}>
             {children}
-        </View>
+        </Text>
     );
 };
 

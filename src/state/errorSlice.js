@@ -8,11 +8,9 @@ const errorSlice = createSlice({
     reducers: {
         setError(state, action) {
             state.message = action.payload.message;
-            // state.action = action.payload.action;
         },
         clearError(state) {
             state.message = null;
-            // state.action = null;
         },
     },
 });

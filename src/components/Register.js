@@ -31,7 +31,7 @@ const Register = () => {
 
     return (
         <View>
-            <HeadlineText copy={'💧 Register an account'} />
+            <HeadlineText>💧 Register an account</HeadlineText>
             <View>
                 <KeyboardAvoidingTextInput
                     style={styles.input}

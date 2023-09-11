@@ -29,7 +29,7 @@ const Login = () => {
 
     return (
         <View>
-            <HeadlineText copy={'💧 Potable'} />
+            <HeadlineText>💧 Potable</HeadlineText>
             <View style={styles.inputContainer}>
                 <KeyboardAvoidingTextInput
                     ref={emailInput}
