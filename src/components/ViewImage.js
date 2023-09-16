@@ -1,5 +1,5 @@
-import { StyleSheet, View } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Button, Portal } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 
 import MarkerImage from '@components/common/MarkerImage';
@@ -10,17 +10,32 @@ import {
     ITEM_ROW_CONTAINER,
     SPACING_DEFAULT,
 } from '@styles/styles';
+import { useState } from 'react';
 
 const ViewImage = () => {
     const dispatch = useDispatch();
 
+    const [fullSize, setFullSize] = useState(false);
+
     const { id } = useSelector(selectSelectedMarker);
+
+    const toggleFullScreen = () => setFullSize(!fullSize);
 
     const goBack = () => dispatch(setModal('markerInfo'));
 
     return (
         <View style={styles.container}>
-            <MarkerImage id={id} size="large" />
+            {fullSize ? (
+                <Portal>
+                    <Pressable onPress={toggleFullScreen}>
+                        <MarkerImage id={id} size="fullscreen" />
+                    </Pressable>
+                </Portal>
+            ) : (
+                <Pressable onPress={toggleFullScreen}>
+                    <MarkerImage id={id} size="large" />
+                </Pressable>
+            )}
             <View style={styles.buttonContainer}>
                 <Button onPress={goBack} mode="contained">
                     Go back
