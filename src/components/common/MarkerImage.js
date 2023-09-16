@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Raindrop from '@assets/raindrop.png';
 import { downloadImageUrl } from '@services/storageService';
-import { RADIUS_DEFAULT } from '@styles/styles';
-import { RADIUS_LARGE } from '../../styles/styles';
+import { RADIUS_LARGE } from '@styles/styles';
 
 const MarkerImage = ({ id, style, editable, size = 'small', ...props }) => {
     const [url, setUrl] = useState(null);
@@ -75,6 +74,11 @@ const styles = StyleSheet.create({
             height: 500,
             width: 350,
             borderRadius: 50,
+        },
+        fullscreen: {
+            height: '100%',
+            width: '100%',
+            borderRadius: 0,
         },
     },
     editOverlay: {

@@ -2,7 +2,7 @@ import {
     IMAGE_URL_BASE,
     IMAGE_URL_QUERY_LARGE,
     IMAGE_URL_QUERY_SMALL,
-} from '@app/constants';
+} from '@constants/constants';
 
 export const formatImageUrl = ({ id, size }) => {
     if (size === 'small') {

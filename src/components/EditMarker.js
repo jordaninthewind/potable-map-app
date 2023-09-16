@@ -8,13 +8,13 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'react-native-paper';
 
-import { COLOR_WARNING } from '@app/constants';
 import HeadlineText from '@components/common/HeadlineText';
 import InfoTile from '@components/common/InfoTile';
 import KeyboardAvoidingTextInput from '@components/common/KeyboardAvoidingTextInput';
 import MarkerImage from '@components/common/MarkerImage';
+import { COLOR_WARNING } from '@constants/constants';
 import { deleteMarkerRemote } from '@services/services';
-import { selectSelectedMarker } from '@state/markersSlice';
+import { selectTempMarker, selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
 import {
     RADIUS_DEFAULT,
@@ -30,7 +30,11 @@ const EditMarker = () => {
     const ratingRef = createRef(null);
 
     const isAdmin = false;
-    const marker = useSelector(selectSelectedMarker);
+
+    const selectedMarker = useSelector(selectSelectedMarker);
+    const tempMarker = useSelector(selectTempMarker);
+
+    const marker = selectedMarker || tempMarker;
 
     const [name, setName] = useState(marker?.name);
     const [type, setType] = useState(marker?.type);
@@ -62,7 +66,7 @@ const EditMarker = () => {
 
     return (
         <KeyboardAvoidingView>
-            <HeadlineText copy={'Edit Marker'} />
+            <HeadlineText>💧 Edit Marker</HeadlineText>
             <InfoTile>
                 <View
                     style={{

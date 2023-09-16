@@ -14,11 +14,16 @@ import {
     ITEM_ROW_CONTAINER,
     SPACING_DEFAULT,
 } from '@styles/styles';
+import { selectTempMarker } from '../state/markersSlice';
 
-const AddImage = () => {
+const AddImage = ({ origin }) => {
     const dispatch = useDispatch();
 
-    const { id } = useSelector(selectSelectedMarker);
+    const selectedMarker = useSelector(selectSelectedMarker);
+    const tempMarker = useSelector(selectTempMarker);
+
+    const id = selectedMarker?.id || tempMarker?.id;
+
     const progress = useSelector(selectUploadProgress);
     const [image, setImage] = useState(false);
 

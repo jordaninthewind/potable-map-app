@@ -17,7 +17,7 @@ import {
     updateDoc,
 } from 'firebase/firestore';
 
-import { MARKER_DATABASE } from '@app/constants.js';
+import { MARKER_DATABASE } from '@constants/constants.js';
 import { app, db } from '@app/firebaseConfig.js';
 import { uploadWaterSourcePhoto } from '@services/storageService';
 import { setDeviceLocationPermission } from '@state/appSlice';
