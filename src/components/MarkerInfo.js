@@ -4,8 +4,9 @@ import {
     View,
     useColorScheme,
     Linking,
+    Button,
 } from 'react-native';
-import { Button, Text } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { BottomSheetView } from '@gorhom/bottom-sheet';
 
@@ -16,40 +17,41 @@ import MarkerImage from '@components/common/MarkerImage';
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
 import { selectAuthState } from '@state/userSlice';
-import { DARK_FONT, LIGHT_FONT, SPACING_DEFAULT } from '@styles/styles';
-import { SPACING_LARGE } from '../styles/styles';
+import {
+    DARK_FONT,
+    LIGHT_FONT,
+    SPACING_DEFAULT,
+    SPACING_LARGE,
+} from '@styles/styles';
 
 const MarkerInfo = () => {
     const dispatch = useDispatch();
 
     const colorScheme = useColorScheme();
-    const loggedIn = useSelector(selectAuthState);
-
-    const { id, name, latitude, longitude } = useSelector(selectSelectedMarker);
-
-    const editMarker = () => {
-        if (!loggedIn) {
-            dispatch(setModal('login'));
-        } else {
-            dispatch(setModal('editMarker'));
-        }
-    };
+    const selectedMarker = useSelector(selectSelectedMarker);
 
     const viewImage = () => dispatch(setModal('viewImage'));
 
-    const goToPin = () => {
-        const url = `maps://?sll=${latitude},${longitude}&z=1`;
+    const openDetailedView = () => dispatch(setModal('markerDetails'));
 
-        Linking.openURL(url);
+    const goToPin = () => {
+        Linking.openURL(
+            `maps://?ll=${selectedMarker.latitude},${selectedMarker.longitude}&z=20`
+        );
     };
 
     return (
         <BottomSheetView style={styles.container}>
-            <HeadlineText copy={shortenString(name, 25)} />
+            <HeadlineText>
+                {shortenString(selectedMarker?.name, 25)}
+            </HeadlineText>
             <InfoTile>
                 <View style={styles.infoRow}>
                     <Pressable onPress={viewImage}>
-                        <MarkerImage id={id} style={styles.image} />
+                        <MarkerImage
+                            id={selectedMarker?.id}
+                            style={styles.image}
+                        />
                     </Pressable>
                     <View
                         style={
@@ -77,15 +79,11 @@ const MarkerInfo = () => {
                                 📝 Notes: N/A
                             </Text>
                         </View>
-                        {loggedIn && (
-                            <Button onPress={editMarker}>edit source</Button>
-                        )}
+                        <Button onPress={openDetailedView} title="Details" />
                     </View>
                 </View>
             </InfoTile>
-            <Button style={styles.button} onPress={goToPin}>
-                Get directions
-            </Button>
+            <Button style={styles.button} onPress={goToPin} title="Go to pin" />
         </BottomSheetView>
     );
 };

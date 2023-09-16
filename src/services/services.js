@@ -1,7 +1,7 @@
 import {
     getLastKnownPositionAsync,
     requestForegroundPermissionsAsync,
-    // watchPositionAsync,
+    watchPositionAsync,
 } from 'expo-location';
 import {
     getAuth,

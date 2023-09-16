@@ -1,17 +1,20 @@
 import React from 'react';
 import { StyleSheet, View, useColorScheme } from 'react-native';
 import { Marker } from 'react-native-maps';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { setSelectedMarker, setTempMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
+import { COLOR_MAGENTA } from '@constants/colors';
 
-export const PotableMarker = ({ marker, selectedId = null, type = null }) => {
+export const PotableMarker = ({ marker, selectedId, type = null }) => {
     const dispatch = useDispatch();
+
     const colorScheme = useColorScheme();
     const { latitude, longitude } = marker;
 
     const openMarkerInfo = () => {
+        console.log('openMarkerInfo', marker);
         if (type) return;
 
         dispatch(setSelectedMarker(marker));
@@ -24,39 +27,45 @@ export const PotableMarker = ({ marker, selectedId = null, type = null }) => {
         }
     };
 
+    const isSelectedMarker = selectedId === marker.id;
+
+    const getMarkerColor = () => {
+        if (type === 'temp') return 'white';
+
+        if (isSelectedMarker) return 'orange';
+
+        return COLOR_MAGENTA;
+    };
+
     return (
         <Marker
             identifier={marker.id}
             calloutVisible={true}
             coordinate={{ latitude, longitude }}
+            pinColor={getMarkerColor()}
             onPress={openMarkerInfo}
             draggable={type === 'temp'}
             onDragEnd={(e) => updateMarkerLocation(e.nativeEvent)}
-        >
-            <View
-                style={[
-                    styles[colorScheme]?.marker,
-                    selectedId === marker.id && styles[colorScheme].selected,
-                    type === 'temp' && styles[colorScheme].temp,
-                ]}
-            />
-        </Marker>
+        />
     );
 };
 
-const defaultMarkerBase = {
+const markerBase = {
     borderRadius: 100,
-    backgroundColor: 'transparent',
-    borderWidth: 10,
+    borderWidth: 5,
+    opacity: 0.75,
+};
+
+const defaultMarkerBase = {
+    ...markerBase,
     height: 10,
     width: 10,
 };
 
 const focusedMarkerBase = {
-    borderRadius: 100,
-    borderWidth: 10,
-    height: 100,
-    width: 100,
+    ...markerBase,
+    height: 50,
+    width: 50,
 };
 
 const styles = StyleSheet.create({
@@ -77,14 +86,15 @@ const styles = StyleSheet.create({
     light: {
         marker: {
             ...defaultMarkerBase,
-            borderColor: 'cyan',
+            borderColor: COLOR_MAGENTA,
         },
         temp: {
             ...focusedMarkerBase,
-            borderColor: 'rgba(0,0,0,.5)',
+            borderColor: 'white',
         },
         selected: {
             ...focusedMarkerBase,
+            backgroundColor: 'transparent',
             borderColor: 'white',
         },
     },

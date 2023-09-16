@@ -1,14 +1,13 @@
 import { StyleSheet, View, useColorScheme } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { FAB } from 'react-native-paper';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { getCurrentPosition } from '@services/services';
 import { selectDeviceLocationPermissions } from '@state/appSlice';
 import { selectLocation, setTempMarker } from '@state/markersSlice';
-import { setModal } from '@state/modalSlice';
+import { setModal, selectModal } from '@state/modalSlice';
 import { selectAuthState } from '@state/userSlice';
-import { getCurrentPosition } from '@services/services';
 import { SPACING_DEFAULT } from '@styles/styles';
-import { selectModal } from '../state/modalSlice';
 
 const MenuGroup = () => {
     const dispatch = useDispatch();
@@ -41,7 +40,7 @@ const MenuGroup = () => {
                         />
                     )}
                     <FAB
-                        icon={'crosshairs-gps'}
+                        icon="crosshairs-gps"
                         onPress={updatePosition}
                         disabled={!deviceHasPermissions}
                         style={styles[colorScheme].fabStyle}
@@ -57,7 +56,6 @@ const fabStyle = {
     borderRadius: 50,
     margin: 10,
     opacity: 0.75,
-    padding: 10,
 };
 
 const styles = StyleSheet.create({
