@@ -1,3 +1,6 @@
+export const SPEED_SLOW = 1000;
+export const SPEED_FAST = 500;
+
 export const DEFAULT_REGION = {
     latitude: 37.78825,
     longitude: -122.4324,
