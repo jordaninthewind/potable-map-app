@@ -3,7 +3,6 @@ import { StyleSheet, Vibration, useColorScheme } from 'react-native';
 import MapView from 'react-native-maps';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { centerMarkerInScreen } from '@app/helpers';
 import { PotableMarker } from '@components/PotableMarker';
 import {
     selectMarkers,
@@ -12,10 +11,10 @@ import {
     selectSelectedMarker,
     selectTempMarker,
     resetSelectedMarker,
-    resetTempMarker,
 } from '@state/markersSlice';
-import { clearModal, setModal } from '@state/modalSlice';
+import { setModal, selectModal } from '@state/modalSlice';
 import { getLocalMarkers } from '@services/services';
+import { animateToLocation } from '@utils/mapUtils';
 
 const PotableMap = () => {
     const mapRef = useRef(null);
@@ -24,43 +23,34 @@ const PotableMap = () => {
     const colorScheme = useColorScheme();
 
     const markers = useSelector(selectMarkers);
-    const location = useSelector(selectLocation);
+    const currentLocation = useSelector(selectLocation);
     const selectedMarker = useSelector(selectSelectedMarker);
     const tempMarker = useSelector(selectTempMarker);
+    const modal = useSelector(selectModal);
+
+    const getActiveMarker = () => {
+        if (selectedMarker) {
+            return selectedMarker;
+        }
+
+        if (tempMarker) {
+            return tempMarker;
+        }
+
+        return currentLocation;
+    };
+
+    const location = getActiveMarker();
 
     useEffect(() => {
-        if (selectedMarker) {
-            mapRef.current.animateToRegion(
-                {
-                    latitude: centerMarkerInScreen({
-                        latitude: selectedMarker.latitude,
-                        zoom: true,
-                    }),
-                    longitude: selectedMarker.longitude,
-                    latitudeDelta: 0.001,
-                    longitudeDelta: 0.001,
-                },
-                750
-            );
-        } else if (tempMarker) {
-            mapRef.current.animateToRegion(
-                {
-                    latitude: centerMarkerInScreen({
-                        latitude: tempMarker.latitude,
-                        zoom: false,
-                    }),
-                    longitude: tempMarker.longitude,
-                    // latitudeDelta: 0.001,
-                    // longitudeDelta: 0.001,
-                },
-                1000
-            );
-        } else {
-            mapRef.current.animateToRegion(location, 750);
-        }
-    }, [selectedMarker, tempMarker, location]);
+        animateToLocation({
+            location,
+            mapRef,
+            view: modal || 'default',
+        });
+    }, [location, modal, selectedMarker, tempMarker]);
 
-    const openAddMarkerScreen = ({ nativeEvent }) => {
+    const openAddMarkerScreen = (nativeEvent) => {
         Vibration.vibrate();
 
         dispatch(resetSelectedMarker());
@@ -76,20 +66,20 @@ const PotableMap = () => {
     //     console.log('updateMarkerLocation', nativeEvent);
     // };
 
-    const onMove = () => {
-        console.log('onMove');
+    const onMove = ({ nativeEvent }) => {
+        // Maybe set the location in state here?
+        console.log('onMove', nativeEvent);
     };
 
     const handleMapPress = async () => {
-        if (selectedMarker) {
-            await dispatch(clearModal());
-            dispatch(resetSelectedMarker());
-        }
-
-        if (tempMarker) {
-            await dispatch(clearModal());
-            dispatch(resetTempMarker());
-        }
+        // if (selectedMarker) {
+        //     await dispatch(clearModal());
+        //     dispatch(resetSelectedMarker());
+        // }
+        // if (tempMarker) {
+        //     await dispatch(clearModal());
+        //     dispatch(resetTempMarker());
+        // }
     };
 
     return (
