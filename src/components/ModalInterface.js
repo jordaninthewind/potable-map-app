@@ -3,11 +3,12 @@ import { StyleSheet, useColorScheme } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import BottomSheet from '@gorhom/bottom-sheet';
 
+import AddImage from '@components/AddImage';
 import AddMarkerInfoModal from '@components/AddMarkerInfoModal';
 import AddMarkerLocationModal from '@components/AddMarkerLocationModal';
-import AddImage from '@components/AddImage';
 import EditMarker from '@components/EditMarker';
 import Login from '@components/Login';
+import MarkerDetails from '@components/MarkerDetails';
 import MarkerInfo from '@components/MarkerInfo';
 import Register from '@components/Register';
 import ViewImage from '@components/ViewImage';
@@ -17,6 +18,7 @@ import { SPACING_DEFAULT } from '@styles/styles';
 
 const ModalInterface = () => {
     const dispatch = useDispatch();
+
     const bottomSheetRef = useRef(null);
     const modal = useSelector(selectModal);
     const colorScheme = useColorScheme();
@@ -53,7 +55,13 @@ const ModalInterface = () => {
                 return {
                     component: <MarkerInfo />,
                     index: 1,
-                    snapPoints: ['5%', '50%'],
+                    snapPoints: ['5%', '45%'],
+                };
+            case 'markerDetails':
+                return {
+                    component: <MarkerDetails />,
+                    index: 1,
+                    snapPoints: ['5%', '70%'],
                 };
             case 'addMarker':
                 return {
