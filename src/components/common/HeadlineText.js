@@ -7,9 +7,11 @@ const HeadlineText = ({ style, children }) => {
     const colorScheme = useColorScheme();
 
     return (
-        <Text variant="headlineSmall" style={[styles[colorScheme], style]}>
-            {children}
-        </Text>
+        <View style={styles.container}>
+            <Text variant="headlineSmall" style={[styles[colorScheme], style]}>
+                {children}
+            </Text>
+        </View>
     );
 };
 

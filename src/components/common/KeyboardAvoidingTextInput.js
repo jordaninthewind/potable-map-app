@@ -10,6 +10,8 @@ const KeyboardAvoidingTextInput = forwardRef(
         return (
             <BottomSheetTextInput
                 ref={ref}
+                autoCorrect={false}
+                spellCheck={false}
                 style={[styles.input[colorScheme], style]}
                 placeholderTextColor={
                     colorScheme === 'dark' ? 'lightgrey' : 'grey'

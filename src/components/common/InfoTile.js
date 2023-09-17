@@ -24,7 +24,7 @@ const InfoTile = ({ style, children }) => {
 
 const infoContainerBase = {
     borderRadius: 30,
-    padding: SPACING_SMALL,
+    padding: 16,
     justifyContent: 'center',
     flexDirection: 'column',
     justifyContent: 'space-between',
