@@ -3,7 +3,7 @@ import { FAB } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getCurrentPosition } from '@services/services';
-import { selectDeviceLocationPermissions } from '@state/appSlice';
+import { selectRightHanded, selectLocationPermission } from '@state/appSlice';
 import { selectLocation, setTempMarker } from '@state/markersSlice';
 import { setModal, selectModal } from '@state/modalSlice';
 import { selectAuthState } from '@state/userSlice';
@@ -13,10 +13,11 @@ const MenuGroup = () => {
     const dispatch = useDispatch();
 
     const colorScheme = useColorScheme();
-    const deviceHasPermissions = useSelector(selectDeviceLocationPermissions);
+    const deviceHasPermissions = useSelector(selectLocationPermission);
     const isLoggedIn = useSelector(selectAuthState);
     const location = useSelector(selectLocation);
     const modal = useSelector(selectModal);
+    const rightHanded = useSelector(selectRightHanded);
 
     const iconColor = colorScheme === 'dark' ? '#fff' : '#000';
 
@@ -30,7 +31,7 @@ const MenuGroup = () => {
     return (
         <>
             {!modal && (
-                <View style={styles.container}>
+                <View style={[styles.container, rightHanded && { right: 0 }]}>
                     {isLoggedIn && (
                         <FAB
                             icon="plus"
@@ -62,8 +63,7 @@ const styles = StyleSheet.create({
     container: {
         position: 'absolute',
         bottom: 0,
-        left: 0,
-        marginLeft: 10,
+        margin: 10,
         marginBottom: SPACING_DEFAULT,
     },
     light: {

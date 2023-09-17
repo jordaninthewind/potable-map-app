@@ -1,16 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    deviceLocationPermission: null,
+    locationPermission: null,
     uploadProgress: 0,
+    rightHanded: false,
+    devMode: false,
 };
 
 const appSlice = createSlice({
     name: 'app',
     initialState,
     reducers: {
-        setDeviceLocationPermission: (state, action) => {
-            state.deviceLocationPermission = action.payload;
+        setLocationPermission: (state, action) => {
+            state.locationPermission = action.payload;
         },
         setUploadProgress: (state, action) => {
             state.uploadProgress = action.payload;
@@ -18,20 +20,28 @@ const appSlice = createSlice({
         clearUploadProgress: (state) => {
             state.uploadProgress = 0;
         },
+        setDevMode: (state, action) => {
+            state.devMode = action.payload;
+        },
+        setRightHanded: (state, action) => {
+            state.rightHanded = action.payload;
+        },
     },
 });
 
 // Actions
 export const {
-    setDeviceLocationPermission,
+    setLocationPermission,
     setUploadProgress,
     clearUploadProgress,
+    setDevMode,
+    setRightHanded,
 } = appSlice.actions;
 
 // Selectors
-export const selectDeviceLocationPermissions = (state) =>
-    state.app.deviceLocationPermission;
-
+export const selectLocationPermission = (state) => state.app.locationPermission;
 export const selectUploadProgress = (state) => state.app.uploadProgress;
+export const selectDevMode = (state) => state.app.devMode;
+export const selectRightHanded = (state) => state.app.rightHanded;
 
 export default appSlice.reducer;
