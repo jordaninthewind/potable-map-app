@@ -29,6 +29,13 @@ const MarkerInfo = () => {
     const colorScheme = useColorScheme();
     const selectedMarker = useSelector(selectSelectedMarker);
 
+    const isNewerThanThreeMonths = () => {
+        const threeMonthsAgo = new Date();
+        threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+
+        return new Date(selectedMarker.createdAt) > threeMonthsAgo;
+    };
+
     const viewImage = () => dispatch(setModal('viewImage'));
 
     const openDetailedView = () => dispatch(setModal('markerDetails'));
@@ -62,7 +69,10 @@ const MarkerInfo = () => {
                         <View>
                             {/* Cumulative rating */}
                             <Text style={styles.detailText[colorScheme]}>
-                                ⭐️ 7.5 / 10
+                                ⭐️{' '}
+                                {selectedMarker?.rating
+                                    ? selectedMarker?.rating + ' / 5'
+                                    : 'No ratings yet'}
                             </Text>
                             {/* Value maps to enum of flavor descriptions */}
                             <Text style={styles.detailText[colorScheme]}>
@@ -74,8 +84,15 @@ const MarkerInfo = () => {
                             </Text>
                             {/* How recently anyone has rated the location */}
                             <Text style={styles.detailText[colorScheme]}>
-                                ✅ Verified
+                                ✅ {isNewerThanThreeMonths() && 'Verified'}
                             </Text>
+                            {/* User reported tags */}
+                            <Text style={styles.detailText[colorScheme]}>
+                                🏷️ {!selectedMarker.tags && 'No tags'}
+                            </Text>
+                            {selectedMarker.tags?.map((tag) => (
+                                <Text>{tag}</Text>
+                            ))}
                         </View>
                         <View>
                             <Button

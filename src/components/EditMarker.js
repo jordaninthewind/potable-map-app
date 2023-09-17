@@ -30,8 +30,6 @@ const EditMarker = () => {
     const typeRef = createRef(null);
     const ratingRef = createRef(null);
 
-    const isAdmin = false;
-
     const selectedMarker = useSelector(selectSelectedMarker);
     const tempMarker = useSelector(selectTempMarker);
 
@@ -49,6 +47,17 @@ const EditMarker = () => {
         await dispatch(
             updateMarkerRemote({ markerId: marker.id, updatedMarker })
         );
+    };
+
+    const addMarker = () => {
+        const newMarker = {
+            ...marker,
+            name,
+            type,
+            rating,
+        };
+
+        dispatch(addMarkerRemote(newMarker));
     };
 
     useEffect(() => {
@@ -79,7 +88,9 @@ const EditMarker = () => {
 
     return (
         <KeyboardAvoidingView>
-            <HeadlineText>Edit Marker</HeadlineText>
+            <HeadlineText>
+                {selectedMarker ? 'Update' : 'Add'} location details
+            </HeadlineText>
             <InfoTile>
                 <View style={{ flexDirection: 'row' }}>
                     <View style={styles.imageContainer}>
@@ -96,7 +107,7 @@ const EditMarker = () => {
                             ref={nameRef}
                             style={styles.input}
                             onChange={(e) => setName(e)}
-                            placeholder="Location Name"
+                            placeholder="Name"
                             value={name || ''}
                         />
                         <KeyboardAvoidingTextInput
@@ -117,13 +128,20 @@ const EditMarker = () => {
                 </View>
             </InfoTile>
             <View style={styles.buttonRow}>
-                <Button
-                    mode="contained"
-                    buttonColor={COLOR_WARNING}
-                    onPress={deleteMarker}
-                >
-                    Delete Marker
-                </Button>
+                {tempMarker && (
+                    <Button mode="contained" onPress={addMarker}>
+                        Add Marker
+                    </Button>
+                )}
+                {selectedMarker && (
+                    <Button
+                        mode="contained"
+                        buttonColor={COLOR_WARNING}
+                        onPress={deleteMarker}
+                    >
+                        Delete Marker
+                    </Button>
+                )}
                 <Button mode="contained" onPress={goBack}>
                     Cancel
                 </Button>
