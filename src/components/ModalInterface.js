@@ -55,13 +55,13 @@ const ModalInterface = () => {
                 return {
                     component: <MarkerInfo />,
                     index: 1,
-                    snapPoints: ['5%', '45%'],
+                    snapPoints: ['5%', '60%'],
                 };
             case 'markerDetails':
                 return {
                     component: <MarkerDetails />,
                     index: 1,
-                    snapPoints: ['5%', '70%'],
+                    snapPoints: ['5%', '65%'],
                 };
             case 'addMarker':
                 return {
@@ -97,7 +97,7 @@ const ModalInterface = () => {
                 return {
                     component: <EditMarker />,
                     index: 1,
-                    snapPoints: ['5%', '55%'],
+                    snapPoints: ['5%', '60%'],
                 };
 
             default:

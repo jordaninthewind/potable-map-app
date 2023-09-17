@@ -20,7 +20,7 @@ import {
 import { MARKER_DATABASE } from '@constants/constants.js';
 import { app, db } from '@app/firebaseConfig.js';
 import { uploadWaterSourcePhoto } from '@services/storageService';
-import { setDeviceLocationPermission } from '@state/appSlice';
+import { setLocationPermission } from '@state/appSlice';
 import { setError } from '@state/errorSlice';
 import {
     setLoading,
@@ -41,7 +41,7 @@ export const requestLocationPermission = () => async (dispatch) => {
 
         const hasPermissions = status === 'granted';
 
-        dispatch(setDeviceLocationPermission(hasPermissions));
+        dispatch(setLocationPermission(hasPermissions));
     } catch ({ message }) {
         dispatch(setError({ message }));
     } finally {

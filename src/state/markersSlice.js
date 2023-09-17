@@ -36,9 +36,6 @@ const markersSlice = createSlice({
         setTempMarker(state, action) {
             state.tempMarker = action.payload;
         },
-        resetTempMarker(state) {
-            state.tempMarker = null;
-        },
         setLoading(state, action) {
             state.loading = action.payload;
         },
@@ -55,7 +52,6 @@ export const {
     setLoading,
     setSelectedMarker,
     setTempMarker,
-    resetTempMarker,
 } = markersSlice.actions;
 
 // Selectors

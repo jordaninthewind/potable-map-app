@@ -29,6 +29,15 @@ const getZoomInfo = (view) => {
                 changeInLatitude: -0.0025,
                 speed: SPEED_FAST,
             };
+        case 'addMarker':
+            return {
+                zoom: {
+                    latitudeDelta: 0.005,
+                    longitudeDelta: 0.005,
+                },
+                changeInLatitude: -0.001,
+                speed: SPEED_FAST,
+            };
         default:
             return {
                 zoom: {
@@ -44,10 +53,13 @@ const getZoomInfo = (view) => {
 export const animateToLocation = ({ mapRef, location, view }) => {
     const viewValues = getZoomInfo(view);
 
+    const latitude = location.latitude + viewValues.changeInLatitude;
+    const longitude = location.longitude;
+
     mapRef.current.animateToRegion(
         {
-            latitude: location.latitude + viewValues.changeInLatitude,
-            longitude: location.longitude,
+            latitude,
+            longitude,
             ...viewValues.zoom,
         },
         viewValues.speed
