@@ -9,7 +9,7 @@ import InfoTile from '@components/common/InfoTile';
 import KeyboardAvoidingTextInput from '@components/common/KeyboardAvoidingTextInput';
 import {
     selectLoading,
-    resetTempMarker,
+    setTempMarker,
     selectTempMarker,
 } from '@state/markersSlice';
 import { clearModal } from '@state/modalSlice';
@@ -37,7 +37,7 @@ const AddMarkerInfoModal = () => {
 
     useEffect(() => {
         return () => {
-            dispatch(resetTempMarker());
+            dispatch(setTempMarker(null));
         };
     }, []);
 

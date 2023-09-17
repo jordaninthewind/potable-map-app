@@ -26,7 +26,7 @@ const PotableMap = () => {
     const currentLocation = useSelector(selectLocation);
     const selectedMarker = useSelector(selectSelectedMarker);
     const tempMarker = useSelector(selectTempMarker);
-    const modal = useSelector(selectModal);
+    const view = useSelector(selectModal);
 
     const getActiveMarker = () => {
         if (selectedMarker) {
@@ -46,9 +46,9 @@ const PotableMap = () => {
         animateToLocation({
             location,
             mapRef,
-            view: modal || 'default',
+            view,
         });
-    }, [location, modal, selectedMarker, tempMarker]);
+    }, [location, view, selectedMarker, tempMarker]);
 
     const openAddMarkerScreen = (nativeEvent) => {
         Vibration.vibrate();
@@ -78,7 +78,7 @@ const PotableMap = () => {
         // }
         // if (tempMarker) {
         //     await dispatch(clearModal());
-        //     dispatch(resetTempMarker());
+        //     dispatch(setTempMarker());
         // }
     };
 
@@ -94,15 +94,16 @@ const PotableMap = () => {
             style={styles.map}
             onPress={handleMapPress}
         >
-            {markers?.map((marker, index) => {
-                return (
-                    <PotableMarker
-                        key={index}
-                        marker={marker}
-                        selectedId={selectedMarker?.id}
-                    />
-                );
-            })}
+            {!tempMarker &&
+                markers?.map((marker, index) => {
+                    return (
+                        <PotableMarker
+                            key={index}
+                            marker={marker}
+                            selectedId={selectedMarker?.id}
+                        />
+                    );
+                })}
             {tempMarker && <PotableMarker marker={tempMarker} type={'temp'} />}
         </MapView>
     );

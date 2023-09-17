@@ -16,7 +16,6 @@ import InfoTile from '@components/common/InfoTile';
 import MarkerImage from '@components/common/MarkerImage';
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
-import { selectAuthState } from '@state/userSlice';
 import {
     DARK_FONT,
     LIGHT_FONT,
@@ -50,40 +49,50 @@ const MarkerInfo = () => {
                     <Pressable onPress={viewImage}>
                         <MarkerImage
                             id={selectedMarker?.id}
+                            size="small"
                             style={styles.image}
                         />
                     </Pressable>
                     <View
                         style={
-                            (styles.columnElement,
-                            { marginLeft: SPACING_LARGE })
+                            (styles.rightContainer,
+                            { marginRight: SPACING_LARGE })
                         }
                     >
-                        <View style={styles.columnElement}>
+                        <View>
+                            {/* Cumulative rating */}
                             <Text style={styles.detailText[colorScheme]}>
                                 ⭐️ 7.5 / 10
                             </Text>
+                            {/* Value maps to enum of flavor descriptions */}
                             <Text style={styles.detailText[colorScheme]}>
                                 💧 Delicious
                             </Text>
-                            <Text style={styles.detailText[colorScheme]}>
-                                🧑‍💻 Link
-                            </Text>
+                            {/* Last known position calculation against lat/long */}
                             <Text style={styles.detailText[colorScheme]}>
                                 📍 Distance
                             </Text>
+                            {/* How recently anyone has rated the location */}
                             <Text style={styles.detailText[colorScheme]}>
-                                ✅ Verified: 2/26/2023
-                            </Text>
-                            <Text style={styles.detailText[colorScheme]}>
-                                📝 Notes: N/A
+                                ✅ Verified
                             </Text>
                         </View>
-                        <Button onPress={openDetailedView} title="Details" />
+                        <View>
+                            <Button
+                                onPress={openDetailedView}
+                                title="Details"
+                            />
+                        </View>
                     </View>
                 </View>
             </InfoTile>
-            <Button style={styles.button} onPress={goToPin} title="Go to pin" />
+            <View>
+                <Button
+                    style={styles.button}
+                    onPress={goToPin}
+                    title="Get directions"
+                />
+            </View>
         </BottomSheetView>
     );
 };
@@ -95,10 +104,15 @@ const detailTextBase = {
 
 const styles = StyleSheet.create({
     button: {
-        marginTop: SPACING_DEFAULT,
+        padding: SPACING_DEFAULT * 2,
     },
     buttonContainer: {
         flexDirection: 'row',
+        justifyContent: 'space-evenly',
+    },
+    rightContainer: {
+        flex: 1,
+        flexDirection: 'column',
         justifyContent: 'space-evenly',
     },
     container: {
@@ -122,9 +136,6 @@ const styles = StyleSheet.create({
             ...detailTextBase,
             color: DARK_FONT,
         },
-    },
-    columnElement: {
-        flex: 1,
     },
 });
 
