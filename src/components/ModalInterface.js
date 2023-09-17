@@ -13,7 +13,7 @@ import MarkerInfo from '@components/MarkerInfo';
 import Register from '@components/Register';
 import ViewImage from '@components/ViewImage';
 import { resetMapState } from '@services/services';
-import { clearModal, selectModal } from '@state/modalSlice';
+import { selectModal } from '@state/modalSlice';
 import { SPACING_DEFAULT } from '@styles/styles';
 
 const ModalInterface = () => {
@@ -33,7 +33,6 @@ const ModalInterface = () => {
             await bottomSheetRef.current?.close();
 
             dispatch(resetMapState());
-            dispatch(clearModal());
         }
     };
 
@@ -63,7 +62,7 @@ const ModalInterface = () => {
                     index: 1,
                     snapPoints: ['5%', '65%'],
                 };
-            case 'addMarker':
+            case 'addMarkerLocation':
                 return {
                     component: <AddMarkerLocationModal />,
                     index: 1,

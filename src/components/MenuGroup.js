@@ -25,7 +25,7 @@ const MenuGroup = () => {
 
     const addTempMarker = async () => {
         dispatch(setTempMarker(location));
-        dispatch(setModal('addMarker'));
+        dispatch(setModal('addMarkerLocation'));
     };
 
     return (

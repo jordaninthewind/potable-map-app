@@ -26,8 +26,8 @@ import {
     setLoading,
     setLocation,
     setMarkers,
-    setSelectedMarker,
-    setTempMarker,
+    resetSelectedMarker,
+    resetTempMarker,
 } from '@state/markersSlice';
 import { clearModal } from '@state/modalSlice';
 import { setUser, clearUser } from '@state/userSlice';
@@ -53,14 +53,7 @@ export const getCurrentPosition = () => async (dispatch) => {
     try {
         const { coords } = await getLastKnownPositionAsync();
 
-        dispatch(
-            setLocation({
-                latitude: coords.latitude,
-                longitude: coords.longitude,
-                latitudeDelta: 0.1,
-                longitudeDelta: 0.1,
-            })
-        );
+        dispatch(setLocation(coords));
     } catch ({ message }) {
         dispatch(setError({ message }));
     }
@@ -73,16 +66,16 @@ export const getLocalMarkers = () => async (dispatch) => {
     try {
         const querySnapshot = await getDocs(collection(db, MARKER_DATABASE));
         const markers = querySnapshot.docs.map((doc) => {
-            const { name, description, imageUrl, location, createdAt } =
-                doc.data();
+            const { name, rating, tags, location, createdAt } = doc.data();
+            const { latitude, longitude } = location;
 
             return {
                 id: doc.id,
                 name,
-                description,
-                imageUrl,
-                latitude: location.latitude,
-                longitude: location.longitude,
+                rating,
+                tags,
+                latitude,
+                longitude,
                 createdAt: createdAt.toDate().toString(),
             };
         });
@@ -96,16 +89,17 @@ export const getLocalMarkers = () => async (dispatch) => {
 };
 
 export const addMarkerRemote =
-    ({ name, description, imageUrl = false, location }) =>
-    async (dispatch, getState) => {
+    ({ name, location, rating, tags, createdBy }) =>
+    async (dispatch) => {
         try {
             dispatch(setLoading(true));
 
             const pinObject = {
                 name,
-                description,
-                imageUrl,
+                rating,
+                tags,
                 location,
+                createdBy,
                 createdAt: new Date(),
             };
 
@@ -179,8 +173,8 @@ export const saveImageRemote =
 // Map Services
 export const resetMapState = () => async (dispatch) => {
     dispatch(clearModal());
-    dispatch(setTempMarker(null));
-    dispatch(setSelectedMarker(null));
+    dispatch(resetSelectedMarker());
+    dispatch(resetTempMarker());
 };
 
 // App Services

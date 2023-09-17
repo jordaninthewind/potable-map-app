@@ -2,8 +2,6 @@ import React from 'react';
 import { StyleSheet, View, useColorScheme } from 'react-native';
 import { BlurView } from 'expo-blur';
 
-import { SPACING_SMALL } from '@styles/styles';
-
 const InfoTile = ({ style, children }) => {
     const colorScheme = useColorScheme();
 
@@ -24,7 +22,7 @@ const InfoTile = ({ style, children }) => {
 
 const infoContainerBase = {
     borderRadius: 30,
-    padding: 16,
+    padding: 8,
     justifyContent: 'center',
     flexDirection: 'column',
     justifyContent: 'space-between',

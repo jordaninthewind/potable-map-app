@@ -29,13 +29,22 @@ const getZoomInfo = (view) => {
                 changeInLatitude: -0.0025,
                 speed: SPEED_FAST,
             };
-        case 'addMarker':
+        case 'addMarkerLocation':
             return {
                 zoom: {
                     latitudeDelta: 0.005,
                     longitudeDelta: 0.005,
                 },
                 changeInLatitude: -0.001,
+                speed: SPEED_FAST,
+            };
+        case 'addMarkerInfo':
+            return {
+                zoom: {
+                    latitudeDelta: 0.005,
+                    longitudeDelta: 0.005,
+                },
+                changeInLatitude: -0.0025,
                 speed: SPEED_FAST,
             };
         default:
