@@ -11,7 +11,7 @@ import {
 } from '@styles/styles';
 import { setModal } from '@state/modalSlice';
 
-const AddMarkerLocationModal = () => {
+const AddMarkerLocation = () => {
     const dispatch = useDispatch();
 
     const loading = useSelector(selectLoading);
@@ -44,4 +44,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AddMarkerLocationModal;
+export default AddMarkerLocation;

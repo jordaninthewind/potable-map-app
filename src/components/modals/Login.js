@@ -7,7 +7,7 @@ import { selectLoading } from '@state/markersSlice';
 import { clearModal, setModal } from '@state/modalSlice';
 import { signIn } from '@services/services';
 import { ITEM_ROW_CONTAINER } from '@styles/styles';
-import HeadlineText from './common/HeadlineText';
+import HeadlineText from '../common/HeadlineText';
 import KeyboardAvoidingTextInput from '@components/common/KeyboardAvoidingTextInput';
 
 const Login = () => {

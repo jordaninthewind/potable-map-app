@@ -7,16 +7,15 @@ import { Camera, CameraType } from 'expo-camera';
 import HeadlineText from '@components/common/HeadlineText';
 import { saveImageRemote } from '@services/services';
 import { selectUploadProgress } from '@state/appSlice';
-import { selectSelectedMarker } from '@state/markersSlice';
+import { selectTempMarker, selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
 import {
     RADIUS_DEFAULT,
     ITEM_ROW_CONTAINER,
     SPACING_DEFAULT,
 } from '@styles/styles';
-import { selectTempMarker } from '../state/markersSlice';
 
-const AddImage = ({ origin }) => {
+const AddImage = () => {
     const dispatch = useDispatch();
 
     const selectedMarker = useSelector(selectSelectedMarker);

@@ -24,7 +24,7 @@ import {
     SPACING_DEFAULT,
 } from '@styles/styles';
 
-const AddMarkerInfoModal = () => {
+const AddMarkerInfo = () => {
     const dispatch = useDispatch();
 
     const loading = useSelector(selectLoading);
@@ -116,4 +116,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AddMarkerInfoModal;
+export default AddMarkerInfo;

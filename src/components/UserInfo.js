@@ -6,7 +6,6 @@ import { setModal } from '@state/modalSlice';
 import { selectAuthState } from '@state/userSlice';
 import { ITEM_ROW_CONTAINER } from '@styles/styles';
 
-// TODO: Split login and user info into two separate components
 const UserInfo = () => {
     const dispatch = useDispatch();
     const isLoggedIn = useSelector(selectAuthState);

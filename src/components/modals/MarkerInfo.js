@@ -16,12 +16,7 @@ import InfoTile from '@components/common/InfoTile';
 import MarkerImage from '@components/common/MarkerImage';
 import { selectSelectedMarker } from '@state/markersSlice';
 import { setModal } from '@state/modalSlice';
-import {
-    DARK_FONT,
-    LIGHT_FONT,
-    SPACING_DEFAULT,
-    SPACING_LARGE,
-} from '@styles/styles';
+import { DARK_FONT, LIGHT_FONT, SPACING_DEFAULT } from '@styles/styles';
 
 const MarkerInfo = () => {
     const dispatch = useDispatch();
@@ -60,12 +55,7 @@ const MarkerInfo = () => {
                             style={styles.image}
                         />
                     </Pressable>
-                    <View
-                        style={
-                            (styles.rightContainer,
-                            { marginRight: SPACING_LARGE })
-                        }
-                    >
+                    <View style={styles.rightContainer}>
                         <View>
                             {/* Cumulative rating */}
                             <Text style={styles.detailText[colorScheme]}>
@@ -131,6 +121,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'space-evenly',
+        marginLeft: 8,
     },
     container: {
         height: '100%',

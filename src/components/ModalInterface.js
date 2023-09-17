@@ -3,15 +3,15 @@ import { StyleSheet, useColorScheme } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import BottomSheet from '@gorhom/bottom-sheet';
 
-import AddImage from '@components/AddImage';
-import AddMarkerInfoModal from '@components/AddMarkerInfoModal';
-import AddMarkerLocationModal from '@components/AddMarkerLocationModal';
-import EditMarker from '@components/EditMarker';
-import Login from '@components/Login';
-import MarkerDetails from '@components/MarkerDetails';
-import MarkerInfo from '@components/MarkerInfo';
-import Register from '@components/Register';
-import ViewImage from '@components/ViewImage';
+import AddImage from '@components/modals/AddImage';
+import AddMarkerInfo from '@components/modals/AddMarkerInfo';
+import AddMarkerLocation from '@components/modals/AddMarkerLocation';
+import EditMarker from '@components/modals/EditMarker';
+import Login from '@components/modals/Login';
+import MarkerDetails from '@components/modals/MarkerDetails';
+import MarkerInfo from '@components/modals/MarkerInfo';
+import Register from '@components/modals/Register';
+import ViewImage from '@components/modals/ViewImage';
 import { resetMapState } from '@services/services';
 import { selectModal } from '@state/modalSlice';
 import { SPACING_DEFAULT } from '@styles/styles';
@@ -64,13 +64,13 @@ const ModalInterface = () => {
                 };
             case 'addMarkerLocation':
                 return {
-                    component: <AddMarkerLocationModal />,
+                    component: <AddMarkerLocation />,
                     index: 1,
                     snapPoints: ['5%', '25%'],
                 };
             case 'addMarkerInfo':
                 return {
-                    component: <AddMarkerInfoModal />,
+                    component: <AddMarkerInfo />,
                     index: 1,
                     snapPoints: ['5%', '65%'],
                 };

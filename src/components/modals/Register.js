@@ -7,8 +7,8 @@ import { selectLoading } from '@state/markersSlice';
 import { clearModal, setModal } from '@state/modalSlice';
 import { signUp } from '@services/services';
 import { ITEM_ROW_CONTAINER } from '@styles/styles';
-import KeyboardAvoidingTextInput from './common/KeyboardAvoidingTextInput';
-import HeadlineText from './common/HeadlineText';
+import KeyboardAvoidingTextInput from '../common/KeyboardAvoidingTextInput';
+import HeadlineText from '../common/HeadlineText';
 import { SPACING_SMALL } from '@styles/styles';
 
 const Register = () => {
