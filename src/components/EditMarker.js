@@ -4,6 +4,7 @@ import {
     Pressable,
     View,
     KeyboardAvoidingView,
+    Alert,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'react-native-paper';
@@ -62,21 +63,32 @@ const EditMarker = () => {
         dispatch(setModal('AddImage'));
     };
 
-    const deleteMarker = () => dispatch(deleteMarkerRemote(marker.id));
+    const deleteMarker = () => {
+        Alert.alert(`Are you sure you want to delete ${marker?.name}?`, '', [
+            {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+            },
+            {
+                text: 'Delete',
+                onPress: () => dispatch(deleteMarkerRemote(marker.id)),
+            },
+        ]);
+    };
 
     return (
         <KeyboardAvoidingView>
-            <HeadlineText>💧 Edit Marker</HeadlineText>
+            <HeadlineText>Edit Marker</HeadlineText>
             <InfoTile>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        // justifyContent: 'space-evenly',
-                    }}
-                >
+                <View style={{ flexDirection: 'row' }}>
                     <View style={styles.imageContainer}>
                         <Pressable onPress={openCameraView}>
-                            <MarkerImage id={marker.id} editable />
+                            <MarkerImage
+                                id={marker.id}
+                                editable
+                                size="xSmall"
+                            />
                         </Pressable>
                     </View>
                     <View style={styles.inputContainer}>
@@ -105,15 +117,13 @@ const EditMarker = () => {
                 </View>
             </InfoTile>
             <View style={styles.buttonRow}>
-                {isAdmin && (
-                    <Button
-                        mode="contained"
-                        buttonColor={COLOR_WARNING}
-                        onPress={deleteMarker}
-                    >
-                        Delete Marker
-                    </Button>
-                )}
+                <Button
+                    mode="contained"
+                    buttonColor={COLOR_WARNING}
+                    onPress={deleteMarker}
+                >
+                    Delete Marker
+                </Button>
                 <Button mode="contained" onPress={goBack}>
                     Cancel
                 </Button>

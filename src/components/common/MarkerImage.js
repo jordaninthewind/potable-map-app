@@ -7,7 +7,7 @@ import Raindrop from '@assets/raindrop.png';
 import { downloadImageUrl } from '@services/storageService';
 import { RADIUS_LARGE } from '@styles/styles';
 
-const MarkerImage = ({ id, style, editable, size = 'small', ...props }) => {
+const MarkerImage = ({ id, style, editable, size, ...props }) => {
     const [url, setUrl] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -66,19 +66,24 @@ const styles = StyleSheet.create({
     },
     image: {
         small: {
-            height: 225,
-            width: 125,
             borderRadius: RADIUS_LARGE,
+            height: 300,
+            width: 200,
         },
         large: {
+            borderRadius: 50,
             height: 500,
             width: 350,
-            borderRadius: 50,
+        },
+        xSmall: {
+            borderRadius: RADIUS_LARGE,
+            height: 200,
+            width: 100,
         },
         fullscreen: {
+            borderRadius: 0,
             height: '100%',
             width: '100%',
-            borderRadius: 0,
         },
     },
     editOverlay: {
