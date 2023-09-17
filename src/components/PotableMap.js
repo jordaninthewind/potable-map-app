@@ -28,19 +28,7 @@ const PotableMap = () => {
     const tempMarker = useSelector(selectTempMarker);
     const view = useSelector(selectModal);
 
-    const getActiveMarker = () => {
-        if (selectedMarker) {
-            return selectedMarker;
-        }
-
-        if (tempMarker) {
-            return tempMarker;
-        }
-
-        return currentLocation;
-    };
-
-    const location = getActiveMarker();
+    const location = selectedMarker || tempMarker || currentLocation;
 
     useEffect(() => {
         animateToLocation({
@@ -48,14 +36,14 @@ const PotableMap = () => {
             mapRef,
             view,
         });
-    }, [location, view, selectedMarker, tempMarker]);
+    }, [location, view, selectedMarker, tempMarker, currentLocation]);
 
-    const openAddMarkerScreen = (nativeEvent) => {
+    const openAddMarkerScreen = ({ coordinate }) => {
         Vibration.vibrate();
 
         dispatch(resetSelectedMarker());
-        dispatch(setTempMarker(nativeEvent.coordinate));
-        dispatch(setModal('addMarker'));
+        dispatch(setTempMarker(coordinate));
+        dispatch(setModal('addMarkerLocation'));
     };
 
     useEffect(() => {
@@ -85,7 +73,7 @@ const PotableMap = () => {
     return (
         <MapView
             ref={mapRef}
-            onLongPress={openAddMarkerScreen}
+            onLongPress={(e) => openAddMarkerScreen(e.nativeEvent)}
             onRegionChangeComplete={onMove}
             userInterfaceStyle={colorScheme}
             region={location}
@@ -112,7 +100,6 @@ const PotableMap = () => {
 const styles = StyleSheet.create({
     map: {
         height: '100%',
-        zIndex: -1,
     },
 });
 

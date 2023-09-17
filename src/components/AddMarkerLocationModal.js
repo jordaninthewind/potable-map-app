@@ -16,7 +16,7 @@ const AddMarkerLocationModal = () => {
 
     const loading = useSelector(selectLoading);
 
-    const onPress = () => dispatch(setModal('addNewMarkerImage'));
+    const onPress = () => dispatch(setModal('addMarkerInfo'));
 
     return (
         <View>

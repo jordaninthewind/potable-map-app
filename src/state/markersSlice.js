@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { DEFAULT_REGION } from '@constants/constants';
 
 const initialState = {
-    entities: [{ id: 1, lat: 0, lng: 0 }],
+    entities: [],
     selectedMarker: null,
     location: DEFAULT_REGION,
     loading: false,
@@ -21,35 +21,39 @@ const markersSlice = createSlice({
                 (marker) => marker.id !== action.payload
             );
         },
+        resetSelectedMarker(state) {
+            state.selectedMarker = null;
+        },
+        resetTempMarker(state) {
+            state.tempMarker = null;
+        },
+        setLoading(state, action) {
+            state.loading = action.payload;
+        },
+        setLocation(state, action) {
+            state.location = action.payload;
+        },
         setMarkers(state, action) {
             state.entities = action.payload;
         },
         setSelectedMarker(state, action) {
             state.selectedMarker = action.payload;
         },
-        resetSelectedMarker(state) {
-            state.selectedMarker = null;
-        },
-        setLocation(state, action) {
-            state.location = action.payload;
-        },
         setTempMarker(state, action) {
             state.tempMarker = action.payload;
-        },
-        setLoading(state, action) {
-            state.loading = action.payload;
         },
     },
 });
 
 // Actions
 export const {
-    setMarkers,
     addMarker,
     deleteMarker,
     resetSelectedMarker,
-    setLocation,
+    resetTempMarker,
     setLoading,
+    setLocation,
+    setMarkers,
     setSelectedMarker,
     setTempMarker,
 } = markersSlice.actions;

@@ -1,26 +1,28 @@
+import { GeoPoint } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { Button, Text } from 'react-native-paper';
-import { GeoPoint } from 'firebase/firestore';
+import { useDispatch, useSelector } from 'react-redux';
 
 import HeadlineText from '@components/common/HeadlineText';
 import InfoTile from '@components/common/InfoTile';
 import KeyboardAvoidingTextInput from '@components/common/KeyboardAvoidingTextInput';
+import StarRating from '@components/common/StarRating';
+import TagChips from '@components/common/TagChips';
+import { addMarkerRemote, getLocalMarkers } from '@services/services';
 import {
+    resetTempMarker,
     selectLoading,
-    setTempMarker,
     selectTempMarker,
 } from '@state/markersSlice';
 import { clearModal } from '@state/modalSlice';
-import { addMarkerRemote, getLocalMarkers } from '@services/services';
+import { selectUserEmail } from '@state/userSlice';
 import {
     BASE_BUTTON,
     ELEMENT_GROUP_SPACING,
     ITEM_ROW_CONTAINER,
     SPACING_DEFAULT,
 } from '@styles/styles';
-import { selectUserEmail } from '@state/userSlice';
 
 const AddMarkerInfoModal = () => {
     const dispatch = useDispatch();
@@ -30,25 +32,22 @@ const AddMarkerInfoModal = () => {
     const userEmail = useSelector(selectUserEmail);
     const location = new GeoPoint(tempMarker?.latitude, tempMarker?.longitude);
 
-    const [description, setDescription] = useState('');
     const [name, setName] = useState('');
-    const [notes, setNotes] = useState('');
-    const [rating, setRating] = useState('');
+    const [tags, setTags] = useState([]);
+    const [rating, setRating] = useState(null);
 
     useEffect(() => {
         return () => {
-            dispatch(setTempMarker(null));
+            dispatch(resetTempMarker());
         };
     }, []);
 
     const structureMarker = () => ({
         createdBy: userEmail,
-        description,
         location,
         name,
-        notes,
         rating,
-        type: 'water fountain',
+        tags,
     });
 
     const onSubmit = () => {
@@ -59,34 +58,32 @@ const AddMarkerInfoModal = () => {
 
     return (
         <View>
+            <HeadlineText>Add a water source</HeadlineText>
             <InfoTile>
-                <HeadlineText>Add a water source</HeadlineText>
-                <Text>Long press on the marker to drag</Text>
                 <View style={{ ...ELEMENT_GROUP_SPACING }}>
-                    <KeyboardAvoidingTextInput
-                        style={styles.input}
-                        placeholder="Location Name"
-                        value={name}
-                        onChangeText={(text) => setName(text)}
-                    />
-                    <KeyboardAvoidingTextInput
-                        style={styles.input}
-                        placeholder="Description"
-                        value={description}
-                        onChangeText={(event) => setDescription(event)}
-                    />
-                    <KeyboardAvoidingTextInput
-                        style={styles.input}
-                        placeholder="Notes"
-                        value={notes}
-                        onChangeText={(event) => setNotes(event)}
-                    />
-                    <KeyboardAvoidingTextInput
-                        style={styles.input}
-                        placeholder="Rating"
-                        value={rating}
-                        onChangeText={(event) => setRating(event)}
-                    />
+                    <View style={styles.infoSection}>
+                        <Text variant="labelLarge">
+                            Choose a descriptive name for the location
+                        </Text>
+                        <KeyboardAvoidingTextInput
+                            style={styles.input}
+                            placeholder="Name"
+                            value={name}
+                            onChangeText={(text) => setName(text)}
+                        />
+                    </View>
+                    <View style={styles.infoSection}>
+                        <Text variant="labelLarge">
+                            What's the quality overall?
+                        </Text>
+                        <StarRating rating={rating} onPress={setRating} />
+                    </View>
+                    <View style={styles.infoSection}>
+                        <Text variant="labelLarge">
+                            Choose some relevant tags
+                        </Text>
+                        <TagChips selectedTags={tags} onPress={setTags} />
+                    </View>
                 </View>
             </InfoTile>
             <View style={styles.buttonContainer}>
@@ -111,8 +108,11 @@ const styles = StyleSheet.create({
     buttonStyle: {
         ...BASE_BUTTON,
     },
+    infoSection: {
+        marginBottom: SPACING_DEFAULT,
+    },
     input: {
-        marginTop: 5,
+        marginBottom: 5,
     },
 });
 
