@@ -1,3 +1,4 @@
+import moment from 'moment';
 import {
     StyleSheet,
     Pressable,
@@ -5,6 +6,7 @@ import {
     useColorScheme,
     Linking,
     Button,
+    Alert,
 } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,10 +27,9 @@ const MarkerInfo = () => {
     const selectedMarker = useSelector(selectSelectedMarker);
 
     const isNewerThanThreeMonths = () => {
-        const threeMonthsAgo = new Date();
-        threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+        const threeMonthsAgo = moment().subtract(3, 'months');
 
-        return new Date(selectedMarker.createdAt) > threeMonthsAgo;
+        return moment(selectedMarker?.createdAt).isAfter(threeMonthsAgo);
     };
 
     const viewImage = () => dispatch(setModal('viewImage'));
@@ -36,8 +37,22 @@ const MarkerInfo = () => {
     const openDetailedView = () => dispatch(setModal('markerDetails'));
 
     const goToPin = () => {
-        Linking.openURL(
-            `maps://?ll=${selectedMarker.latitude},${selectedMarker.longitude}&z=20`
+        Alert.alert(
+            'Open in Maps',
+            'Would you like to open this location in your maps app?',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Open',
+                    onPress: () =>
+                        Linking.openURL(
+                            `maps://?ll=${selectedMarker.latitude},${selectedMarker.longitude}&z=20`
+                        ),
+                },
+            ]
         );
     };
 
@@ -78,11 +93,19 @@ const MarkerInfo = () => {
                             </Text>
                             {/* User reported tags */}
                             <Text style={styles.detailText[colorScheme]}>
-                                🏷️ {!selectedMarker.tags && 'No tags'}
+                                🏷️
+                                {selectedMarker?.tags?.map((tag, idx) => {
+                                    const isLastIdx =
+                                        idx ===
+                                        selectedMarker?.tags?.length - 1;
+                                    return (
+                                        <Text key={idx}>
+                                            {tag}
+                                            {!isLastIdx && ','}{' '}
+                                        </Text>
+                                    );
+                                })}
                             </Text>
-                            {selectedMarker.tags?.map((tag) => (
-                                <Text>{tag}</Text>
-                            ))}
                         </View>
                         <View>
                             <Button

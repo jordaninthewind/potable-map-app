@@ -1,6 +1,7 @@
+import moment from 'moment';
 import { StyleSheet, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'react-native-paper';
+import { useDispatch, useSelector } from 'react-redux';
 
 import InfoText from '@components/common/InfoText';
 import InfoTile from '@components/common/InfoTile';
@@ -17,8 +18,11 @@ import {
 const MarkerDetails = () => {
     const dispatch = useDispatch();
 
-    const selectedMarker = useSelector(selectSelectedMarker);
     const auth = useSelector(selectAuthState);
+    const marker = useSelector(selectSelectedMarker);
+    const { name, latitude, longitude, rating, createdAt } = marker;
+
+    const formattedDate = moment(createdAt).format('MMM Do YYYY, h:mm:ss a');
 
     const editMarker = () => dispatch(setModal('editMarker'));
 
@@ -26,19 +30,18 @@ const MarkerDetails = () => {
 
     return (
         <View>
-            <HeadlineText>{selectedMarker?.name}</HeadlineText>
+            <HeadlineText>{name}</HeadlineText>
             <InfoTile
                 style={{ padding: 16, backgroundColor: 'rgba(0,0,0,.05)' }}
             >
-                <InfoText>🌎 Latitude: {selectedMarker.latitude}</InfoText>
-                <InfoText>🌍 Longitude: {selectedMarker.longitude}</InfoText>
-                <InfoText>⭐️ Rating: {selectedMarker.rating}</InfoText>
-                <InfoText>✨ Your rating: 3</InfoText>
-                <InfoText>💧 Taste: "Delicious"</InfoText>
+                <InfoText>🌎 Latitude: {latitude}</InfoText>
+                <InfoText>🌍 Longitude: {longitude}</InfoText>
+                <InfoText>⭐️ Rating: {rating || 'N/A'}</InfoText>
+                <InfoText>✨ Your rating: </InfoText>
+                <InfoText>💧 Taste: </InfoText>
                 <InfoText>🧑‍💻 Link</InfoText>
-                <InfoText>📍 Distance</InfoText>
-                <InfoText>✅ Verified: 2/26/2023</InfoText>
-                <InfoText>📝 Notes: N/A</InfoText>
+                <InfoText>📍 Distance: </InfoText>
+                <InfoText>✅ Verified: {formattedDate}</InfoText>
             </InfoTile>
             <View style={styles.buttonContainer}>
                 <Button onPress={goBack} mode="contained">

@@ -1,55 +1,55 @@
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { Chip } from 'react-native-paper';
 
-const tags = [
+const tagTypes = [
     { value: 'dog bowl', icon: 'dog' },
     { value: 'water fountain', icon: 'fountain' },
     { value: 'bottle refill', icon: 'bottle-soda' },
 ];
 
-const TagChips = ({ selectedTags, onPress, style }) => {
+const TagChips = ({ tags = [], onPress, style }) => {
     const updateChips = (value) => {
-        console.log(selectedTags);
-        if (selectedTags.includes(value)) {
-            const tags = selectedTags.filter((tag) => tag !== value);
+        if (tags?.includes(value)) {
+            const tags = tags.filter((tag) => tag !== value);
 
             onPress(tags);
         } else {
-            onPress([...selectedTags, value]);
+            onPress([...tags, value]);
         }
     };
 
     return (
-        <View style={[styles.container, style]}>
-            {tags.map(({ value, icon }) => {
-                const selected = selectedTags.includes(value);
+        <ScrollView horizontal style={[styles.container, style]}>
+            {tagTypes.map(({ value, icon }) => {
+                const selected = tags?.includes(value);
 
                 return (
-                    <Chip
-                        selected={selected}
-                        onPress={() => updateChips(value)}
-                        icon={icon}
-                        key={value}
-                        style={[styles.chip, selected && styles.selected]}
-                        mode="outlined"
-                    >
-                        {value}
-                    </Chip>
+                    <View>
+                        <Chip
+                            selected={selected}
+                            onPress={() => updateChips(value)}
+                            icon={icon}
+                            key={value}
+                            style={[styles.chip, selected && styles.selected]}
+                            mode="outlined"
+                        >
+                            {value}
+                        </Chip>
+                    </View>
                 );
             })}
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: 100,
+        // justifyContent: 'space-between',
     },
     chip: {
-        margin: 2,
         backgroundColor: 'rgba(255,255,255,0.125)',
+        margin: 2,
     },
     selected: {
         backgroundColor: 'white',
