@@ -18,7 +18,7 @@ import {
 } from 'firebase/firestore';
 
 import { MARKER_DATABASE } from '@constants/constants.js';
-import { app, db } from '@app/firebaseConfig.js';
+import { app } from '@app/firebaseConfig.js';
 import { uploadWaterSourcePhoto } from '@services/storageService';
 import { setLocationPermission } from '@state/appSlice';
 import { setError } from '@state/errorSlice';
@@ -31,6 +31,7 @@ import {
 } from '@state/markersSlice';
 import { clearModal } from '@state/modalSlice';
 import { setUser, clearUser } from '@state/userSlice';
+import axios from 'axios';
 
 // Device / Location Services
 export const requestLocationPermission = () => async (dispatch) => {
@@ -64,23 +65,33 @@ export const getLocalMarkers = () => async (dispatch) => {
     dispatch(setLoading(true));
 
     try {
-        const querySnapshot = await getDocs(collection(db, MARKER_DATABASE));
-        const markers = querySnapshot.docs.map((doc) => {
-            const { name, rating, tags, location, createdAt } = doc.data();
-            const { latitude, longitude } = location;
+        console.log('getLocalMarkers');
+        // add get request for markers
+        const request = await axios.get(
+            'https://localhost:3000/api/locations',
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+        console.log(request);
+        //     const { name, rating, tags, location, createdAt } = doc.data();
+        //     const { latitude, longitude } = location;
+        const data = await request.json();
+        console.log(data);
+        dispatch(setError({ data }));
+        // return {
+        //     id: doc.id,
+        //     name,
+        //     rating,
+        //     tags,
+        //     latitude,
+        //     longitude,
+        //     createdAt: createdAt.toDate().toString(),
+        // };
 
-            return {
-                id: doc.id,
-                name,
-                rating,
-                tags,
-                latitude,
-                longitude,
-                createdAt: createdAt.toDate().toString(),
-            };
-        });
-
-        dispatch(setMarkers(markers));
+        // dispatch(setMarkers(markers));
     } catch ({ message }) {
         dispatch(setError({ message }));
     } finally {

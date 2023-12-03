@@ -4,20 +4,19 @@
         "slug": "map-app",
         "version": "1.0.12",
         "orientation": "portrait",
-        "icon": "./assets/icon.png",
+        "icon": "./assets/potable-low-poly-logo.png",
         "userInterfaceStyle": "automatic",
         "splash": {
-            "image": "./assets/splash.png",
+            "image": "./assets/potable-low-poly-logo.png",
             "resizeMode": "contain",
             "backgroundColor": "#FEFEFE"
         },
-        "jsEngine": "jsc",
+        "jsEngine": "hermes",
         "updates": {
             "fallbackToCacheTimeout": 0
         },
         "assetBundlePatterns": ["**/*"],
         "ios": {
-            "supportsTablet": true,
             "infoPlist": {
                 "UIBackgroundModes": ["location", "fetch"]
             },
@@ -28,7 +27,12 @@
             "adaptiveIcon": {
                 "foregroundImage": "./assets/icon.png",
                 "backgroundColor": "#D3D3D3"
-            }
+            },
+            "permissions": [
+                "android.permission.CAMERA",
+                "android.permission.RECORD_AUDIO"
+            ],
+            "package": "com.potable.water"
         },
         "web": {
             "favicon": "./assets/favicon.png"
